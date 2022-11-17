@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "285396457892",
+    "project_id": "habilife-2bba3",
+    "storage_bucket": "habilife-2bba3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:285396457892:android:eb99777d778977f752c931",
+        "android_client_info": {
+          "package_name": "com.santrucho.habilife"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "285396457892-0q4m0pnlju59d4scif74hd5lfjr8p896.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOj44RtcGtGN9orfkOyPq6EOgoA8rN3ew"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "285396457892-0q4m0pnlju59d4scif74hd5lfjr8p896.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
