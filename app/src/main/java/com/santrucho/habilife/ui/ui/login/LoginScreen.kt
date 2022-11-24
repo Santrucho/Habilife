@@ -1,0 +1,62 @@
+package com.santrucho.habilife.ui.ui.login
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Button
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.santrucho.habilife.R
+import com.santrucho.habilife.ui.navigation.Screen
+
+
+@Composable
+fun LoginScreen(navController: NavController) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(id = R.color.white))
+            .wrapContentSize(Alignment.Center)
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
+            LoginBase()
+
+
+            Spacer(modifier = Modifier.padding(10.dp))
+            Button(
+                onClick = {
+                    navController.navigate(Screen.AppScaffold.route)
+                },
+                modifier = Modifier
+                    .fillMaxWidth(0.8f)
+                    .height(50.dp),
+            ) {
+                Text(
+                    text = "Login"
+                )
+            }
+        }
+        Spacer(modifier = Modifier.padding(8.dp))
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(0.8f)
+                .wrapContentHeight(), contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "You don't have account? Sign up here!",
+                modifier = Modifier.clickable(onClick = {
+                }), color = Color.Black, fontSize = 14.sp
+            )
+        }
+    }
+}
