@@ -3,24 +3,14 @@ package com.santrucho.habilife
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.santrucho.habilife.ui.ui.bottombar.AppScaffold
+import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.theme.HabilifeTheme
-import com.santrucho.habilife.ui.ui.*
+import com.santrucho.habilife.ui.ui.login.LoginScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,76 +18,30 @@ class MainActivity : ComponentActivity() {
         setContent {
             HabilifeTheme {
                 // A surface container using the 'background' color from the theme
-                MainScreenView()
+                LoginApplication()
             }
         }
     }
 }
 
 @Composable
-fun MainScreenView(){
+fun LoginApplication() {
     val navController = rememberNavController()
-    Scaffold(
-        bottomBar = { BottomNavigation(navController = navController) }
-    ) {
-        NavigationGraph(navController = navController)
-    }
-}
+    val navBarNavController = rememberNavController()
 
-@Composable
-fun BottomNavigation(navController: NavController) {
-    val items = listOf(
-        BottomNavItem.Home,
-        BottomNavItem.Habit,
-        BottomNavItem.Goals,
-        BottomNavItem.Profile
-    )
-    BottomNavigation(
-        backgroundColor = colorResource(id = R.color.white),
-        contentColor = Color.Black
-    ) {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.destination?.route
-        items.forEach { item ->
-            BottomNavigationItem(
-                icon = { Icon(painterResource(id = item.icon), contentDescription = item.title) },
-                label = { Text(text = item.title,
-                    fontSize = 10.sp) },
-                selectedContentColor = Color.Black,
-                unselectedContentColor = Color.Black.copy(0.4f),
-                alwaysShowLabel = true,
-                selected = currentRoute == item.screen_route,
-                onClick = {
-                    navController.navigate(item.screen_route) {
+    NavHost(navController = navController, startDestination = Screen.LoginScreen.route) {
+        composable(
+            route = Screen.LoginScreen.route,
+            content = {
+                LoginScreen(
+                    navController = navController,
+                )
+            })
+        composable(
+            route = Screen.AppScaffold.route,
+            content = {
+                AppScaffold(navController = navBarNavController)
+            })
 
-                        navController.graph.startDestinationRoute?.let { screen_route ->
-                            popUpTo(screen_route) {
-                                saveState = true
-                            }
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                }
-            )
-        }
-    }
-}
-
-@Composable
-fun NavigationGraph(navController: NavHostController) {
-    NavHost(navController,startDestination = BottomNavItem.Home.screen_route){
-        composable(BottomNavItem.Home.screen_route){
-            HomeScreen()
-        }
-        composable(BottomNavItem.Habit.screen_route){
-            HabitScreen()
-        }
-        composable(BottomNavItem.Goals.screen_route){
-            GoalsScreen()
-        }
-        composable(BottomNavItem.Profile.screen_route){
-            ProfileScreen()
-        }
     }
 }
