@@ -11,6 +11,7 @@ import com.santrucho.habilife.ui.ui.bottombar.AppScaffold
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.theme.HabilifeTheme
 import com.santrucho.habilife.ui.ui.login.LoginScreen
+import com.santrucho.habilife.ui.ui.signup.SignUpScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +43,11 @@ fun LoginApplication() {
             content = {
                 AppScaffold(navController = navBarNavController)
             })
+        composable(
+            route = Screen.SignUpScreen.route,
+            content = {
+                SignUpScreen(navController = navController)
+        })
 
     }
 }

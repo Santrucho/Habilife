@@ -1,11 +1,10 @@
-package com.santrucho.habilife.ui.ui.login
+package com.santrucho.habilife.ui.ui.signup
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,10 +17,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.navigation.Screen
-
+import com.santrucho.habilife.ui.ui.login.LoginBase
 
 @Composable
-fun LoginScreen(navController: NavController) {
+fun SignUpScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -30,9 +29,9 @@ fun LoginScreen(navController: NavController) {
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
-            LoginBase()
-
+            SignUpBase()
             Spacer(modifier = Modifier.padding(10.dp))
+
             Button(
                 onClick = {
                     navController.navigate(Screen.AppScaffold.route)
@@ -42,7 +41,7 @@ fun LoginScreen(navController: NavController) {
                     .height(50.dp),
             ) {
                 Text(
-                    text = "Login"
+                    text = "Create account"
                 )
             }
         }
@@ -53,9 +52,9 @@ fun LoginScreen(navController: NavController) {
                 .wrapContentHeight(), contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "You don't have account? Sign up here!",
+                text = "You already have account? Sign in",
                 modifier = Modifier.clickable(onClick = {
-                    navController.navigate(Screen.SignUpScreen.route)
+                    navController.navigate(Screen.LoginScreen.route)
                 }), color = Color.Black, fontSize = 14.sp
             )
         }
