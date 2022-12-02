@@ -15,6 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.santrucho.habilife.R
+import com.santrucho.habilife.ui.ui.signup.SignUpViewModel
 
 @Composable
 fun HabitScreen(navController: NavController) {

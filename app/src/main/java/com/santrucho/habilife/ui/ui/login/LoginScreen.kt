@@ -1,16 +1,20 @@
 package com.santrucho.habilife.ui.ui.login
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -18,10 +22,19 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.navigation.Screen
+import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
+import com.santrucho.habilife.ui.utils.Resource
 
 
 @Composable
-fun LoginScreen(navController: NavController) {
+fun LoginScreen(viewModel:LoginViewModel?,navController: NavController) {
+
+    var emailValue by remember { mutableStateOf("") }
+    var passwordValue by remember { mutableStateOf("") }
+    val passwordVisibility = remember { mutableStateOf(false) }
+
+    val loginFlow = viewModel?.loginFlow?.collectAsState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -30,12 +43,31 @@ fun LoginScreen(navController: NavController) {
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
-            LoginBase()
+            OutlinedTextField(
+                value = emailValue,
+                onValueChange = { emailValue = it },
+                label = { Text(text = "Email") },
+                placeholder = { Text(text = "Enter email") },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth(0.8f),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+            )
+
+            OutlinedTextField(
+                value = passwordValue,
+                onValueChange = { passwordValue = it },
+                label = { Text(text = "Password") },
+                placeholder = { Text(text = "Enter the password") },
+                singleLine = true,
+                visualTransformation = if (passwordVisibility.value) VisualTransformation.None
+                else PasswordVisualTransformation(),
+                modifier = Modifier.fillMaxWidth(0.8f)
+            )
 
             Spacer(modifier = Modifier.padding(10.dp))
             Button(
                 onClick = {
-                    navController.navigate(Screen.AppScaffold.route)
+                    viewModel?.login(emailValue,passwordValue)
                 },
                 modifier = Modifier
                     .fillMaxWidth(0.8f)
@@ -58,6 +90,29 @@ fun LoginScreen(navController: NavController) {
                     navController.navigate(Screen.SignUpScreen.route)
                 }), color = Color.Black, fontSize = 14.sp
             )
+        }
+    }
+
+    loginFlow?.value?.let{
+        when(it){
+            is Resource.Success ->{
+                LaunchedEffect(Unit){
+                    navController.navigate(BottomNavScreen.Home.screen_route){
+                        popUpTo(Screen.LoginScreen.route) {inclusive = true}
+                    }
+                }
+            }
+            is Resource.Failure -> {
+                val context = LocalContext.current
+                Toast.makeText(context,it.exception.message, Toast.LENGTH_LONG).show()
+            }
+            is Resource.Loading -> {
+                Box(contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize()) {
+                    CircularProgressIndicator()
+                }
+
+            }
         }
     }
 }
