@@ -21,4 +21,8 @@ class DefaultLoginRepository @Inject constructor(private val firebaseAuth : Fire
             return Resource.Failure(e)
         }
     }
+
+    override fun logout(){
+        firebaseAuth.signOut()
+    }
 }

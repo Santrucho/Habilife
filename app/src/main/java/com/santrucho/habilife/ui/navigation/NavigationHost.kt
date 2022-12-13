@@ -40,6 +40,6 @@ fun NavigationHost(loginViewModel: LoginViewModel,signUpViewModel: SignUpViewMod
             content = { GoalsScreen(navController) })
         composable(
             route = BottomNavScreen.Profile.screen_route,
-            content = { ProfileScreen(signUpViewModel,navController) })
+            content = { ProfileScreen(signUpViewModel,loginViewModel,navController) })
     })
 }

@@ -8,4 +8,5 @@ interface SignUpRepository {
     val currentUser : FirebaseUser?
 
     suspend fun createUser(username:String,email:String,password:String) : Resource<FirebaseUser>
+
 }

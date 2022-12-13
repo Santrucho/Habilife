@@ -33,4 +33,6 @@ class SignUpViewModel @Inject constructor(private val repository:SignUpRepositor
         val resultData = repository.createUser(username,email, password)
         _signUpFlow.value = resultData
     }
+
+
 }
