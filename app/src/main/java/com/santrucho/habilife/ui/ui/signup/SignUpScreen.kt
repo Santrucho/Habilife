@@ -23,11 +23,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.navigation.Screen
+import com.santrucho.habilife.ui.presentation.SignUpViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.utils.Resource
 
 @Composable
-fun SignUpScreen(viewModel:SignUpViewModel, navController: NavController) {
+fun SignUpScreen(viewModel: SignUpViewModel, navController: NavController) {
 
     var usernameValue by remember { mutableStateOf("") }
     var emailValue by remember { mutableStateOf("") }

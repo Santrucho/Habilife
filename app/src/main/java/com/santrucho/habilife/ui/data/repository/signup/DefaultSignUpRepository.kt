@@ -1,14 +1,15 @@
-package com.santrucho.habilife.ui.data.repository
+package com.santrucho.habilife.ui.data.repository.signup
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.firestore.FirebaseFirestore
+import com.santrucho.habilife.ui.data.model.User
 import com.santrucho.habilife.ui.utils.Resource
-import dagger.hilt.android.scopes.ActivityScoped
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class DefaultSignUpRepository @Inject constructor(private val firebaseAuth : FirebaseAuth) : SignUpRepository {
+class DefaultSignUpRepository @Inject constructor(private val firebaseAuth : FirebaseAuth,private val firebaseFirestore:FirebaseFirestore) : SignUpRepository {
 
     override val currentUser : FirebaseUser?
         get() = firebaseAuth.currentUser
@@ -21,11 +22,24 @@ class DefaultSignUpRepository @Inject constructor(private val firebaseAuth : Fir
         return try{
             val result = firebaseAuth.createUserWithEmailAndPassword(email,password).await()
             result?.user?.updateProfile(UserProfileChangeRequest.Builder().setDisplayName(username).build())
+
+            //Added user to firestore database
+            currentUser.let{ userLogged ->
+                val userToSave = User(
+                    userId = userLogged?.uid!!,
+                    username = username,
+                    email = email
+                )
+                firebaseFirestore.collection("users").add(userToSave).await()
+            }
+
             Resource.Success(result.user!!)
         } catch(e:Exception){
             return Resource.Failure(e)
         }
     }
 
-
+    override fun logout() {
+        firebaseAuth.signOut()
+    }
 }

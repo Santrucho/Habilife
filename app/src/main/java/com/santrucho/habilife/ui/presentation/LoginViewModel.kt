@@ -1,9 +1,8 @@
-package com.santrucho.habilife.ui.ui.login
+package com.santrucho.habilife.ui.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
-import com.santrucho.habilife.ui.data.repository.SignUpRepository
 import com.santrucho.habilife.ui.data.repository.login.LoginRepository
 import com.santrucho.habilife.ui.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel

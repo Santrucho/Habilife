@@ -8,13 +8,13 @@ import androidx.navigation.compose.composable
 import com.santrucho.habilife.ui.ui.*
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.login.LoginScreen
-import com.santrucho.habilife.ui.ui.login.LoginViewModel
+import com.santrucho.habilife.ui.presentation.LoginViewModel
 import com.santrucho.habilife.ui.ui.signup.SignUpScreen
-import com.santrucho.habilife.ui.ui.signup.SignUpViewModel
+import com.santrucho.habilife.ui.presentation.SignUpViewModel
 
 
 @Composable
-fun NavigationHost(loginViewModel: LoginViewModel,signUpViewModel: SignUpViewModel,navController:NavController) {
+fun NavigationHost(loginViewModel: LoginViewModel, signUpViewModel: SignUpViewModel, navController:NavController) {
     NavHost(navController = navController as NavHostController, startDestination = Screen.LoginScreen.route,builder ={
 
         composable(

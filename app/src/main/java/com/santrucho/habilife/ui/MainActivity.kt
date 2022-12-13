@@ -5,23 +5,16 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.santrucho.habilife.ui.navigation.NavigationHost
-import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.theme.HabilifeTheme
 import com.santrucho.habilife.ui.ui.bottombar.BottomBar
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
-import com.santrucho.habilife.ui.ui.login.LoginScreen
-import com.santrucho.habilife.ui.ui.login.LoginViewModel
-import com.santrucho.habilife.ui.ui.signup.SignUpScreen
-import com.santrucho.habilife.ui.ui.signup.SignUpViewModel
+import com.santrucho.habilife.ui.presentation.LoginViewModel
+import com.santrucho.habilife.ui.presentation.SignUpViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
