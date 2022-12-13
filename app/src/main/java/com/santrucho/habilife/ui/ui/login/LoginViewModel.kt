@@ -20,18 +20,20 @@ class LoginViewModel @Inject constructor(private val repository:LoginRepository)
     private val _loginFlow = MutableStateFlow<Resource<FirebaseUser>?>(null)
     val loginFlow : StateFlow<Resource<FirebaseUser>?> = _loginFlow
 
-    val currentUser : FirebaseUser?
-        get() = repository.currentUser
-
-    /*init{
+    init{
         if(repository.currentUser != null){
             _loginFlow.value = Resource.Success(repository.currentUser!!)
         }
-    }*/
+    }
 
     fun login(email:String,password:String) = viewModelScope.launch {
         _loginFlow.value = Resource.Loading()
         val resultData = repository.loginUser(email, password)
         _loginFlow.value = resultData
+    }
+
+    fun logout(){
+        repository.logout()
+        _loginFlow.value = null
     }
 }
