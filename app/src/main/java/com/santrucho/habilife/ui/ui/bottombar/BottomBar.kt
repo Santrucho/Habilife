@@ -1,5 +1,6 @@
 package com.santrucho.habilife.ui.ui.bottombar
 
+import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -12,17 +13,14 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.santrucho.habilife.R
-import com.santrucho.habilife.ui.navigation.BottomNavScreen
 
 @Composable
-fun BottomBar(navController: NavController) {
-    val items = listOf(
-        BottomNavScreen.Home,
-        BottomNavScreen.Habit,
-        BottomNavScreen.Goals,
-        BottomNavScreen.Profile
-    )
-    androidx.compose.material.BottomNavigation(
+fun BottomBar(
+    items:List<BottomNavScreen>,
+    navController: NavController,
+    onClick:(BottomNavScreen) -> Unit) {
+
+    BottomNavigation(
         backgroundColor = colorResource(id = R.color.white),
         contentColor = Color.Black
     ) {
@@ -42,7 +40,8 @@ fun BottomBar(navController: NavController) {
                 alwaysShowLabel = true,
                 selected = currentRoute == item.screen_route,
                 onClick = {
-                    navController.navigate(item.screen_route) {
+                    onClick(item)
+                    /*navController.navigate(item.screen_route) {
 
                         navController.graph.startDestinationRoute?.let { screen_route ->
                             popUpTo(screen_route) {
@@ -51,7 +50,8 @@ fun BottomBar(navController: NavController) {
                         }
                         launchSingleTop = true
                         restoreState = true
-                    }
+                    }*/
+
                 }
             )
         }

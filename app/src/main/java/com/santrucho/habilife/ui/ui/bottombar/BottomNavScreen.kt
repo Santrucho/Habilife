@@ -1,4 +1,4 @@
-package com.santrucho.habilife.ui.navigation
+package com.santrucho.habilife.ui.ui.bottombar
 
 import com.santrucho.habilife.R
 
