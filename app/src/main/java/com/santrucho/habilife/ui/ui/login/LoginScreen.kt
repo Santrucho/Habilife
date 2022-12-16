@@ -33,6 +33,7 @@ fun LoginScreen(viewModel: LoginViewModel?, navController: NavController) {
     val passwordVisibility = remember { mutableStateOf(false) }
 
     val loginFlow = viewModel?.loginFlow?.collectAsState()
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -102,8 +103,9 @@ fun LoginScreen(viewModel: LoginViewModel?, navController: NavController) {
                 }
             }
             is Resource.Failure -> {
-                val context = LocalContext.current
-                Toast.makeText(context,it.exception.message, Toast.LENGTH_LONG).show()
+                LaunchedEffect(loginFlow.value){
+                    Toast.makeText(context,it.exception.message, Toast.LENGTH_LONG).show()
+                }
             }
             is Resource.Loading -> {
                 Box(contentAlignment = Alignment.Center,

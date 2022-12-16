@@ -37,6 +37,7 @@ fun SignUpScreen(viewModel: SignUpViewModel, navController: NavController) {
     val passwordVisibility = remember { mutableStateOf(false) }
 
     val signUpFlow = viewModel.signUpFlow.collectAsState()
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -126,8 +127,9 @@ fun SignUpScreen(viewModel: SignUpViewModel, navController: NavController) {
                 }
             }
             is Resource.Failure -> {
-                val context = LocalContext.current
-                Toast.makeText(context,it.exception.message,Toast.LENGTH_LONG).show()
+                LaunchedEffect(signUpFlow.value){
+                    Toast.makeText(context,it.exception.message, Toast.LENGTH_LONG).show()
+                }
             }
             is Resource.Loading -> {
                 Box(contentAlignment = Alignment.Center,
