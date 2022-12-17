@@ -1,4 +1,4 @@
-package com.santrucho.habilife.ui.ui
+package com.santrucho.habilife.ui.ui.goals
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -17,7 +17,7 @@ import androidx.navigation.NavController
 import com.santrucho.habilife.R
 
 @Composable
-fun GoalsScreen(navController: NavController) {
+fun NewGoalScreen( navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -25,7 +25,7 @@ fun GoalsScreen(navController: NavController) {
             .wrapContentSize(Alignment.Center)
     ) {
         Text(
-            text = "Goals Screen",
+            text = "New goal Screen",
             fontWeight = FontWeight.Bold,
             color = Color.Black,
             modifier = Modifier.align(Alignment.CenterHorizontally),

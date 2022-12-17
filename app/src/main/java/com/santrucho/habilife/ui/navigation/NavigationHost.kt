@@ -11,6 +11,8 @@ import com.santrucho.habilife.ui.ui.login.LoginScreen
 import com.santrucho.habilife.ui.presentation.LoginViewModel
 import com.santrucho.habilife.ui.ui.signup.SignUpScreen
 import com.santrucho.habilife.ui.presentation.SignUpViewModel
+import com.santrucho.habilife.ui.ui.goals.GoalsScreen
+import com.santrucho.habilife.ui.ui.goals.NewGoalScreen
 
 
 @Composable
@@ -27,6 +29,10 @@ fun NavigationHost(loginViewModel: LoginViewModel, signUpViewModel: SignUpViewMo
         composable(
             route = Screen.SignUpScreen.route) {
             SignUpScreen(viewModel = signUpViewModel, navController = navController)
+        }
+        composable(
+            route = Screen.NewGoalScreen.route) {
+            NewGoalScreen(navController = navController)
         }
 
         composable(
