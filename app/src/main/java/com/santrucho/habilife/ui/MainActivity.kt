@@ -4,17 +4,23 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.santrucho.habilife.ui.navigation.NavigationHost
+import com.santrucho.habilife.ui.navigation.Screen
+import com.santrucho.habilife.ui.presentation.LoginViewModel
+import com.santrucho.habilife.ui.presentation.SignUpViewModel
 import com.santrucho.habilife.ui.theme.HabilifeTheme
 import com.santrucho.habilife.ui.ui.bottombar.BottomBar
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
-import com.santrucho.habilife.ui.presentation.LoginViewModel
-import com.santrucho.habilife.ui.presentation.SignUpViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -34,15 +40,19 @@ class MainActivity : ComponentActivity() {
                     BottomNavScreen.Profile
                 )
                 val navController = rememberNavController()
+
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentState = navBackStackEntry?.destination?.hierarchy?.first()?.route
+
+                val currentRoute = navController
+                    .currentBackStackEntryFlow
+                    .collectAsState(initial = navController.currentBackStackEntry)
+
                 Scaffold(bottomBar = {
-                    val items = navItems.map{
+                    val items = navItems.map {
                         it.screen_route
                     }
-                    val navBackStackEntry by navController.currentBackStackEntryAsState()
-                    val currentState = navBackStackEntry?.destination?.hierarchy?.first()?.route
-
-                    if(currentState !in items) return@Scaffold
-
+                    if (currentState !in items) return@Scaffold
                     BottomBar(
                         items = navItems,
                         navController = navController,
@@ -51,7 +61,7 @@ class MainActivity : ComponentActivity() {
                         }
                     )
                 }){
-                    NavigationHost(loginViewModel,signUpViewModel,navController)
+                    NavigationHost(loginViewModel, signUpViewModel, navController)
                 }
             }
         }

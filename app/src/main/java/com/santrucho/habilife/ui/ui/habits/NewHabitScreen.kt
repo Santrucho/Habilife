@@ -1,4 +1,4 @@
-package com.santrucho.habilife.ui.ui
+package com.santrucho.habilife.ui.ui.habits
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -17,7 +17,7 @@ import androidx.navigation.NavController
 import com.santrucho.habilife.R
 
 @Composable
-fun HabitScreen(navController: NavController) {
+fun NewHabitScreen( navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -25,7 +25,7 @@ fun HabitScreen(navController: NavController) {
             .wrapContentSize(Alignment.Center)
     ) {
         Text(
-            text = "Habits Screen",
+            text = "New Habit Screen",
             fontWeight = FontWeight.Bold,
             color = Color.Black,
             modifier = Modifier.align(Alignment.CenterHorizontally),
