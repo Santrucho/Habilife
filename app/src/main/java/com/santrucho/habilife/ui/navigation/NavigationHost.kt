@@ -8,13 +8,17 @@ import androidx.navigation.compose.composable
 import com.santrucho.habilife.ui.ui.*
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.login.LoginScreen
-import com.santrucho.habilife.ui.ui.login.LoginViewModel
+import com.santrucho.habilife.ui.presentation.LoginViewModel
 import com.santrucho.habilife.ui.ui.signup.SignUpScreen
-import com.santrucho.habilife.ui.ui.signup.SignUpViewModel
+import com.santrucho.habilife.ui.presentation.SignUpViewModel
+import com.santrucho.habilife.ui.ui.habits.HabitScreen
+import com.santrucho.habilife.ui.ui.habits.NewHabitScreen
+import com.santrucho.habilife.ui.ui.goals.GoalsScreen
+import com.santrucho.habilife.ui.ui.goals.NewGoalScreen
 
 
 @Composable
-fun NavigationHost(loginViewModel: LoginViewModel,signUpViewModel: SignUpViewModel,navController:NavController) {
+fun NavigationHost(loginViewModel: LoginViewModel, signUpViewModel: SignUpViewModel, navController:NavController) {
     NavHost(navController = navController as NavHostController, startDestination = Screen.LoginScreen.route,builder ={
 
         composable(
@@ -26,7 +30,19 @@ fun NavigationHost(loginViewModel: LoginViewModel,signUpViewModel: SignUpViewMod
         }
         composable(
             route = Screen.SignUpScreen.route) {
-            SignUpScreen(viewModel = signUpViewModel, navController = navController)
+            SignUpScreen(
+                viewModel = signUpViewModel,
+                navController = navController)
+        }
+
+        composable(
+            route = Screen.NewHabitScreen.route) {
+           NewHabitScreen(
+               navController = navController)
+        }
+        composable(
+            route = Screen.NewGoalScreen.route) {
+            NewGoalScreen(navController = navController)
         }
 
         composable(

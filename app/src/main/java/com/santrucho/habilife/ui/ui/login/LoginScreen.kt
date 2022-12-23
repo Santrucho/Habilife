@@ -15,25 +15,25 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.navigation.Screen
+import com.santrucho.habilife.ui.presentation.LoginViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.utils.Resource
 
 
 @Composable
-fun LoginScreen(viewModel:LoginViewModel?,navController: NavController) {
+fun LoginScreen(viewModel: LoginViewModel?, navController: NavController) {
 
     var emailValue by remember { mutableStateOf("") }
     var passwordValue by remember { mutableStateOf("") }
     val passwordVisibility = remember { mutableStateOf(false) }
 
     val loginFlow = viewModel?.loginFlow?.collectAsState()
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -103,8 +103,9 @@ fun LoginScreen(viewModel:LoginViewModel?,navController: NavController) {
                 }
             }
             is Resource.Failure -> {
-                val context = LocalContext.current
-                Toast.makeText(context,it.exception.message, Toast.LENGTH_LONG).show()
+                LaunchedEffect(loginFlow.value){
+                    Toast.makeText(context,it.exception.message, Toast.LENGTH_LONG).show()
+                }
             }
             is Resource.Loading -> {
                 Box(contentAlignment = Alignment.Center,

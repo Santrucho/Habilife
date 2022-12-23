@@ -23,11 +23,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.navigation.Screen
+import com.santrucho.habilife.ui.presentation.SignUpViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.utils.Resource
 
 @Composable
-fun SignUpScreen(viewModel:SignUpViewModel, navController: NavController) {
+fun SignUpScreen(viewModel: SignUpViewModel, navController: NavController) {
 
     var usernameValue by remember { mutableStateOf("") }
     var emailValue by remember { mutableStateOf("") }
@@ -36,6 +37,7 @@ fun SignUpScreen(viewModel:SignUpViewModel, navController: NavController) {
     val passwordVisibility = remember { mutableStateOf(false) }
 
     val signUpFlow = viewModel.signUpFlow.collectAsState()
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -125,8 +127,9 @@ fun SignUpScreen(viewModel:SignUpViewModel, navController: NavController) {
                 }
             }
             is Resource.Failure -> {
-                val context = LocalContext.current
-                Toast.makeText(context,it.exception.message,Toast.LENGTH_LONG).show()
+                LaunchedEffect(signUpFlow.value){
+                    Toast.makeText(context,it.exception.message, Toast.LENGTH_LONG).show()
+                }
             }
             is Resource.Loading -> {
                 Box(contentAlignment = Alignment.Center,

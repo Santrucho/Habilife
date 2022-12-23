@@ -15,8 +15,8 @@ import androidx.navigation.NavHostController
 import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
-import com.santrucho.habilife.ui.ui.login.LoginViewModel
-import com.santrucho.habilife.ui.ui.signup.SignUpViewModel
+import com.santrucho.habilife.ui.presentation.LoginViewModel
+import com.santrucho.habilife.ui.presentation.SignUpViewModel
 
 @Composable
 fun ProfileScreen(signUpViewModel: SignUpViewModel?, loginViewModel: LoginViewModel?, navController: NavHostController) {
@@ -40,6 +40,7 @@ fun ProfileScreen(signUpViewModel: SignUpViewModel?, loginViewModel: LoginViewMo
             Button(
                 onClick = {
                     loginViewModel?.logout()
+                    signUpViewModel?.logout()
                     navController.navigate(Screen.LoginScreen.route) {
                         popUpTo(BottomNavScreen.Profile.screen_route) { inclusive = true }
                     }
