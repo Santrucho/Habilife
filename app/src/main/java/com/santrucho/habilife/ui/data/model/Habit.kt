@@ -5,6 +5,7 @@ data class Habit(
     var title:String,
     var description:String,
     var image:String,
+    var frecuently:String,
     var isCompleted : Boolean,
     var isExpanded : Boolean
 ) {

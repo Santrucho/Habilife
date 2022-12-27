@@ -44,9 +44,6 @@ class MainActivity : ComponentActivity() {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentState = navBackStackEntry?.destination?.hierarchy?.first()?.route
 
-                val currentRoute = navController
-                    .currentBackStackEntryFlow
-                    .collectAsState(initial = navController.currentBackStackEntry)
 
                 Scaffold(bottomBar = {
                     val items = navItems.map {

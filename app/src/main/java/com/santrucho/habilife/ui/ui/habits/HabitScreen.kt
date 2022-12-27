@@ -196,7 +196,7 @@ fun FabButton(navController: NavController) {
         shape = CircleShape
 
     ) {
-        Icon(Icons.Filled.Favorite, contentDescription = "Localized description")
+        Text("Crear nuevo habito")
     }
 }
 
