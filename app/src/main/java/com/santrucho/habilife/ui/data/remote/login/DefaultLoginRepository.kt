@@ -1,4 +1,4 @@
-package com.santrucho.habilife.ui.data.repository.login
+package com.santrucho.habilife.ui.data.remote.login
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -8,7 +8,8 @@ import dagger.hilt.android.scopes.ActivityScoped
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class DefaultLoginRepository @Inject constructor(private val firebaseAuth : FirebaseAuth) : LoginRepository {
+class DefaultLoginRepository @Inject constructor(private val firebaseAuth : FirebaseAuth) :
+    LoginRepository {
 
     override val currentUser : FirebaseUser?
         get() = firebaseAuth.currentUser
