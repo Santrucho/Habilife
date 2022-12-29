@@ -50,7 +50,7 @@ fun NavigationHost(goalViewModel: GoalViewModel, habitViewModel:HabitViewModel, 
         }
         composable(
             route = Screen.NewGoalScreen.route) {
-            NewGoalScreen(navController = navController)
+            NewGoalScreen(goalViewModel = goalViewModel, navController = navController)
         }
 
         composable(

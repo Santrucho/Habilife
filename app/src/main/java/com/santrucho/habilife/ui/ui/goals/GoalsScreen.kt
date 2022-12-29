@@ -54,7 +54,7 @@ fun GoalsScreen(goalViewModel: GoalViewModel, navController: NavController,isRef
                 .background(colorResource(id = R.color.white)),
             horizontalAlignment = Alignment.Start
         ) {
-            Text(text = "OBJETIVOS RECOMENDADOS", modifier = Modifier.padding(8.dp), color = Color.Black)
+            Text(text = "MIS OBJETIVOS", modifier = Modifier.padding(8.dp), color = Color.Black)
             GoalList(state,isRefreshing,refreshData)
         }
         //Set FAB Button Row above BottomBar

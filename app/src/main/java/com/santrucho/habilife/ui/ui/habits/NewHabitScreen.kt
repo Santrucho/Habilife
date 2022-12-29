@@ -109,7 +109,7 @@ fun NewHabitScreen(habitViewModel: HabitViewModel,navController: NavController) 
         }
     }
 
-    habitFlow?.value?.let{
+    habitFlow.value?.let{
         when(it){
             is Resource.Success ->{
                 LaunchedEffect(Unit){
