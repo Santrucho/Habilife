@@ -27,11 +27,16 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.navigation.Screen
+import com.santrucho.habilife.ui.presentation.GoalViewModel
+import com.santrucho.habilife.ui.ui.goals.components.GoalList
+import com.santrucho.habilife.ui.ui.habits.HabitList
 
 @Composable
-fun GoalsScreen(navController: NavController) {
+fun GoalsScreen(goalViewModel: GoalViewModel, navController: NavController,isRefreshing: Boolean,
+                refreshData: () -> Unit) {
 
-    val localContext = LocalContext.current
+    //val localContext = LocalContext.current
+    val state = goalViewModel.goalState.value
 
     Column(
         modifier = Modifier
@@ -41,7 +46,17 @@ fun GoalsScreen(navController: NavController) {
         RecommendedGoalsSection()
         Spacer(modifier = Modifier.height(32.dp))
         //Set each element inside column
-        MyGoalsSection()
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(420.dp)
+                .padding(8.dp)
+                .background(colorResource(id = R.color.white)),
+            horizontalAlignment = Alignment.Start
+        ) {
+            Text(text = "OBJETIVOS RECOMENDADOS", modifier = Modifier.padding(8.dp), color = Color.Black)
+            GoalList(state,isRefreshing,refreshData)
+        }
         //Set FAB Button Row above BottomBar
         Spacer(modifier = Modifier.weight(1f))
         Row(
@@ -113,82 +128,6 @@ fun RecommendedGoalsElement(
     }
 }
 
-//Set my habits list section in screen
-@Composable
-fun MyGoalsSection(){
-    Text("MIS OBJETIVOS", modifier = Modifier.padding(8.dp))
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(420.dp)
-            .padding(8.dp)
-            .border(0.4.dp, Color.Gray)
-            .background(colorResource(id = R.color.white)),
-        horizontalAlignment = Alignment.Start
-    ) {
-        LazyColumn(
-            modifier = Modifier.padding(8.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalAlignment = Alignment.Start
-
-        ) {
-            items(goalsData) { item ->
-                GoalsElement(item.drawable, item.text)
-            }
-        }
-    }
-}
-
-//Set each element in My Habits list section
-@Composable
-fun GoalsElement(
-    @DrawableRes drawable: Int,
-    @StringRes text: Int,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(106.dp)
-            .padding(8.dp)
-            .border(1.dp, Color.Gray),
-    ) {
-        Row(
-            modifier
-                .width(48.dp)
-                .fillMaxHeight(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                painter = painterResource(R.drawable.ic_habits),
-                contentDescription = null
-            )
-        }
-        Row(
-            modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.Top
-        ) {
-            Column(
-                modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.Top
-            ) {
-                Text(
-                    text = stringResource(R.string.app_name)
-                )
-                Text(
-                    text = "Descripcion"
-                )
-                Text(
-                    text = "Fecha limite"
-                )
-            }
-        }
-    }
-}
-
 //Set Fab Button which navigate to Create New Habit screen
 @Composable
 fun FabButton(navController: NavController) {
@@ -198,7 +137,7 @@ fun FabButton(navController: NavController) {
         shape = CircleShape
 
     ) {
-        Icon(Icons.Filled.Favorite, contentDescription = "Localized description")
+        Text("Crear nuevo objetivo")
     }
 }
 

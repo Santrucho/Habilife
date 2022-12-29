@@ -12,7 +12,6 @@ class DefaultGoalsRepository @Inject constructor(private val firestore:FirebaseF
                                                  private val firebaseAuth:FirebaseAuth) : GoalsRepository {
 
     override suspend fun addGoal(
-        userId: String,
         title: String,
         description: String,
         isCompleted: Boolean,

@@ -7,7 +7,6 @@ import com.santrucho.habilife.ui.utils.Resource
 interface GoalsRepository {
 
     suspend fun addGoal(
-        userId:String,
         title:String,
         description:String,
         isCompleted : Boolean,
