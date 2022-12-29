@@ -1,11 +1,13 @@
 package com.santrucho.habilife.ui.navigation
 
+import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.santrucho.habilife.ui.presentation.GoalViewModel
 import com.santrucho.habilife.ui.presentation.HabitViewModel
 import com.santrucho.habilife.ui.ui.*
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
@@ -20,7 +22,7 @@ import com.santrucho.habilife.ui.ui.goals.NewGoalScreen
 
 
 @Composable
-fun NavigationHost(habitViewModel:HabitViewModel,loginViewModel: LoginViewModel, signUpViewModel: SignUpViewModel, navController:NavController) {
+fun NavigationHost(goalViewModel: GoalViewModel, habitViewModel:HabitViewModel, loginViewModel: LoginViewModel, signUpViewModel: SignUpViewModel, navController:NavController) {
 
     val isRefreshing = habitViewModel.isRefreshing.collectAsState()
 
@@ -59,7 +61,7 @@ fun NavigationHost(habitViewModel:HabitViewModel,loginViewModel: LoginViewModel,
             content = { HabitScreen(habitViewModel,navController,isRefreshing.value,refreshData = habitViewModel::getAllHabits) })
         composable(
             route = BottomNavScreen.Goals.screen_route,
-            content = { GoalsScreen(navController) })
+            content = { GoalsScreen(goalViewModel,navController,isRefreshing.value, refreshData = goalViewModel::getAllGoals) })
         composable(
             route = BottomNavScreen.Profile.screen_route,
             content = { ProfileScreen(signUpViewModel,loginViewModel,navController) })
