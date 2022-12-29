@@ -1,5 +1,6 @@
 package com.santrucho.habilife.ui.ui.habits
 
+import android.annotation.SuppressLint
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -16,6 +17,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.Black
@@ -27,12 +30,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.santrucho.habilife.R
+import com.santrucho.habilife.ui.data.model.Habit
 import com.santrucho.habilife.ui.navigation.Screen
+import com.santrucho.habilife.ui.presentation.HabitViewModel
 
 @Composable
-fun HabitScreen(navController: NavController) {
+fun HabitScreen(habitViewModel:HabitViewModel,
+                navController: NavController,
+                isRefreshing: Boolean,
+                refreshData: () -> Unit) {
 
-    val localContext = LocalContext.current
+    val state = habitViewModel.habitState.value
 
     Column(
         modifier = Modifier
@@ -43,7 +51,16 @@ fun HabitScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(32.dp))
         Text("MIS HABITOS", modifier = Modifier.padding(8.dp))
         //Set each element inside column
-        MyHabitsSection()
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(420.dp)
+                .padding(8.dp)
+                .background(colorResource(id = R.color.white)),
+            horizontalAlignment = Alignment.Start
+        ) {
+            HabitList(state,isRefreshing,refreshData)
+        }
         //Set FAB Button Row above BottomBar
         Spacer(modifier = Modifier.weight(1f))
         Row(
@@ -115,77 +132,6 @@ fun RecommendedHabitsElement(
     }
 }
 
-//Set my habits list section in screen
-@Composable
-fun MyHabitsSection(){
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(420.dp)
-            .padding(8.dp)
-            .border(0.4.dp, Gray)
-            .background(colorResource(id = R.color.white)),
-        horizontalAlignment = Alignment.Start
-    ) {
-        LazyColumn(
-            modifier = Modifier.padding(8.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalAlignment = Alignment.Start
-
-        ) {
-            items(habitsData) { item ->
-                HabitsElement(item.drawable, item.text)
-            }
-        }
-    }
-}
-
-//Set each element in My Habits list section
-@Composable
-fun HabitsElement(
-    @DrawableRes drawable: Int,
-    @StringRes text: Int,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(72.dp)
-            .padding(8.dp)
-            .border(1.dp, Gray),
-    ) {
-        Row(
-            modifier
-                .width(48.dp)
-                .fillMaxHeight(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                painter = painterResource(R.drawable.ic_habits),
-                contentDescription = null
-            )
-        }
-        Row(
-            modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column(
-                modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = stringResource(R.string.app_name)
-                )
-                Text(
-                    text = "Descripcion"
-                )
-            }
-        }
-    }
-}
 
 //Set Fab Button which navigate to Create New Habit screen
 @Composable
@@ -196,7 +142,7 @@ fun FabButton(navController: NavController) {
         shape = CircleShape
 
     ) {
-        Icon(Icons.Filled.Favorite, contentDescription = "Localized description")
+        Text("Crear nuevo habito")
     }
 }
 

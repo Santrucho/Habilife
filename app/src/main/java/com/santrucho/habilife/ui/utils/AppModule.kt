@@ -2,10 +2,14 @@ package com.santrucho.habilife.ui.utils
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.santrucho.habilife.ui.data.repository.signup.DefaultSignUpRepository
-import com.santrucho.habilife.ui.data.repository.signup.SignUpRepository
-import com.santrucho.habilife.ui.data.repository.login.DefaultLoginRepository
-import com.santrucho.habilife.ui.data.repository.login.LoginRepository
+import com.santrucho.habilife.ui.data.remote.goals.DefaultGoalsRepository
+import com.santrucho.habilife.ui.data.remote.goals.GoalsRepository
+import com.santrucho.habilife.ui.data.remote.habits.DefaultHabitsRepository
+import com.santrucho.habilife.ui.data.remote.habits.HabitsRepository
+import com.santrucho.habilife.ui.data.remote.signup.DefaultSignUpRepository
+import com.santrucho.habilife.ui.data.remote.signup.SignUpRepository
+import com.santrucho.habilife.ui.data.remote.login.DefaultLoginRepository
+import com.santrucho.habilife.ui.data.remote.login.LoginRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,4 +29,10 @@ object AppModule {
 
     @Provides
     fun provideLoginRepository(implementation: DefaultLoginRepository) : LoginRepository = implementation
+
+    @Provides
+    fun provideHabitsRepository(implementation: DefaultHabitsRepository) : HabitsRepository = implementation
+
+    @Provides
+    fun provideGoalsRepository(implementation: DefaultGoalsRepository) : GoalsRepository = implementation
 }

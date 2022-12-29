@@ -1,4 +1,4 @@
-package com.santrucho.habilife.ui.data.repository.login
+package com.santrucho.habilife.ui.data.remote.login
 
 import com.google.firebase.auth.FirebaseUser
 import com.santrucho.habilife.ui.utils.Resource

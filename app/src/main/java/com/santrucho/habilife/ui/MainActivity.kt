@@ -16,6 +16,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.santrucho.habilife.ui.navigation.NavigationHost
 import com.santrucho.habilife.ui.navigation.Screen
+import com.santrucho.habilife.ui.presentation.HabitViewModel
 import com.santrucho.habilife.ui.presentation.LoginViewModel
 import com.santrucho.habilife.ui.presentation.SignUpViewModel
 import com.santrucho.habilife.ui.theme.HabilifeTheme
@@ -28,6 +29,7 @@ class MainActivity : ComponentActivity() {
 
     private val signUpViewModel by viewModels<SignUpViewModel>()
     private val loginViewModel by viewModels<LoginViewModel>()
+    private val habitViewModel by viewModels<HabitViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,9 +46,6 @@ class MainActivity : ComponentActivity() {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentState = navBackStackEntry?.destination?.hierarchy?.first()?.route
 
-                val currentRoute = navController
-                    .currentBackStackEntryFlow
-                    .collectAsState(initial = navController.currentBackStackEntry)
 
                 Scaffold(bottomBar = {
                     val items = navItems.map {
@@ -61,7 +60,7 @@ class MainActivity : ComponentActivity() {
                         }
                     )
                 }){
-                    NavigationHost(loginViewModel, signUpViewModel, navController)
+                    NavigationHost(habitViewModel,loginViewModel, signUpViewModel, navController)
                 }
             }
         }

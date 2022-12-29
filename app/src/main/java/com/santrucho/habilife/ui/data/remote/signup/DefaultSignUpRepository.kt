@@ -1,4 +1,4 @@
-package com.santrucho.habilife.ui.data.repository.signup
+package com.santrucho.habilife.ui.data.remote.signup
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -9,7 +9,8 @@ import com.santrucho.habilife.ui.utils.Resource
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class DefaultSignUpRepository @Inject constructor(private val firebaseAuth : FirebaseAuth,private val firebaseFirestore:FirebaseFirestore) : SignUpRepository {
+class DefaultSignUpRepository @Inject constructor(private val firebaseAuth : FirebaseAuth,private val firebaseFirestore:FirebaseFirestore) :
+    SignUpRepository {
 
     override val currentUser : FirebaseUser?
         get() = firebaseAuth.currentUser

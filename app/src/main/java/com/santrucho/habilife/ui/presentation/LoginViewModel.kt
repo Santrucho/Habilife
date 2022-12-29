@@ -3,7 +3,7 @@ package com.santrucho.habilife.ui.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
-import com.santrucho.habilife.ui.data.repository.login.LoginRepository
+import com.santrucho.habilife.ui.data.remote.login.LoginRepository
 import com.santrucho.habilife.ui.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val repository:LoginRepository) : ViewModel() {
+class LoginViewModel @Inject constructor(private val repository: LoginRepository) : ViewModel() {
 
     var userError: String = ""
 
