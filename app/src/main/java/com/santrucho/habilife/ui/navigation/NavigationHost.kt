@@ -3,10 +3,12 @@ package com.santrucho.habilife.ui.navigation
 import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.santrucho.habilife.ui.data.model.Habit
 import com.santrucho.habilife.ui.presentation.GoalViewModel
 import com.santrucho.habilife.ui.presentation.HabitViewModel
 import com.santrucho.habilife.ui.ui.*
@@ -22,8 +24,13 @@ import com.santrucho.habilife.ui.ui.goals.NewGoalScreen
 
 
 @Composable
-fun NavigationHost(goalViewModel: GoalViewModel, habitViewModel:HabitViewModel, loginViewModel: LoginViewModel, signUpViewModel: SignUpViewModel, navController:NavController) {
+fun NavigationHost(navController:NavController) {
 
+
+    val goalViewModel = viewModel<GoalViewModel>()
+    val signUpViewModel = viewModel<SignUpViewModel>()
+    val habitViewModel = viewModel<HabitViewModel>()
+    val loginViewModel = viewModel<LoginViewModel>()
     val isRefreshing = habitViewModel.isRefreshing.collectAsState()
 
     NavHost(navController = navController as NavHostController, startDestination = Screen.LoginScreen.route,builder ={
@@ -38,7 +45,6 @@ fun NavigationHost(goalViewModel: GoalViewModel, habitViewModel:HabitViewModel, 
         composable(
             route = Screen.SignUpScreen.route) {
             SignUpScreen(
-                viewModel = signUpViewModel,
                 navController = navController)
         }
 
@@ -64,6 +70,8 @@ fun NavigationHost(goalViewModel: GoalViewModel, habitViewModel:HabitViewModel, 
             content = { GoalsScreen(goalViewModel,navController,isRefreshing.value, refreshData = goalViewModel::getAllGoals) })
         composable(
             route = BottomNavScreen.Profile.screen_route,
-            content = { ProfileScreen(signUpViewModel,loginViewModel,navController) })
+            content = {
+                ProfileScreen(navController,loginViewModel, signUpViewModel)
+            })
     })
 }
