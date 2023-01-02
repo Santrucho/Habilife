@@ -114,7 +114,7 @@ fun NewHabitScreen(habitViewModel: HabitViewModel,navController: NavController) 
             is Resource.Success ->{
                 LaunchedEffect(Unit){
                     navController.navigate(BottomNavScreen.Habit.screen_route){
-                        popUpTo(Screen.LoginScreen.route) {inclusive = true}
+                        //popUpTo(Screen.LoginScreen.route) {inclusive = true}
                     }
                 }
             }
