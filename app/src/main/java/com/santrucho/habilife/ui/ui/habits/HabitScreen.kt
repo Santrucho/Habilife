@@ -41,6 +41,7 @@ fun HabitScreen(habitViewModel:HabitViewModel,
                 isRefreshing: Boolean,
                 refreshData: () -> Unit) {
 
+    habitViewModel.resetResult()
     val state = habitViewModel.habitState.value
 
     Column(

@@ -38,14 +38,29 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
 
     var isEnabledConfirmButton: MutableState<Boolean> = mutableStateOf(false)
 
+    private val _habitFlow = MutableStateFlow<Resource<Habit>?>(null)
+    val habitFlow: StateFlow<Resource<Habit>?> = _habitFlow
+
+    private val _habitState: MutableState<HabitResponse> = mutableStateOf(HabitResponse())
+    val habitState: State<HabitResponse> = _habitState
+
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean> = _isRefreshing
+
+    val error = MutableStateFlow<String>("")
+
+    init {
+        getAllHabits()
+    }
+
     private fun shouldEnabledConfirmButton() {
         isEnabledConfirmButton.value =
             titleErrMsg.value.isEmpty()
                 && descriptionErrMsg.value.isEmpty()
                 && frequentlyMsg.value.isEmpty()
-                && titleValue.value.isNotEmpty()
-                && descriptionValue.value.isNotEmpty()
-                && frequencyValue.value.isNotEmpty()
+                && !titleValue.value.isNullOrBlank()
+                && !descriptionValue.value.isNullOrBlank()
+                && !frequencyValue.value.isNullOrBlank()
     }
 
     fun validateTitle() {
@@ -81,22 +96,6 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
         shouldEnabledConfirmButton()
     }
 
-
-    private val _habitFlow = MutableStateFlow<Resource<Habit>?>(null)
-    val habitFlow: StateFlow<Resource<Habit>?> = _habitFlow
-
-    private val _habitState: MutableState<HabitResponse> = mutableStateOf(HabitResponse())
-    val habitState: State<HabitResponse> = _habitState
-
-    private val _isRefreshing = MutableStateFlow(false)
-    val isRefreshing: StateFlow<Boolean> = _isRefreshing
-
-    val error = MutableStateFlow<String>("")
-
-    init {
-        getAllHabits()
-    }
-
     fun addHabit(
         id: String,
         title: String,
@@ -108,26 +107,16 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
     ) {
         viewModelScope.launch {
             _habitFlow.value = Resource.Loading()
-            repository.addHabit(id, title, description, image, frequently, isCompleted, isExpanded)
-                .let { result ->
-                    Log.d("******************",result.toString())
-                    when (result) {
-                        is Resource.Loading -> {
-                            _habitFlow.value = Resource.Loading()
-                        }
-                        is Resource.Success -> {
-                            _habitFlow.value = result
-                            Log.d("@@@@@@@@@@@@@@@@@",result.toString())
-                        }
-                        is Resource.Failure -> {
-                            error.value = result.exception.message.toString()
-                        }
-                    }
-                }
-            titleValue.value = ""
-            descriptionValue.value = ""
-            frequencyValue.value = ""
+            val result = repository.addHabit(id, title, description, image, frequently, isCompleted, isExpanded)
+            _habitFlow.value = result
         }
+    }
+
+    fun resetResult(){
+        _habitFlow.value = null
+        titleValue.value = ""
+        descriptionValue.value = ""
+        frequencyValue.value = ""
     }
 
     fun getAllHabits() {
@@ -138,7 +127,7 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
                         _habitState.value = HabitResponse(isLoading = true)
                     }
                     is Resource.Success -> {
-                        _habitState.value = HabitResponse(listHabits = resource.data ?: emptyList())
+                        _habitState.value = HabitResponse(listHabits = resource.data)
                     }
                     is Resource.Failure -> {
                         _habitState.value =
