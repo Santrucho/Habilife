@@ -10,6 +10,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltNavGraphViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.santrucho.habilife.R
@@ -19,7 +21,7 @@ import com.santrucho.habilife.ui.presentation.LoginViewModel
 import com.santrucho.habilife.ui.presentation.SignUpViewModel
 
 @Composable
-fun ProfileScreen(signUpViewModel: SignUpViewModel?, loginViewModel: LoginViewModel?, navController: NavHostController) {
+fun ProfileScreen(navController: NavController,loginViewModel: LoginViewModel, signUpViewModel: SignUpViewModel) {
 
     Column(
         modifier = Modifier
@@ -29,7 +31,7 @@ fun ProfileScreen(signUpViewModel: SignUpViewModel?, loginViewModel: LoginViewMo
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
-            signUpViewModel?.currentUser?.let {
+            signUpViewModel.currentUser?.let {
                 UserInfo(
                     viewModel = signUpViewModel,
                     navController = navController,
@@ -39,8 +41,8 @@ fun ProfileScreen(signUpViewModel: SignUpViewModel?, loginViewModel: LoginViewMo
             }
             Button(
                 onClick = {
-                    loginViewModel?.logout()
-                    signUpViewModel?.logout()
+                    loginViewModel.logout()
+                    signUpViewModel.logout()
                     navController.navigate(Screen.LoginScreen.route) {
                         popUpTo(BottomNavScreen.Profile.screen_route) { inclusive = true }
                     }

@@ -28,11 +28,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val signUpViewModel by viewModels<SignUpViewModel>()
-    private val loginViewModel by viewModels<LoginViewModel>()
-    private val habitViewModel by viewModels<HabitViewModel>()
-    private val goalViewModel by viewModels<GoalViewModel>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -62,7 +57,7 @@ class MainActivity : ComponentActivity() {
                         }
                     )
                 }){
-                    NavigationHost(goalViewModel,habitViewModel,loginViewModel, signUpViewModel, navController)
+                    NavigationHost(navController)
                 }
             }
         }

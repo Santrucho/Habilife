@@ -33,6 +33,7 @@ import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.data.model.Habit
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.HabitViewModel
+import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 
 @Composable
 fun HabitScreen(habitViewModel:HabitViewModel,
@@ -40,6 +41,7 @@ fun HabitScreen(habitViewModel:HabitViewModel,
                 isRefreshing: Boolean,
                 refreshData: () -> Unit) {
 
+    habitViewModel.resetResult()
     val state = habitViewModel.habitState.value
 
     Column(
@@ -68,7 +70,16 @@ fun HabitScreen(habitViewModel:HabitViewModel,
                 .fillMaxWidth()
                 .padding(8.dp), horizontalArrangement = Arrangement.Center
         ) {
-            FabButton(navController)
+            Button(
+                onClick = { navController.navigate(Screen.NewHabitScreen.route){
+                    popUpTo(BottomNavScreen.Habit.screen_route) {inclusive = true}
+                } },
+                modifier = Modifier.defaultMinSize(240.dp, 56.dp),
+                shape = CircleShape
+
+            ) {
+                Text("Crear nuevo habito")
+            }
         }
         Spacer(modifier = Modifier.height(60.dp))
     }
@@ -134,17 +145,7 @@ fun RecommendedHabitsElement(
 
 
 //Set Fab Button which navigate to Create New Habit screen
-@Composable
-fun FabButton(navController: NavController) {
-    Button(
-        onClick = { navController.navigate(Screen.NewHabitScreen.route) },
-        modifier = Modifier.defaultMinSize(240.dp, 56.dp),
-        shape = CircleShape
 
-    ) {
-        Text("Crear nuevo habito")
-    }
-}
 
 
 private val habitsData = listOf(
@@ -160,4 +161,6 @@ private data class DrawableStringPair(
     @DrawableRes val drawable: Int,
     @StringRes val text: Int
 )
+
+
 
