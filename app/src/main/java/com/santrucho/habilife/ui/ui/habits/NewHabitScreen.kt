@@ -1,5 +1,7 @@
 package com.santrucho.habilife.ui.ui.habits
 
+import android.annotation.SuppressLint
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -24,20 +26,23 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.santrucho.habilife.R
+import com.santrucho.habilife.ui.data.model.Habit
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.HabitViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.utils.BackPressHandler
 import com.santrucho.habilife.ui.utils.Resource
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun NewHabitScreen(habitViewModel: HabitViewModel,navController: NavController) {
 
-    var titleValue by remember { mutableStateOf("") }
-    var descriptionValue by remember { mutableStateOf("") }
-    var frequencyValue by remember { mutableStateOf("") }
+    //var titleValue by remember {mutableStateOf("")}
+    //var descriptionValue by remember { mutableStateOf("") }
+    //var frequencyValue by remember { mutableStateOf("") }
 
-    val habitFlow = habitViewModel.habitFlow.collectAsState()
+    val result by habitViewModel.habitFlow.collectAsState()
+
     val context = LocalContext.current
 
     // onBack can be passed down as composable param and hoisted
@@ -58,17 +63,26 @@ fun NewHabitScreen(habitViewModel: HabitViewModel,navController: NavController) 
                     .background(colorResource(id = R.color.white))
             ) {
                 TextField(
-                    value = titleValue,
-                    onValueChange = { titleValue = it },
+                    value = habitViewModel.titleValue.value,
+                    onValueChange = { habitViewModel.titleValue.value = it
+                                    habitViewModel.validateTitle()},
+                    isError = habitViewModel.isTitleValid.value,
                     placeholder = { Text(text = "Habit title") },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(1f),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
                 )
-
+                Text(
+                    modifier = Modifier.padding(start = 8.dp),
+                    text = habitViewModel.titleErrMsg.value,
+                    fontSize = 14.sp,
+                    color = Color.Red
+                )
                 TextField(
-                    value = descriptionValue,
-                    onValueChange = { descriptionValue = it },
+                    value = habitViewModel.descriptionValue.value,
+                    onValueChange = { habitViewModel.descriptionValue.value = it
+                        habitViewModel.validateDescription()},
+                    isError = habitViewModel.isDescriptionValid.value,
                     label = { Text(text = "Descripcion") },
                     placeholder = { Text(text = "Description") },
                     modifier = Modifier
@@ -76,11 +90,20 @@ fun NewHabitScreen(habitViewModel: HabitViewModel,navController: NavController) 
                         .fillMaxHeight(0.5f),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
                 )
+                Text(
+                    modifier = Modifier.padding(start = 8.dp),
+                    text = habitViewModel.descriptionErrMsg.value,
+                    fontSize = 14.sp,
+                    color = Color.Red
+                )
+
                 Spacer(modifier = Modifier.padding(8.dp))
 
                 TextField(
-                    value = frequencyValue,
-                    onValueChange = { frequencyValue = it },
+                    value = habitViewModel.frequencyValue.value,
+                    onValueChange = { habitViewModel.frequencyValue.value = it
+                        habitViewModel.validateFrequently()},
+                    isError = habitViewModel.isFrequentlyValid.value,
                     label = { Text(text = "Frecuencia") },
                     placeholder = { Text(text = "frequency") },
                     singleLine = true,
@@ -89,11 +112,25 @@ fun NewHabitScreen(habitViewModel: HabitViewModel,navController: NavController) 
                         .padding(8.dp),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
                 )
+                Text(
+                    modifier = Modifier.padding(start = 8.dp),
+                    text = habitViewModel.frequentlyMsg.value,
+                    fontSize = 14.sp,
+                    color = Color.Red
+                )
 
                 Spacer(modifier = Modifier.padding(16.dp))
                 Column(modifier = Modifier.fillMaxWidth()){
                     Button(
-                        onClick = {habitViewModel.addHabit("",titleValue,descriptionValue,"",frequencyValue,false,false)},
+                        onClick = {
+                            habitViewModel.addHabit("",habitViewModel.titleValue.value,
+                                habitViewModel.descriptionValue.value,"",
+                                habitViewModel.frequencyValue.value,false, false)
+                            navController.navigate(BottomNavScreen.Habit.screen_route) {
+                                popUpTo(Screen.NewHabitScreen.route) { inclusive = true }
+                            }
+                            },
+                        enabled = habitViewModel.isEnabledConfirmButton.value,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(8.dp)
@@ -108,19 +145,29 @@ fun NewHabitScreen(habitViewModel: HabitViewModel,navController: NavController) 
             }
         }
     }
-
-    habitFlow.value?.let{
-        when(it){
+    if(result != null) {
+        when (result) {
+            is Resource.Loading -> {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+        }
+    }
+    /*habitFlow.value?.let{ result ->
+        when(result){
             is Resource.Success ->{
-                LaunchedEffect(Unit){
-                    navController.navigate(BottomNavScreen.Habit.screen_route){
-                        //popUpTo(Screen.LoginScreen.route) {inclusive = true}
-                    }
+                LaunchedEffect(Unit) {
+                    Log.d("************************",habitFlow.value.toString())
+
                 }
             }
             is Resource.Failure -> {
                 LaunchedEffect(habitFlow.value){
-                    Toast.makeText(context,it.exception.message, Toast.LENGTH_LONG).show()
+                    Toast.makeText(context,result.exception.message, Toast.LENGTH_LONG).show()
                 }
             }
             is Resource.Loading -> {
@@ -128,11 +175,9 @@ fun NewHabitScreen(habitViewModel: HabitViewModel,navController: NavController) 
                     modifier = Modifier.fillMaxSize()) {
                     CircularProgressIndicator()
                 }
-
             }
         }
-    }
-
+    } */
 }
 
 @Composable
