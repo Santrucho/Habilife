@@ -17,6 +17,21 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GoalViewModel @Inject constructor(private val repository : GoalsRepository) : ViewModel() {
+
+    var titleValue : MutableState<String> = mutableStateOf("")
+    var isTitleValid: MutableState<Boolean> = mutableStateOf(false)
+    var titleErrMsg: MutableState<String> = mutableStateOf("")
+
+    var descriptionValue: MutableState<String> = mutableStateOf("")
+    var isDescriptionValid: MutableState<Boolean> = mutableStateOf(false)
+    var descriptionErrMsg: MutableState<String> = mutableStateOf("")
+
+    var release_dateValue: MutableState<String> = mutableStateOf("")
+    var isreleaseDateValid: MutableState<Boolean> = mutableStateOf(false)
+    var release_dateMsg: MutableState<String> = mutableStateOf("")
+
+    var isEnabledConfirmButton: MutableState<Boolean> = mutableStateOf(false)
+
     private val _goalFlow = MutableStateFlow<Resource<Goals>?>(null)
     val goalFlow : StateFlow<Resource<Goals>?> = _goalFlow
 
@@ -31,6 +46,51 @@ class GoalViewModel @Inject constructor(private val repository : GoalsRepository
         getAllGoals()
     }
 
+    private fun shouldEnabledConfirmButton() {
+        isEnabledConfirmButton.value =
+            titleErrMsg.value.isEmpty()
+                    && descriptionErrMsg.value.isEmpty()
+                    && release_dateMsg.value.isEmpty()
+                    && !titleValue.value.isNullOrBlank()
+                    && !descriptionValue.value.isNullOrBlank()
+                    && !release_dateValue.value.isNullOrBlank()
+    }
+
+    fun validateTitle() {
+        if (titleValue.value.length >= 10) {
+            isTitleValid.value = true
+            titleErrMsg.value = "Title should be less than 10 chars"
+        } else {
+            isTitleValid.value = false
+            titleErrMsg.value = ""
+        }
+        shouldEnabledConfirmButton()
+    }
+
+    fun validateDescription() {
+        if (descriptionValue.value.length <= 5) {
+            isDescriptionValid.value = true
+            descriptionErrMsg.value = "Description should be long than 5 chars"
+        } else {
+            isDescriptionValid.value = false
+            descriptionErrMsg.value = ""
+        }
+        shouldEnabledConfirmButton()
+    }
+
+    fun validateReleaseDate() {
+        if (release_dateValue.value.length <= 6) {
+            isreleaseDateValid.value = true
+            release_dateMsg.value = "Release date should be 6 digit in format dd-mm-yyyy"
+        } else {
+            isreleaseDateValid.value = false
+            release_dateMsg.value = ""
+        }
+        shouldEnabledConfirmButton()
+    }
+
+
+
     fun addGoal(title:String,description:String,isCompleted:Boolean,release_date:String){
         viewModelScope.launch {
             _goalFlow.value = Resource.Loading()
@@ -38,6 +98,13 @@ class GoalViewModel @Inject constructor(private val repository : GoalsRepository
             _goalFlow.value = createHabit
         }
 
+    }
+
+    fun resetResult(){
+        _goalFlow.value = null
+        titleValue.value = ""
+        descriptionValue.value = ""
+        release_dateValue.value = ""
     }
 
     fun getAllGoals(){

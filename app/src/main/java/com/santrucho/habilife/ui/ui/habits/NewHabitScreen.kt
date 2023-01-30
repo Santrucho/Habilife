@@ -168,7 +168,7 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                                 is Resource.Failure -> {
                                     Toast.makeText(
                                         context,
-                                        "Error al crear el habito, intente nuevamente",
+                                        result.exception.message.toString(),
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
