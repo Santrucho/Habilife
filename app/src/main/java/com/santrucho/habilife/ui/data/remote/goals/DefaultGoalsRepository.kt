@@ -48,4 +48,13 @@ class DefaultGoalsRepository @Inject constructor(private val firestore:FirebaseF
         }
     }
 
+    override suspend fun deleteGoal(goal:Goals){
+        try {
+            firestore.collection("goals").document(goal.id).delete().await()
+        }
+        catch(e:Exception){
+            Resource.Failure(e)
+        }
+    }
+
 }

@@ -45,4 +45,17 @@ class GoalViewModel @Inject constructor(private val repository : GoalsRepository
             _goalState.value = repository.getGoals()
         }
     }
+
+    fun deleteGoal(goal:Goals){
+        viewModelScope.launch {
+            repository.deleteGoal(goal)
+            val currentResource = _goalState.value
+            val currentGoals = when (currentResource) {
+                is Resource.Success -> currentResource.data
+                else -> emptyList()
+            }
+            val updatedHabits = currentGoals.toMutableList().apply { remove(goal) }
+            _goalState.value = Resource.Success(updatedHabits)
+        }
+    }
 }

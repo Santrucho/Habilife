@@ -32,10 +32,6 @@ fun GoalList(
 ) {
     val goals = goalsViewModel.goalState.collectAsState()
 
-    LazyColumn(modifier = Modifier.padding(16.dp)){
-
-    }
-
     goals.value.let { result ->
         when(result){
             is Resource.Loading -> {
@@ -47,7 +43,7 @@ fun GoalList(
                 }
             }
             is Resource.Success -> {
-                GoalsUI(goals = result.data)
+                GoalsUI(goals = result.data,goalsViewModel::deleteGoal)
             }
             is Resource.Failure -> {
                 result.exception.message.toString()
@@ -58,10 +54,10 @@ fun GoalList(
 }
 
 @Composable
-fun GoalsUI(goals:List<Goals>){
+fun GoalsUI(goals:List<Goals>,onDelete:(Goals) -> Unit){
     LazyColumn(modifier = Modifier.padding(8.dp)){
         items(goals) {
-            GoalCard(goal = it)
+            GoalCard(goal = it,onDelete)
         }
     }
 }

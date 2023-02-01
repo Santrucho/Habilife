@@ -1,9 +1,7 @@
 package com.santrucho.habilife.ui.ui.goals.components
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -17,7 +15,7 @@ import com.santrucho.habilife.ui.data.model.Goals
 
 
 @Composable
-fun GoalCard(goal: Goals) {
+fun GoalCard(goal: Goals,onDelete:(Goals) -> Unit) {
     Card(
         shape = MaterialTheme.shapes.small,
         modifier = Modifier
@@ -61,6 +59,18 @@ fun GoalCard(goal: Goals) {
                         .wrapContentHeight(Alignment.Bottom),
                     color = Color.DarkGray,
                     fontSize = 25.sp
+                )
+            }
+            Button(
+                onClick = {
+                    onDelete(goal)
+                },
+                modifier = Modifier
+                    .fillMaxWidth(0.5f)
+                    .height(50.dp),
+            ) {
+                Text(
+                    text = "Delete"
                 )
             }
         }
