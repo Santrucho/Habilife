@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.Flow
 interface HabitsRepository {
 
     suspend fun addHabit(
-        id:String,
         title:String,
         description:String,
         image:String,
@@ -18,5 +17,7 @@ interface HabitsRepository {
         isExpanded : Boolean) : Resource<Habit>
 
     suspend fun getHabits() : Resource<List<Habit>>
+
+    suspend fun deleteHabit(habit:Habit)
 
 }

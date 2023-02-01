@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -25,98 +26,49 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.santrucho.habilife.ui.data.model.Habit
 import com.santrucho.habilife.ui.data.model.HabitResponse
+import com.santrucho.habilife.ui.presentation.HabitViewModel
+import com.santrucho.habilife.ui.utils.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.StateFlow
 
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun HabitList(
-    state: HabitResponse,
-    isRefreshing: Boolean,
-    refreshData: () -> Unit
-) {
+    habitViewModel: HabitViewModel) {
+    val habits = habitViewModel.habitState.collectAsState()
 
-    Box(
-        modifier = Modifier.fillMaxSize(),
-    ){
-        SwipeRefresh(
-            state = rememberSwipeRefreshState(isRefreshing),
-            onRefresh = refreshData
-        ){
-            LazyColumn(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                items(
-                    items = state.listHabits
-                ){ habit ->
+    LazyColumn(modifier = Modifier.padding(16.dp)){
 
-                    var isDeleted by remember { mutableStateOf(false) }
-                    val dismissState = rememberDismissState(
-                        confirmStateChange = {
-                            Log.d("BookList", "Dismiss value: ${it.name}")
-                            if(it == DismissValue.DismissedToEnd) isDeleted = !isDeleted
-                            it != DismissValue.DismissedToEnd
-                        }
-                    )
+    }
 
-                    SwipeToDismiss(
-                        state = dismissState,
-                        directions = setOf(DismissDirection.StartToEnd),
-                        dismissThresholds = {
-                            FractionalThreshold(0.5f)
-                        },
-                        background = {
-                            val direction = dismissState.dismissDirection ?:  return@SwipeToDismiss
-                            val color by animateColorAsState(
-                                when(dismissState.targetValue) {
-                                    DismissValue.DismissedToEnd -> androidx.compose.ui.graphics.Color.Companion.Red
-                                    DismissValue.DismissedToStart -> androidx.compose.ui.graphics.Color.Companion.Red
-                                    DismissValue.Default -> androidx.compose.ui.graphics.Color.Companion.Red
-                                }
-                            )
-                            val alignment = when (direction) {
-                                DismissDirection.StartToEnd -> Alignment.CenterStart
-                                DismissDirection.EndToStart -> Alignment.CenterEnd
-
-                            }
-                            val scale by animateFloatAsState(
-                                if (dismissState.targetValue == DismissValue.Default) 0.75f else 1f
-                            )
-
-                            Box(
-                                Modifier
-                                    .fillMaxSize()
-                                    .background(color)
-                                    .padding(horizontal = 20.dp),
-                                contentAlignment = alignment
-                            ) {
-                            }
-                        }
-                    ) {
-                        if(isDeleted) {
-                            // TODO("DELETE BOOK")
-                        } else {
-                            HabitCard(habit)
-                        }
-                    }
+    habits.value.let { result ->
+        when(result){
+            is Resource.Loading -> {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    CircularProgressIndicator()
                 }
             }
-        }
-
-
-        if (state.error.isNotBlank()) {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp),
-                    text = state.error,
-                    textAlign = TextAlign.Center
-                )
+            is Resource.Success -> {
+                HabitUI(habits = result.data,habitViewModel::deleteHabit)
             }
-            if (state.isLoading) {
-                CircularProgressIndicator(modifier = Modifier
-                    .fillMaxSize()
-                    .padding(8.dp))
+            is Resource.Failure -> {
+                result.exception.message.toString()
             }
+            null -> TODO()
         }
     }
+}
+
+@Composable
+fun HabitUI(habits:List<Habit>,onDelete : (Habit) -> Unit){
+    LazyColumn(modifier = Modifier.padding(8.dp)){
+        items(habits) {
+            HabitCard(habit = it,onDelete)
+        }
+    }
+}
