@@ -36,7 +36,7 @@ fun NewGoalScreen(goalViewModel: GoalViewModel, navController: NavController) {
     var descriptionValue by remember { mutableStateOf("") }
     var release_date by remember { mutableStateOf("") }
 
-    val goalFlow = goalViewModel.goalFlow.collectAsState()
+    val goalValue = goalViewModel.goalFlow.collectAsState()
     val context = LocalContext.current
 
     // onBack can be passed down as composable param and hoisted
@@ -102,36 +102,39 @@ fun NewGoalScreen(goalViewModel: GoalViewModel, navController: NavController) {
                     ) {
                         Text("Guardar objetivo")
                     }
-                }
+                    goalValue.value?.let{
+                        when(it){
+                            is Resource.Success ->{
+                                LaunchedEffect(Unit){
+                                    navController.navigate(BottomNavScreen.Goals.screen_route){
+                                        popUpTo(Screen.LoginScreen.route) {inclusive = true}
+                                    }
+                                    Toast.makeText(
+                                        context,
+                                        "Habito creado con exito!",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                            is Resource.Failure -> {
+                                LaunchedEffect(goalValue.value){
+                                    Toast.makeText(context,it.exception.message, Toast.LENGTH_LONG).show()
+                                }
+                            }
+                            is Resource.Loading -> {
+                                Box(contentAlignment = Alignment.Center,
+                                    modifier = Modifier.fillMaxSize()) {
+                                    CircularProgressIndicator()
+                                }
 
-            }
-        }
-    }
-
-    goalFlow.value?.let{
-        when(it){
-            is Resource.Success ->{
-                LaunchedEffect(Unit){
-                    navController.navigate(BottomNavScreen.Goals.screen_route){
-                        popUpTo(Screen.LoginScreen.route) {inclusive = true}
+                            }
+                        }
                     }
                 }
-            }
-            is Resource.Failure -> {
-                LaunchedEffect(goalFlow.value){
-                    Toast.makeText(context,it.exception.message, Toast.LENGTH_LONG).show()
-                }
-            }
-            is Resource.Loading -> {
-                Box(contentAlignment = Alignment.Center,
-                    modifier = Modifier.fillMaxSize()) {
-                    CircularProgressIndicator()
-                }
 
             }
         }
     }
-
 }
 
 @Composable

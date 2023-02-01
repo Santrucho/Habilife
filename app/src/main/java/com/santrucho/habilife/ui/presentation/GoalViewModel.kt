@@ -34,8 +34,7 @@ class GoalViewModel @Inject constructor(private val repository : GoalsRepository
     fun addGoal(title:String,description:String,isCompleted:Boolean,release_date:String){
         viewModelScope.launch {
             _goalFlow.value = Resource.Loading()
-            val createHabit = repository.addGoal(title,description,isCompleted,release_date)
-            _goalFlow.value = createHabit
+            _goalFlow.value = repository.addGoal(title,description,isCompleted,release_date)
         }
 
     }
