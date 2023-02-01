@@ -2,6 +2,7 @@ package com.santrucho.habilife.ui.ui.habits
 
 import android.graphics.Color
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -12,9 +13,10 @@ import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.santrucho.habilife.ui.data.model.Habit
+import com.santrucho.habilife.ui.presentation.HabitViewModel
 
 @Composable
-fun HabitCard(habit: Habit) {
+fun HabitCard(habit: Habit,onDelete:(Habit)-> Unit) {
     Card(
         shape = MaterialTheme.shapes.small,
         modifier = Modifier
@@ -58,6 +60,18 @@ fun HabitCard(habit: Habit) {
                         .wrapContentHeight(Alignment.Bottom),
                     color = androidx.compose.ui.graphics.Color.Companion.DarkGray,
                     fontSize = 25.sp
+                )
+            }
+            Button(
+                onClick = {
+                    onDelete(habit)
+                },
+                modifier = Modifier
+                    .fillMaxWidth(0.5f)
+                    .height(50.dp),
+            ) {
+                Text(
+                    text = "Delete"
                 )
             }
         }

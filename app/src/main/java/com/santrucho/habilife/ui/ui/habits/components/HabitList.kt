@@ -36,8 +36,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun HabitList(
-    habitViewModel: HabitViewModel
-) {
+    habitViewModel: HabitViewModel) {
     val habits = habitViewModel.habitState.collectAsState()
 
     LazyColumn(modifier = Modifier.padding(16.dp)){
@@ -55,7 +54,7 @@ fun HabitList(
                 }
             }
             is Resource.Success -> {
-                HabitUI(habits = result.data)
+                HabitUI(habits = result.data,habitViewModel::deleteHabit)
             }
             is Resource.Failure -> {
                 result.exception.message.toString()
@@ -66,10 +65,10 @@ fun HabitList(
 }
 
 @Composable
-fun HabitUI(habits:List<Habit>){
+fun HabitUI(habits:List<Habit>,onDelete : (Habit) -> Unit){
     LazyColumn(modifier = Modifier.padding(8.dp)){
         items(habits) {
-            HabitCard(habit = it)
+            HabitCard(habit = it,onDelete)
         }
     }
 }
