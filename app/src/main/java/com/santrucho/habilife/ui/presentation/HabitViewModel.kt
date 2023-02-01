@@ -1,5 +1,6 @@
 package com.santrucho.habilife.ui.presentation
 
+import android.system.Os.remove
 import android.util.Log
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
@@ -129,6 +130,13 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
     fun deleteHabit(habit:Habit){
         viewModelScope.launch {
             repository.deleteHabit(habit)
+            val currentResource = _habitState.value
+            val currentHabits = when (currentResource) {
+                is Resource.Success -> currentResource.data
+                else -> emptyList()
+            }
+            val updatedHabits = currentHabits.toMutableList().apply { remove(habit) }
+            _habitState.value = Resource.Success(updatedHabits)
         }
     }
 }
