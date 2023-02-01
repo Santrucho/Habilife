@@ -42,8 +42,8 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
     private val _habitFlow = MutableStateFlow<Resource<Habit>?>(null)
     val habitFlow: StateFlow<Resource<Habit>?> = _habitFlow
 
-    private val _habitState = MutableStateFlow<List<Habit>>(emptyList())
-    val habitState: StateFlow<List<Habit>> = _habitState
+    private val _habitState = MutableStateFlow<Resource<List<Habit>>?>(null)
+    val habitState: StateFlow<Resource<List<Habit>>?> = _habitState
 
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> = _isRefreshing
@@ -97,6 +97,13 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
         shouldEnabledConfirmButton()
     }
 
+    fun resetResult(){
+        _habitFlow.value = null
+        titleValue.value = ""
+        descriptionValue.value = ""
+        frequencyValue.value = ""
+    }
+
     fun addHabit(
         title: String,
         description: String,
@@ -113,16 +120,9 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
         }
     }
 
-    fun resetResult(){
-        _habitFlow.value = null
-        titleValue.value = ""
-        descriptionValue.value = ""
-        frequencyValue.value = ""
-    }
-
     fun getAllHabits() {
         viewModelScope.launch {
-            repository.getHabits()
+            _habitState.value = repository.getHabits()
         }
     }
 

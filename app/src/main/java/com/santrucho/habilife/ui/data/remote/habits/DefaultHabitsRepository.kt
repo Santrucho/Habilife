@@ -34,8 +34,6 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
                     isCompleted = isCompleted,
                     isExpanded = isExpanded
                 )
-                Log.d("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",habitToSave.id)
-                Log.d("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",habitToSave.toString())
                 documentReference.set(habitToSave).await()
                 Resource.Success(habitToSave)
             }

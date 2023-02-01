@@ -64,8 +64,7 @@ fun HabitScreen(habitViewModel:HabitViewModel,
                 .background(colorResource(id = R.color.white)),
             horizontalAlignment = Alignment.Start
         ) {
-            habitViewModel.getAllHabits()
-            HabitList(habitsStateFlow,isRefreshing,refreshData,habitViewModel)
+            HabitList(habitViewModel)
         }
         //Set FAB Button Row above BottomBar
         Spacer(modifier = Modifier.weight(1f))
