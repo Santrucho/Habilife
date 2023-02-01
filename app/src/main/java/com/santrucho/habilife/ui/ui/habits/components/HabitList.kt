@@ -25,17 +25,23 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.santrucho.habilife.ui.data.model.Habit
 import com.santrucho.habilife.ui.data.model.HabitResponse
+import com.santrucho.habilife.ui.presentation.HabitViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.StateFlow
 
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun HabitList(
-    state: HabitResponse,
+    habitsStateFlow: StateFlow<List<Habit>>,
     isRefreshing: Boolean,
-    refreshData: () -> Unit
+    refreshData: () -> Unit,
+    habitViewModel: HabitViewModel
 ) {
 
+    val habits by habitsStateFlow.collectAsState()
     Box(
         modifier = Modifier.fillMaxSize(),
     ){
@@ -47,13 +53,15 @@ fun HabitList(
                 modifier = Modifier.fillMaxSize()
             ) {
                 items(
-                    items = state.listHabits
+                    items = habits
                 ){ habit ->
+                    Log.d("[[[[[[[[[[[[[[[[[[[[[[[[[[",habit.toString())
+                    Log.d("[[[[[[[[[[[[[[[[[[[[[[[[[[",habit.toString())
 
                     var isDeleted by remember { mutableStateOf(false) }
                     val dismissState = rememberDismissState(
                         confirmStateChange = {
-                            Log.d("BookList", "Dismiss value: ${it.name}")
+                            Log.d("HabitList", "Dismiss value: ${it.name}")
                             if(it == DismissValue.DismissedToEnd) isDeleted = !isDeleted
                             it != DismissValue.DismissedToEnd
                         }
@@ -94,9 +102,9 @@ fun HabitList(
                         }
                     ) {
                         if(isDeleted) {
-                            // TODO("DELETE BOOK")
+                            habitViewModel.deleteHabit(habit)
                         } else {
-                            HabitCard(habit)
+                            HabitCard(habit = habit)
                         }
                     }
                 }
@@ -104,19 +112,14 @@ fun HabitList(
         }
 
 
-        if (state.error.isNotBlank()) {
+        if (habits.isEmpty()) {
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp),
-                    text = state.error,
+                    text = "Error al mostrar los habitos",
                     textAlign = TextAlign.Center
                 )
-            }
-            if (state.isLoading) {
-                CircularProgressIndicator(modifier = Modifier
-                    .fillMaxSize()
-                    .padding(8.dp))
             }
         }
     }

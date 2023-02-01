@@ -60,6 +60,15 @@ fun HabitCard(habit: Habit) {
                     fontSize = 25.sp
                 )
             }
+            habit.id.let { id ->
+                Text(
+                    text = id,
+                    modifier = Modifier
+                        .wrapContentHeight(Alignment.Top),
+                    color = androidx.compose.ui.graphics.Color.Companion.DarkGray,
+                    fontSize = 25.sp
+                )
+            }
         }
     }
 }

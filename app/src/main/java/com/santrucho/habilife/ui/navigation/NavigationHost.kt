@@ -21,6 +21,8 @@ import com.santrucho.habilife.ui.ui.habits.HabitScreen
 import com.santrucho.habilife.ui.ui.habits.NewHabitScreen
 import com.santrucho.habilife.ui.ui.goals.GoalsScreen
 import com.santrucho.habilife.ui.ui.goals.NewGoalScreen
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 
 @Composable
@@ -32,6 +34,7 @@ fun NavigationHost(navController:NavController) {
     val habitViewModel = viewModel<HabitViewModel>()
     val loginViewModel = viewModel<LoginViewModel>()
     val isRefreshing = habitViewModel.isRefreshing.collectAsState()
+    val habitsStateFlow = MutableStateFlow<List<Habit>>(emptyList())
 
     NavHost(navController = navController as NavHostController, startDestination = Screen.LoginScreen.route,builder ={
 
@@ -59,7 +62,7 @@ fun NavigationHost(navController:NavController) {
             content = { HomeScreen(navController) })
         composable(
             route = BottomNavScreen.Habit.screen_route,
-            content = { HabitScreen(habitViewModel,navController,isRefreshing.value,refreshData = habitViewModel::getAllHabits) })
+            content = { HabitScreen(habitViewModel,navController,isRefreshing.value,refreshData = habitViewModel::getAllHabits,habitsStateFlow) })
         composable(
             route = BottomNavScreen.Goals.screen_route,
             content = { GoalsScreen(goalViewModel,navController,isRefreshing.value, refreshData = goalViewModel::getAllGoals) })

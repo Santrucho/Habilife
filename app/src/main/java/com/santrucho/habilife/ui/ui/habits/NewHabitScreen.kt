@@ -31,6 +31,7 @@ import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.utils.BackPressHandler
 import com.santrucho.habilife.ui.utils.Resource
 import kotlinx.coroutines.withContext
+import java.util.*
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
@@ -125,7 +126,7 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                     Button(
                         onClick = {
                             habitViewModel.addHabit(
-                                "", habitViewModel.titleValue.value,
+                                habitViewModel.titleValue.value,
                                 habitViewModel.descriptionValue.value, "",
                                 habitViewModel.frequencyValue.value, false, false
                             )

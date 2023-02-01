@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -41,8 +42,8 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
     private val _habitFlow = MutableStateFlow<Resource<Habit>?>(null)
     val habitFlow: StateFlow<Resource<Habit>?> = _habitFlow
 
-    private val _habitState: MutableState<HabitResponse> = mutableStateOf(HabitResponse())
-    val habitState: State<HabitResponse> = _habitState
+    private val _habitState = MutableStateFlow<List<Habit>>(emptyList())
+    val habitState: StateFlow<List<Habit>> = _habitState
 
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> = _isRefreshing
@@ -97,7 +98,6 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
     }
 
     fun addHabit(
-        id: String,
         title: String,
         description: String,
         image: String,
@@ -105,9 +105,10 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
         isCompleted: Boolean,
         isExpanded: Boolean
     ) {
+
         viewModelScope.launch {
             _habitFlow.value = Resource.Loading()
-            val result = repository.addHabit(id, title, description, image, frequently, isCompleted, isExpanded)
+            val result = repository.addHabit(title, description, image, frequently, isCompleted, isExpanded)
             _habitFlow.value = result
         }
     }
@@ -121,20 +122,13 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
 
     fun getAllHabits() {
         viewModelScope.launch {
-            repository.getHabits().let { resource ->
-                when (resource) {
-                    is Resource.Loading -> {
-                        _habitState.value = HabitResponse(isLoading = true)
-                    }
-                    is Resource.Success -> {
-                        _habitState.value = HabitResponse(listHabits = resource.data)
-                    }
-                    is Resource.Failure -> {
-                        _habitState.value =
-                            HabitResponse(error = resource.exception.message ?: "Error inesperado")
-                    }
-                }
-            }
+            repository.getHabits()
+        }
+    }
+
+    fun deleteHabit(habit:Habit){
+        viewModelScope.launch {
+            repository.deleteHabit(habit)
         }
     }
 }

@@ -34,15 +34,18 @@ import com.santrucho.habilife.ui.data.model.Habit
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.HabitViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun HabitScreen(habitViewModel:HabitViewModel,
                 navController: NavController,
                 isRefreshing: Boolean,
-                refreshData: () -> Unit) {
+                refreshData: () -> Unit,
+                habitsStateFlow: StateFlow<List<Habit>>
+) {
 
     habitViewModel.resetResult()
-    val state = habitViewModel.habitState.value
+    val state = habitViewModel.habitState.collectAsState()
 
     Column(
         modifier = Modifier
@@ -61,7 +64,8 @@ fun HabitScreen(habitViewModel:HabitViewModel,
                 .background(colorResource(id = R.color.white)),
             horizontalAlignment = Alignment.Start
         ) {
-            HabitList(state,isRefreshing,refreshData)
+            habitViewModel.getAllHabits()
+            HabitList(habitsStateFlow,isRefreshing,refreshData,habitViewModel)
         }
         //Set FAB Button Row above BottomBar
         Spacer(modifier = Modifier.weight(1f))
