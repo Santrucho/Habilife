@@ -1,7 +1,6 @@
 package com.santrucho.habilife.ui.presentation
 
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -40,11 +39,6 @@ class GoalViewModel @Inject constructor(private val repository : GoalsRepository
 
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> = _isRefreshing
-
-
-    init {
-        getAllGoals()
-    }
 
     private fun shouldEnabledConfirmButton() {
         isEnabledConfirmButton.value =
@@ -93,8 +87,8 @@ class GoalViewModel @Inject constructor(private val repository : GoalsRepository
         viewModelScope.launch {
             _goalFlow.value = Resource.Loading()
             _goalFlow.value = repository.addGoal(title,description,isCompleted,release_date)
+           getAllGoals()
         }
-
     }
 
     fun resetResult(){
@@ -103,9 +97,12 @@ class GoalViewModel @Inject constructor(private val repository : GoalsRepository
         descriptionValue.value = ""
         release_dateValue.value = ""
     }
-
+    fun resetValue(){
+        _goalState.value = null
+    }
     fun getAllGoals(){
         viewModelScope.launch {
+            _goalState.value = Resource.Loading()
             _goalState.value = repository.getGoals()
         }
     }

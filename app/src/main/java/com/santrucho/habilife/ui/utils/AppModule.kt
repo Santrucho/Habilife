@@ -10,6 +10,7 @@ import com.santrucho.habilife.ui.data.remote.signup.DefaultSignUpRepository
 import com.santrucho.habilife.ui.data.remote.signup.SignUpRepository
 import com.santrucho.habilife.ui.data.remote.login.DefaultLoginRepository
 import com.santrucho.habilife.ui.data.remote.login.LoginRepository
+import com.santrucho.habilife.ui.presentation.GoalViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,6 +19,12 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 @Module
 object AppModule {
+
+    @Provides
+    fun provideGoalViewModel(implementation: GoalsRepository) : GoalViewModel{
+        return GoalViewModel(implementation)
+    }
+
     @Provides
     fun provideFirebaseAuth():FirebaseAuth = FirebaseAuth.getInstance()
 

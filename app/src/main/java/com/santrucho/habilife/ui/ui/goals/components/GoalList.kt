@@ -46,9 +46,10 @@ fun GoalList(
                 GoalsUI(goals = result.data,goalsViewModel::deleteGoal)
             }
             is Resource.Failure -> {
-                result.exception.message.toString()
+                LaunchedEffect(goals.value){
+                    result.exception.message.toString()
+                }
             }
-            null -> TODO()
         }
     }
 }
