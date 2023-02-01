@@ -20,8 +20,8 @@ class GoalViewModel @Inject constructor(private val repository : GoalsRepository
     private val _goalFlow = MutableStateFlow<Resource<Goals>?>(null)
     val goalFlow : StateFlow<Resource<Goals>?> = _goalFlow
 
-    private val _goalState : MutableState<GoalsResponse> = mutableStateOf(GoalsResponse())
-    val goalState : State<GoalsResponse> = _goalState
+    private val _goalState = MutableStateFlow<Resource<List<Goals>>?>(null)
+    val goalState : StateFlow<Resource<List<Goals>>?> = _goalState
 
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> = _isRefreshing
@@ -42,19 +42,7 @@ class GoalViewModel @Inject constructor(private val repository : GoalsRepository
 
     fun getAllGoals(){
         viewModelScope.launch {
-            repository.getGoals().let{ resource ->
-                when(resource){
-                    is Resource.Loading -> {
-                        _goalState.value = GoalsResponse(isLoading = true)
-                    }
-                    is Resource.Success -> {
-                        _goalState.value = GoalsResponse(goalsList = resource.data ?: emptyList())
-                    }
-                    is Resource.Failure -> {
-                        _goalState.value = GoalsResponse(error = resource.exception.message ?: "Error inesperado")
-                    }
-                }
-            }
+            _goalState.value = repository.getGoals()
         }
     }
 }
