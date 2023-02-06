@@ -8,16 +8,28 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.activity.viewModels
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import com.santrucho.habilife.R
+import com.santrucho.habilife.ui.presentation.GoalViewModel
+import com.santrucho.habilife.ui.presentation.HabitViewModel
+import com.santrucho.habilife.ui.presentation.LoginViewModel
+import com.santrucho.habilife.ui.presentation.SignUpViewModel
 
 @Composable
-fun HomeScreen( navController: NavController) {
+fun HomeScreen(navController: NavController,goalViewModel: GoalViewModel) {
+
+    goalViewModel.resetValue()
+    goalViewModel.getAllGoals()
+
     Column(
         modifier = Modifier
             .fillMaxSize()

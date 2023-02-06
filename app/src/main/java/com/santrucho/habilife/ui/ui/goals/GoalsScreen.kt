@@ -35,9 +35,8 @@ import com.santrucho.habilife.ui.ui.habits.HabitList
 fun GoalsScreen(goalViewModel: GoalViewModel, navController: NavController,isRefreshing: Boolean,
                 refreshData: () -> Unit) {
 
+    goalViewModel.resetResult()
     //val localContext = LocalContext.current
-    val state = goalViewModel.goalState.value
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -55,7 +54,7 @@ fun GoalsScreen(goalViewModel: GoalViewModel, navController: NavController,isRef
             horizontalAlignment = Alignment.Start
         ) {
             Text(text = "MIS OBJETIVOS", modifier = Modifier.padding(8.dp), color = Color.Black)
-            GoalList(state,isRefreshing,refreshData)
+            GoalList(goalViewModel)
         }
         //Set FAB Button Row above BottomBar
         Spacer(modifier = Modifier.weight(1f))

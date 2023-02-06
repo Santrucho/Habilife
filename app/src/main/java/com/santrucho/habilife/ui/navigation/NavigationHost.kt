@@ -28,7 +28,6 @@ import kotlinx.coroutines.flow.StateFlow
 @Composable
 fun NavigationHost(navController:NavController) {
 
-
     val goalViewModel = viewModel<GoalViewModel>()
     val signUpViewModel = viewModel<SignUpViewModel>()
     val habitViewModel = viewModel<HabitViewModel>()
@@ -42,7 +41,7 @@ fun NavigationHost(navController:NavController) {
             route = Screen.LoginScreen.route){
             LoginScreen(
                 viewModel = loginViewModel,
-                navController = navController
+                navController = navController,
             )
         }
         composable(
@@ -59,7 +58,7 @@ fun NavigationHost(navController:NavController) {
 
         composable(
             route = BottomNavScreen.Home.screen_route,
-            content = { HomeScreen(navController) })
+            content = { HomeScreen(navController,goalViewModel) })
         composable(
             route = BottomNavScreen.Habit.screen_route,
             content = { HabitScreen(habitViewModel,navController,isRefreshing.value,refreshData = habitViewModel::getAllHabits,habitsStateFlow) })
@@ -69,7 +68,7 @@ fun NavigationHost(navController:NavController) {
         composable(
             route = BottomNavScreen.Profile.screen_route,
             content = {
-                ProfileScreen(navController,loginViewModel, signUpViewModel)
+                ProfileScreen(navController,goalViewModel,loginViewModel, signUpViewModel)
             })
     })
 }

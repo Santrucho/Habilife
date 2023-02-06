@@ -13,4 +13,6 @@ interface GoalsRepository {
         release_date:String) : Resource<Goals>
 
     suspend fun getGoals() : Resource<List<Goals>>
+
+    suspend fun deleteGoal(goal:Goals)
 }

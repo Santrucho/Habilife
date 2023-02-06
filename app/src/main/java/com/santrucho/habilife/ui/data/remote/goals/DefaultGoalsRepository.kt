@@ -18,16 +18,17 @@ class DefaultGoalsRepository @Inject constructor(private val firestore:FirebaseF
         release_date: String
     ): Resource<Goals> {
         return try {
+            val docRef = firestore.collection("goals").document()
             firebaseAuth.currentUser.let { userLogged ->
                 val goalToSave = Goals(
+                    id = docRef.id,
                     userId = userLogged?.uid.toString(),
                     title = title,
                     description = description,
                     isCompleted = isCompleted,
                     release_date = release_date
                 )
-                firestore.collection("goals").add(goalToSave).await()
-
+                docRef.set(goalToSave).await()
                 Resource.Success(goalToSave)
             }
         }
@@ -37,20 +38,21 @@ class DefaultGoalsRepository @Inject constructor(private val firestore:FirebaseF
 }
     override suspend fun getGoals(): Resource<List<Goals>> {
         return try {
-            val goalsList = mutableListOf<Goals>()
+
             val resultData = firestore.collection("goals")
                 .whereEqualTo("userId",firebaseAuth.currentUser?.uid)
-                .get().await()
-
-            for (document in resultData){
-                val title = document.getString("title")
-                val description = document.getString("description")
-                val release_date = document.getString("release_date")
-                goalsList.add(Goals(firebaseAuth.currentUser?.uid!!,title!!,description!!,false,release_date!!))
-            }
-
-            Resource.Success(goalsList)
+                .get().await().toObjects(Goals::class.java)
+            Resource.Success(resultData)
         } catch (e:Exception) {
+            Resource.Failure(e)
+        }
+    }
+
+    override suspend fun deleteGoal(goal:Goals){
+        try {
+            firestore.collection("goals").document(goal.id).delete().await()
+        }
+        catch(e:Exception){
             Resource.Failure(e)
         }
     }

@@ -16,12 +16,14 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.navigation.Screen
+import com.santrucho.habilife.ui.presentation.GoalViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.presentation.LoginViewModel
 import com.santrucho.habilife.ui.presentation.SignUpViewModel
 
 @Composable
-fun ProfileScreen(navController: NavController,loginViewModel: LoginViewModel, signUpViewModel: SignUpViewModel) {
+fun ProfileScreen(navController: NavController,goalViewModel: GoalViewModel,loginViewModel: LoginViewModel, signUpViewModel: SignUpViewModel) {
+
 
     Column(
         modifier = Modifier
