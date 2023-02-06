@@ -1,22 +1,15 @@
 package com.santrucho.habilife.ui.presentation
 
-import android.system.Os.remove
-import android.util.Log
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseUser
 import com.santrucho.habilife.ui.data.model.Habit
-import com.santrucho.habilife.ui.data.model.HabitResponse
 import com.santrucho.habilife.ui.data.remote.habits.HabitsRepository
 import com.santrucho.habilife.ui.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.forEach
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -96,7 +89,6 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
     }
     fun getAllHabits(){
         viewModelScope.launch {
-            _habitState.value = Resource.Loading()
             _habitState.value = repository.getHabits()
         }
     }

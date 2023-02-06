@@ -1,14 +1,11 @@
 package com.santrucho.habilife.ui.navigation
 
-import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.santrucho.habilife.ui.data.model.Habit
 import com.santrucho.habilife.ui.presentation.*
 import com.santrucho.habilife.ui.ui.*
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
@@ -18,8 +15,7 @@ import com.santrucho.habilife.ui.ui.habits.HabitScreen
 import com.santrucho.habilife.ui.ui.habits.NewHabitScreen
 import com.santrucho.habilife.ui.ui.goals.GoalsScreen
 import com.santrucho.habilife.ui.ui.goals.NewGoalScreen
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import com.santrucho.habilife.ui.ui.home.HomeScreen
 
 
 @Composable
@@ -53,7 +49,7 @@ fun NavigationHost(navController:NavController) {
 
         composable(
             route = BottomNavScreen.Home.screen_route,
-            content = { HomeScreen(navController,goalViewModel,habitViewModel) })
+            content = { HomeScreen(navController,signUpViewModel,goalViewModel,habitViewModel) })
         composable(
             route = BottomNavScreen.Habit.screen_route,
             content = { HabitScreen(habitViewModel,navController) })
@@ -63,7 +59,7 @@ fun NavigationHost(navController:NavController) {
         composable(
             route = BottomNavScreen.Profile.screen_route,
             content = {
-                ProfileScreen(navController,loginViewModel, signUpViewModel)
+                ProfileScreen(navController,goalViewModel,habitViewModel,loginViewModel, signUpViewModel)
             })
     })
 }

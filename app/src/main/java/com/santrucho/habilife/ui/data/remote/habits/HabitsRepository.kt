@@ -1,10 +1,9 @@
 package com.santrucho.habilife.ui.data.remote.habits
 
-import com.google.firebase.auth.FirebaseUser
+
 import com.santrucho.habilife.ui.data.model.Habit
-import com.santrucho.habilife.ui.data.model.HabitResponse
 import com.santrucho.habilife.ui.utils.Resource
-import kotlinx.coroutines.flow.Flow
+
 
 interface HabitsRepository {
 
