@@ -14,9 +14,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.presentation.*
@@ -26,6 +23,9 @@ fun HomeScreen(navController: NavController,goalViewModel: GoalViewModel,habitVi
 
     goalViewModel.resetValue()
     habitViewModel.resetValue()
+
+    goalViewModel.getAllGoals()
+    habitViewModel.getAllHabits()
 
     Column(
         modifier = Modifier

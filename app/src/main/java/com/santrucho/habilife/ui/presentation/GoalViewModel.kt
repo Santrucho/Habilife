@@ -37,9 +37,6 @@ class GoalViewModel @Inject constructor(private val repository : GoalsRepository
     private val _goalState = MutableStateFlow<Resource<List<Goals>>?>(null)
     val goalState : StateFlow<Resource<List<Goals>>?> = _goalState
 
-    private val _isRefreshing = MutableStateFlow(false)
-    val isRefreshing: StateFlow<Boolean> = _isRefreshing
-
     private fun shouldEnabledConfirmButton() {
         isEnabledConfirmButton.value =
             titleErrMsg.value.isEmpty()

@@ -29,19 +29,16 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.santrucho.habilife.ui.data.model.Habit
 import com.santrucho.habilife.ui.data.model.HabitResponse
 import com.santrucho.habilife.ui.presentation.HabitViewModel
+import com.santrucho.habilife.ui.ui.goals.components.GoalsUI
 import com.santrucho.habilife.ui.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.StateFlow
 
 
 @Composable
-fun HabitList(
-    habitViewModel: HabitViewModel) {
+fun HabitList(habitViewModel: HabitViewModel) {
+
     val habits = habitViewModel.habitState.collectAsState()
-
-    LazyColumn(modifier = Modifier.padding(16.dp)){
-
-    }
 
     habits.value.let { result ->
         when(result){
@@ -57,8 +54,11 @@ fun HabitList(
                 HabitUI(habits = result.data,habitViewModel::deleteHabit)
             }
             is Resource.Failure -> {
-                result.exception.message.toString()
+                LaunchedEffect(habits.value){
+                    result.exception.message.toString()
+                }
             }
+            else -> {IllegalAccessException()}
         }
     }
 }

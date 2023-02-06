@@ -50,6 +50,7 @@ fun GoalList(
                     result.exception.message.toString()
                 }
             }
+            else -> {IllegalAccessException()}
         }
     }
 }
