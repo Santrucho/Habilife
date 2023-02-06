@@ -19,16 +19,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import com.santrucho.habilife.R
-import com.santrucho.habilife.ui.presentation.GoalViewModel
-import com.santrucho.habilife.ui.presentation.HabitViewModel
-import com.santrucho.habilife.ui.presentation.LoginViewModel
-import com.santrucho.habilife.ui.presentation.SignUpViewModel
+import com.santrucho.habilife.ui.presentation.*
 
 @Composable
-fun HomeScreen(navController: NavController,goalViewModel: GoalViewModel) {
+fun HomeScreen(navController: NavController,goalViewModel: GoalViewModel,habitViewModel: HabitViewModel) {
 
     goalViewModel.resetValue()
-    goalViewModel.getAllGoals()
+    habitViewModel.resetValue()
 
     Column(
         modifier = Modifier

@@ -39,9 +39,6 @@ import kotlinx.coroutines.flow.StateFlow
 @Composable
 fun HabitScreen(habitViewModel:HabitViewModel,
                 navController: NavController,
-                isRefreshing: Boolean,
-                refreshData: () -> Unit,
-                habitsStateFlow: StateFlow<List<Habit>>
 ) {
 
     habitViewModel.resetResult()

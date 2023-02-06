@@ -22,7 +22,7 @@ import com.santrucho.habilife.ui.presentation.LoginViewModel
 import com.santrucho.habilife.ui.presentation.SignUpViewModel
 
 @Composable
-fun ProfileScreen(navController: NavController,goalViewModel: GoalViewModel,loginViewModel: LoginViewModel, signUpViewModel: SignUpViewModel) {
+fun ProfileScreen(navController: NavController,loginViewModel: LoginViewModel, signUpViewModel: SignUpViewModel) {
 
 
     Column(

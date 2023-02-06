@@ -59,7 +59,6 @@ fun HabitList(
             is Resource.Failure -> {
                 result.exception.message.toString()
             }
-            null -> TODO()
         }
     }
 }

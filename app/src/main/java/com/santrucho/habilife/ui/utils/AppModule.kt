@@ -11,6 +11,7 @@ import com.santrucho.habilife.ui.data.remote.signup.SignUpRepository
 import com.santrucho.habilife.ui.data.remote.login.DefaultLoginRepository
 import com.santrucho.habilife.ui.data.remote.login.LoginRepository
 import com.santrucho.habilife.ui.presentation.GoalViewModel
+import com.santrucho.habilife.ui.presentation.HabitViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

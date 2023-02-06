@@ -32,8 +32,7 @@ import com.santrucho.habilife.ui.ui.goals.components.GoalList
 import com.santrucho.habilife.ui.ui.habits.HabitList
 
 @Composable
-fun GoalsScreen(goalViewModel: GoalViewModel, navController: NavController,isRefreshing: Boolean,
-                refreshData: () -> Unit) {
+fun GoalsScreen(goalViewModel: GoalViewModel, navController: NavController) {
 
     goalViewModel.resetResult()
     //val localContext = LocalContext.current

@@ -22,10 +22,6 @@ import javax.inject.Inject
 @HiltViewModel
 class HabitViewModel @Inject constructor(private val repository: HabitsRepository) : ViewModel() {
 
-    //val habit : Habit = Habit()
-
-    //var isLoading : MutableState<Boolean> = mutableStateOf(false)
-
     var titleValue : MutableState<String> = mutableStateOf("")
     var isTitleValid: MutableState<Boolean> = mutableStateOf(false)
     var titleErrMsg: MutableState<String> = mutableStateOf("")
@@ -46,10 +42,6 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
     private val _habitState = MutableStateFlow<Resource<List<Habit>>?>(null)
     val habitState: StateFlow<Resource<List<Habit>>?> = _habitState
 
-    private val _isRefreshing = MutableStateFlow(false)
-    val isRefreshing: StateFlow<Boolean> = _isRefreshing
-
-    val error = MutableStateFlow<String>("")
 
     init {
         getAllHabits()
@@ -104,6 +96,15 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
         descriptionValue.value = ""
         frequencyValue.value = ""
     }
+    fun resetValue(){
+        _habitState.value = null
+    }
+    fun getAllHabits(){
+        viewModelScope.launch {
+            _habitState.value = Resource.Loading()
+            _habitState.value = repository.getHabits()
+        }
+    }
 
     fun addHabit(
         title: String,
@@ -118,12 +119,6 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
             _habitFlow.value = Resource.Loading()
             val result = repository.addHabit(title, description, image, frequently, isCompleted, isExpanded)
             _habitFlow.value = result
-        }
-    }
-
-    fun getAllHabits() {
-        viewModelScope.launch {
-            _habitState.value = repository.getHabits()
         }
     }
 
