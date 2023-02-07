@@ -73,7 +73,7 @@ fun HabitOfTheDay(habits:List<Habit>, onDelete:(Habit)-> Unit){
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .height(200.dp),
+            .height(260.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Column( modifier = Modifier

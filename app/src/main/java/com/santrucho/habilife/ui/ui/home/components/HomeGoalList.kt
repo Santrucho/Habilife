@@ -74,7 +74,7 @@ fun GoalOfTheDay(goals:List<Goals>, onDelete:(Goals)-> Unit){
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .height(200.dp),
+            .height(250.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Column( modifier = Modifier
