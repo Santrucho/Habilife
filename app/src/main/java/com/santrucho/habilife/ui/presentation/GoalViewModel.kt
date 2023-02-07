@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.santrucho.habilife.ui.data.model.Goals
-import com.santrucho.habilife.ui.data.model.GoalsResponse
 import com.santrucho.habilife.ui.data.remote.goals.GoalsRepository
 import com.santrucho.habilife.ui.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -36,9 +35,6 @@ class GoalViewModel @Inject constructor(private val repository : GoalsRepository
 
     private val _goalState = MutableStateFlow<Resource<List<Goals>>?>(null)
     val goalState : StateFlow<Resource<List<Goals>>?> = _goalState
-
-    private val _isRefreshing = MutableStateFlow(false)
-    val isRefreshing: StateFlow<Boolean> = _isRefreshing
 
     private fun shouldEnabledConfirmButton() {
         isEnabledConfirmButton.value =
@@ -102,7 +98,6 @@ class GoalViewModel @Inject constructor(private val repository : GoalsRepository
     }
     fun getAllGoals(){
         viewModelScope.launch {
-            _goalState.value = Resource.Loading()
             _goalState.value = repository.getGoals()
         }
     }
