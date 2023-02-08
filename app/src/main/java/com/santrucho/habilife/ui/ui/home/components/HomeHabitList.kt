@@ -17,12 +17,12 @@ import androidx.compose.ui.unit.sp
 import com.santrucho.habilife.ui.data.model.Habit
 import com.santrucho.habilife.ui.presentation.HabitViewModel
 import com.santrucho.habilife.ui.ui.habits.HabitCard
+import com.santrucho.habilife.ui.ui.habits.HabitList
+import com.santrucho.habilife.ui.ui.habits.HabitUI
 import com.santrucho.habilife.ui.utils.Resource
 
 @Composable
 fun HomeHabitList(habitViewModel: HabitViewModel) {
-
-
 
     Card(
         shape = MaterialTheme.shapes.medium,
@@ -60,82 +60,7 @@ fun HomeHabitList(habitViewModel: HabitViewModel) {
                     )
                 }
             }
-            val habit = habitViewModel.habitState.collectAsState()
-
-                habit.value.let { result ->
-                    when (result) {
-                        is Resource.Loading -> {
-                            Box(
-                                contentAlignment = Alignment.Center,
-                                modifier = Modifier.fillMaxSize()
-                            ) {
-                                CircularProgressIndicator()
-                            }
-                        }
-                        is Resource.Success -> {
-                            HabitOfTheDay(
-                                habits = result.data,
-                                habitViewModel::deleteHabit
-                            )
-                        }
-                        is Resource.Failure -> {
-                            LaunchedEffect(habit.value) {
-                                result.exception.message.toString()
-                            }
-                        }
-                        else -> {
-                            IllegalAccessException()
-                        }
-                    }
-                }
+            HabitList(habitViewModel = habitViewModel)
         }
-    }
-}
-
-
-@Composable
-fun HabitOfTheDay(habits: List<Habit>, onDelete: (Habit) -> Unit) {
-    val filteredList = habits.filter { it.frequently.contains("odos") }
-    if(filteredList.isEmpty()){
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ){
-            EmptyHabits()
-        }
-    } else{
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            LazyColumn(modifier=Modifier.padding(0.dp,0.dp,0.dp,8.dp)){
-                items(filteredList) {
-                    HabitCard(habit = it, onDelete = onDelete)
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun EmptyHabits(){
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .wrapContentHeight(),
-        horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(
-            text = "No tiene ningun habito por cumplir hoy!" +
-                    "Crea uno nuevo!",
-            fontWeight = FontWeight.Medium,
-            color = Color.DarkGray,
-            modifier = Modifier.wrapContentWidth(Alignment.CenterHorizontally),
-            textAlign = TextAlign.Start,
-            fontSize = 20.sp
-        )
     }
 }
