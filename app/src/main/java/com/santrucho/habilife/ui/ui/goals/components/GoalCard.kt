@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,10 +31,10 @@ fun GoalCard(goal: Goals,onDelete:(Goals) -> Unit) {
         shape = MaterialTheme.shapes.small,
         modifier = Modifier
             .padding(
-                start = 8.dp,
-                end = 8.dp,
-                top = 4.dp,
-                bottom = 4.dp
+                start = 4.dp,
+                end = 4.dp,
+                top = 2.dp,
+                bottom = 2.dp
             )
             .fillMaxWidth()
             .animateContentSize (animationSpec = tween(
@@ -41,7 +42,8 @@ fun GoalCard(goal: Goals,onDelete:(Goals) -> Unit) {
             easing = LinearOutSlowInEasing
     )),
         elevation = 3.dp,
-        onClick = {expandedState = !expandedState}
+        onClick = {expandedState = !expandedState},
+        backgroundColor = MaterialTheme.colors.primary
     ) {
         Column(
             modifier = Modifier
@@ -49,16 +51,14 @@ fun GoalCard(goal: Goals,onDelete:(Goals) -> Unit) {
                 .padding(all = 12.dp)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                goal.title.let { title ->
-                    Text(
-                        text = title,
-                        modifier = Modifier
-                            .fillMaxWidth(0.85f)
-                            .wrapContentHeight(Alignment.Top),
-                        color = Color.DarkGray,
-                        fontSize = 25.sp
-                    )
-                }
+                Text(
+                    text = goal.title,
+                    modifier = Modifier
+                        .fillMaxWidth(0.85f)
+                        .wrapContentHeight(Alignment.Top),
+                    color = Color.Black,
+                    fontSize = 25.sp
+                )
                 IconButton(
                     modifier = Modifier
                         .weight(1f)
@@ -68,41 +68,41 @@ fun GoalCard(goal: Goals,onDelete:(Goals) -> Unit) {
                         expandedState = !expandedState
                     }) {
                     Icon(
-                        imageVector = Icons.Default.ArrowDropDown,
+                        imageVector = Icons.Filled.ArrowDropDown,
                         contentDescription = "Drop-Down Arrow"
                     )
                 }
             }
             if (expandedState) {
-                goal.description.let { description ->
+                Text(
+                    text = goal.description,
+                    modifier = Modifier
+                        .wrapContentHeight(Alignment.Top),
+                    color = Color.White,
+                    fontSize = 25.sp
+                )
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween,modifier=Modifier.fillMaxWidth()) {
+
                     Text(
-                        text = description,
-                        modifier = Modifier
-                            .wrapContentHeight(Alignment.Top),
-                        color = Color.DarkGray,
-                        fontSize = 25.sp
-                    )
-                }
-                goal.release_date.let { release_date ->
-                    Text(
-                        text = release_date,
+                        text = goal.release_date,
                         modifier = Modifier
                             .wrapContentHeight(Alignment.Bottom),
-                        color = Color.DarkGray,
+                        color = Color.White,
                         fontSize = 25.sp
                     )
-                }
-                Button(
-                    onClick = {
-                        onDelete(goal)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth(0.5f)
-                        .height(50.dp),
-                ) {
-                    Text(
-                        text = "Delete"
-                    )
+                    IconButton(
+                        modifier = Modifier
+                            .weight(1f)
+                            .alpha(ContentAlpha.medium)
+                            .wrapContentWidth(Alignment.End),
+                        onClick = {
+                            onDelete(goal)
+                        }) {
+                        Icon(
+                            imageVector = Icons.Filled.Delete,
+                            contentDescription = "Drop-Down Arrow"
+                        )
+                    }
                 }
             }
         }

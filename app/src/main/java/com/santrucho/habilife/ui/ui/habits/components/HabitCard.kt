@@ -58,16 +58,14 @@ fun HabitCard(habit: Habit,onDelete:(Habit)-> Unit) {
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
 
-                habit.title.let { title ->
-                    Text(
-                        text = title,
-                        modifier = Modifier
-                            .fillMaxWidth(0.85f)
-                            .wrapContentHeight(Alignment.Top),
-                        color = White,
-                        fontSize = 25.sp
-                    )
-                }
+                Text(
+                    text = habit.title,
+                    modifier = Modifier
+                        .fillMaxWidth(0.85f)
+                        .wrapContentHeight(Alignment.Top),
+                    color = White,
+                    fontSize = 25.sp
+                )
                 IconButton(
                     modifier = Modifier
                         .weight(1f)
@@ -83,27 +81,23 @@ fun HabitCard(habit: Habit,onDelete:(Habit)-> Unit) {
                 }
             }
             if(expandedState) {
-                habit.description.let { description ->
-                    Text(
-                        text = description,
-                        modifier = Modifier
-                            .wrapContentHeight(Alignment.Top),
-                        color = White,
-                        fontSize = 16.sp
-                    )
-                }
+                Text(
+                    text = habit.description,
+                    modifier = Modifier
+                        .wrapContentHeight(Alignment.Top),
+                    color = White,
+                    fontSize = 16.sp
+                )
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween,modifier=Modifier.fillMaxWidth()) {
 
-                    habit.frequently.let { frequently ->
-                        Text(
-                            text = frequently,
-                            modifier = Modifier
-                                .wrapContentHeight(Alignment.Bottom)
-                                .wrapContentWidth(Alignment.Start),
-                            color = White,
-                            fontSize = 12.sp
-                        )
-                    }
+                    Text(
+                        text = habit.frequently,
+                        modifier = Modifier
+                            .wrapContentHeight(Alignment.Bottom)
+                            .wrapContentWidth(Alignment.Start),
+                        color = White,
+                        fontSize = 12.sp
+                    )
                     IconButton(
                         modifier = Modifier
                             .weight(1f)

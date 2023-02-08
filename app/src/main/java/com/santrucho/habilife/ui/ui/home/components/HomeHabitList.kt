@@ -22,7 +22,7 @@ import com.santrucho.habilife.ui.utils.Resource
 @Composable
 fun HomeHabitList(habitViewModel: HabitViewModel) {
 
-    val habit = habitViewModel.habitState.collectAsState()
+
 
     Card(
         shape = MaterialTheme.shapes.medium,
@@ -60,6 +60,7 @@ fun HomeHabitList(habitViewModel: HabitViewModel) {
                     )
                 }
             }
+            val habit = habitViewModel.habitState.collectAsState()
 
                 habit.value.let { result ->
                     when (result) {
@@ -103,9 +104,8 @@ fun HabitOfTheDay(habits: List<Habit>, onDelete: (Habit) -> Unit) {
                 .padding(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ){
-            emptyHabits()
+            EmptyHabits()
         }
-
     } else{
         Column(
             modifier = Modifier
@@ -123,7 +123,7 @@ fun HabitOfTheDay(habits: List<Habit>, onDelete: (Habit) -> Unit) {
 }
 
 @Composable
-fun emptyHabits(){
+fun EmptyHabits(){
     Column(modifier = Modifier
         .fillMaxWidth()
         .wrapContentHeight(),

@@ -1,7 +1,6 @@
 package com.santrucho.habilife.ui.ui.habits
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -13,7 +12,6 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,8 +28,6 @@ import com.santrucho.habilife.ui.presentation.HabitViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.utils.BackPressHandler
 import com.santrucho.habilife.ui.utils.Resource
-import kotlinx.coroutines.withContext
-import java.util.*
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
@@ -141,46 +137,41 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                     ) {
                         Text("Guardar habito")
                     }
-                    habitValue.value.let { result ->
-                            when (result) {
-                                is Resource.Loading -> {
-                                    Box(
-                                        contentAlignment = Alignment.Center,
-                                        modifier = Modifier.fillMaxSize()
-                                    ) {
-                                        CircularProgressIndicator()
+                    habitValue.value.let {
+                        when (it) {
+                            is Resource.Success -> {
+                                LaunchedEffect(Unit) {
+                                    navController.navigate(BottomNavScreen.Habit.screen_route) {
+                                        popUpTo(Screen.NewHabitScreen.route) { inclusive = true }
                                     }
-                                }
-                                is Resource.Success -> {
-                                    //**ERROR** result Log appears two times in console
-                                    Log.d("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",result.toString())
-                                    LaunchedEffect(Unit){
-                                        navController.navigate(BottomNavScreen.Habit.screen_route) {
-                                            popUpTo(Screen.NewHabitScreen.route) { inclusive = true }
-                                        }
-                                        Toast.makeText(
-                                            context,
-                                            "Habito creado con exito!",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-
-                                }
-                                is Resource.Failure -> {
                                     Toast.makeText(
                                         context,
-                                        result.exception.message.toString(),
+                                        "Habito creado correctamente!",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
+                            }
+                            is Resource.Failure -> {
+                                LaunchedEffect(habitValue.value) {
+                                    Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG)
+                                        .show()
+                                }
+                            }
+                            is Resource.Loading -> {
+                                Box(
+                                    contentAlignment = Alignment.Center,
+                                    modifier = Modifier.fillMaxSize()
+                                ) {
+                                    CircularProgressIndicator()
+                                }
+                            }
+                            else -> {IllegalAccessException()}
                         }
                     }
                 }
-
             }
         }
     }
-
 }
 
 @Composable

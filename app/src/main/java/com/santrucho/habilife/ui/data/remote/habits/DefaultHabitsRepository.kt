@@ -54,6 +54,11 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
     }
 
     override suspend fun deleteHabit(habit: Habit) {
-        firestore.collection("habits").document(habit.id).delete().await()
+        try {
+            firestore.collection("habits").document(habit.id).delete().await()
+        }
+        catch(e:Exception){
+            Resource.Failure(e)
+        }
     }
 }
