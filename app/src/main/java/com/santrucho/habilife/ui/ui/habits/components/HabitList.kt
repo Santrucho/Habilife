@@ -39,10 +39,6 @@ fun HabitList(
     habitViewModel: HabitViewModel) {
     val habits = habitViewModel.habitState.collectAsState()
 
-    LazyColumn(modifier = Modifier.padding(16.dp)){
-
-    }
-
     habits.value.let { result ->
         when(result){
             is Resource.Loading -> {
