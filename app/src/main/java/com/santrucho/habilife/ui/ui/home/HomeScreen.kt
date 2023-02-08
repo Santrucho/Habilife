@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -20,6 +21,7 @@ import com.santrucho.habilife.ui.ui.habits.HabitCard
 import com.santrucho.habilife.ui.ui.home.components.HomeGoalList
 import com.santrucho.habilife.ui.ui.home.components.HomeHabitList
 import com.santrucho.habilife.ui.utils.Resource
+
 
 @Composable
 fun HomeScreen(navController: NavController,userViewModel: SignUpViewModel,goalViewModel: GoalViewModel,habitViewModel: HabitViewModel) {

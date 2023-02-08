@@ -9,12 +9,16 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.Gray
+import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.layout.HorizontalAlignmentLine
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.santrucho.habilife.ui.data.model.Habit
@@ -37,12 +41,15 @@ fun HabitCard(habit: Habit,onDelete:(Habit)-> Unit) {
                 bottom = 2.dp
             )
             .fillMaxWidth()
-            .animateContentSize (animationSpec = tween(
-                durationMillis = 300,
-                easing = LinearOutSlowInEasing
-            )),
+            .animateContentSize(
+                animationSpec = tween(
+                    durationMillis = 300,
+                    easing = LinearOutSlowInEasing
+                )
+            ),
         elevation = 3.dp,
-        onClick = {expandedState = !expandedState}
+        onClick = {expandedState = !expandedState},
+        backgroundColor = MaterialTheme.colors.secondary
     ) {
         Column(
             modifier = Modifier
@@ -57,7 +64,7 @@ fun HabitCard(habit: Habit,onDelete:(Habit)-> Unit) {
                         modifier = Modifier
                             .fillMaxWidth(0.85f)
                             .wrapContentHeight(Alignment.Top),
-                        color = androidx.compose.ui.graphics.Color.Companion.DarkGray,
+                        color = White,
                         fontSize = 25.sp
                     )
                 }
@@ -81,31 +88,37 @@ fun HabitCard(habit: Habit,onDelete:(Habit)-> Unit) {
                         text = description,
                         modifier = Modifier
                             .wrapContentHeight(Alignment.Top),
-                        color = androidx.compose.ui.graphics.Color.Companion.DarkGray,
-                        fontSize = 25.sp
+                        color = White,
+                        fontSize = 16.sp
                     )
                 }
-                habit.frequently.let { frequently ->
-                    Text(
-                        text = frequently,
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween,modifier=Modifier.fillMaxWidth()) {
+
+                    habit.frequently.let { frequently ->
+                        Text(
+                            text = frequently,
+                            modifier = Modifier
+                                .wrapContentHeight(Alignment.Bottom)
+                                .wrapContentWidth(Alignment.Start),
+                            color = White,
+                            fontSize = 12.sp
+                        )
+                    }
+                    IconButton(
                         modifier = Modifier
-                            .wrapContentHeight(Alignment.Bottom),
-                        color = androidx.compose.ui.graphics.Color.Companion.DarkGray,
-                        fontSize = 25.sp
-                    )
+                            .weight(1f)
+                            .alpha(ContentAlpha.medium)
+                            .wrapContentWidth(Alignment.End),
+                        onClick = {
+                            onDelete(habit)
+                        }) {
+                        Icon(
+                            imageVector = Icons.Filled.Delete,
+                            contentDescription = "Drop-Down Arrow"
+                        )
+                    }
                 }
-                Button(
-                    onClick = {
-                        onDelete(habit)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth(0.5f)
-                        .height(50.dp),
-                ) {
-                    Text(
-                        text = "Delete"
-                    )
-                }
+
             }
         }
     }
