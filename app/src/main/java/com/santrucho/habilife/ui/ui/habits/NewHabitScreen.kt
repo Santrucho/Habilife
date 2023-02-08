@@ -173,6 +173,7 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
+                                else -> {IllegalAccessException()}
                         }
                     }
                 }
