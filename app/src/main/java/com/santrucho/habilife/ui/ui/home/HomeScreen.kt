@@ -18,6 +18,7 @@ import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.data.model.Habit
 import com.santrucho.habilife.ui.presentation.*
 import com.santrucho.habilife.ui.ui.habits.HabitCard
+import com.santrucho.habilife.ui.ui.habits.components.CalendarView
 import com.santrucho.habilife.ui.ui.home.components.HomeGoalList
 import com.santrucho.habilife.ui.ui.home.components.HomeHabitList
 import com.santrucho.habilife.ui.utils.Resource
@@ -38,6 +39,7 @@ fun HomeScreen(navController: NavController,userViewModel: SignUpViewModel,goalV
         userViewModel.currentUser?.let{
             UserInfo(name = it.displayName.toString())
         }
+        CalendarView()
         HomeHabitList(navController,habitViewModel)
         Spacer(modifier = Modifier.height(18.dp))
         HomeGoalList(navController,goalViewModel)

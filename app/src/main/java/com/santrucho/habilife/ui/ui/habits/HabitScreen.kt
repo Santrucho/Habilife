@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.HabitViewModel
+import com.santrucho.habilife.ui.ui.habits.components.CalendarView
 import com.santrucho.habilife.ui.ui.habits.components.HabitList
 import com.santrucho.habilife.ui.ui.habits.components.HabitUI
 import com.santrucho.habilife.ui.utils.Resource
@@ -33,7 +34,6 @@ fun HabitScreen(
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         MyHabitsSection(habitViewModel = habitViewModel)
         Spacer(modifier = Modifier.weight(1f))
         FABButton(navController = navController)
