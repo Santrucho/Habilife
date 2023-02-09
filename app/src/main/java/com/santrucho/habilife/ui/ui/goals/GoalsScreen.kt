@@ -29,7 +29,6 @@ import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.GoalViewModel
 import com.santrucho.habilife.ui.ui.goals.components.GoalList
-import com.santrucho.habilife.ui.ui.habits.HabitList
 
 @Composable
 fun GoalsScreen(goalViewModel: GoalViewModel, navController: NavController) {

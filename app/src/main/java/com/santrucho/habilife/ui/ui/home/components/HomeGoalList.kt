@@ -1,8 +1,6 @@
 package com.santrucho.habilife.ui.ui.home.components
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -15,12 +13,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.santrucho.habilife.ui.data.model.Goals
 import com.santrucho.habilife.ui.presentation.GoalViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
-import com.santrucho.habilife.ui.ui.goals.components.GoalCard
 import com.santrucho.habilife.ui.ui.goals.components.GoalsUI
-import com.santrucho.habilife.ui.ui.habits.HabitUI
 import com.santrucho.habilife.ui.utils.Resource
 
 @Composable
@@ -37,7 +32,7 @@ fun HomeGoalList(navController: NavController,goalViewModel: GoalViewModel) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentHeight(),
+                .wrapContentSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(
