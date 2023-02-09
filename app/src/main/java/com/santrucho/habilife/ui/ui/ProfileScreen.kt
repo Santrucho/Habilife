@@ -17,13 +17,13 @@ import androidx.navigation.NavHostController
 import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.GoalViewModel
+import com.santrucho.habilife.ui.presentation.HabitViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.presentation.LoginViewModel
 import com.santrucho.habilife.ui.presentation.SignUpViewModel
 
 @Composable
-fun ProfileScreen(navController: NavController,goalViewModel: GoalViewModel,loginViewModel: LoginViewModel, signUpViewModel: SignUpViewModel) {
-
+fun ProfileScreen(navController: NavController,goalViewModel: GoalViewModel,habitViewModel: HabitViewModel,loginViewModel: LoginViewModel, signUpViewModel: SignUpViewModel) {
 
     Column(
         modifier = Modifier
@@ -48,6 +48,8 @@ fun ProfileScreen(navController: NavController,goalViewModel: GoalViewModel,logi
                     navController.navigate(Screen.LoginScreen.route) {
                         popUpTo(BottomNavScreen.Profile.screen_route) { inclusive = true }
                     }
+                    goalViewModel.resetValue()
+                    habitViewModel.resetValue()
                 },
                 modifier = Modifier
                     .fillMaxWidth(0.8f)

@@ -1,30 +1,19 @@
 package com.santrucho.habilife.ui.presentation
 
-import android.system.Os.remove
-import android.util.Log
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseUser
 import com.santrucho.habilife.ui.data.model.Habit
-import com.santrucho.habilife.ui.data.model.HabitResponse
 import com.santrucho.habilife.ui.data.remote.habits.HabitsRepository
 import com.santrucho.habilife.ui.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.forEach
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class HabitViewModel @Inject constructor(private val repository: HabitsRepository) : ViewModel() {
-
-    //val habit : Habit = Habit()
-
-    //var isLoading : MutableState<Boolean> = mutableStateOf(false)
 
     var titleValue : MutableState<String> = mutableStateOf("")
     var isTitleValid: MutableState<Boolean> = mutableStateOf(false)
@@ -40,20 +29,11 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
 
     var isEnabledConfirmButton: MutableState<Boolean> = mutableStateOf(false)
 
-    private val _habitFlow = MutableStateFlow<Resource<Habit>?>(null)
-    val habitFlow: StateFlow<Resource<Habit>?> = _habitFlow
-
     private val _habitState = MutableStateFlow<Resource<List<Habit>>?>(null)
     val habitState: StateFlow<Resource<List<Habit>>?> = _habitState
 
-    private val _isRefreshing = MutableStateFlow(false)
-    val isRefreshing: StateFlow<Boolean> = _isRefreshing
-
-    val error = MutableStateFlow<String>("")
-
-    init {
-        getAllHabits()
-    }
+    private val _habitFlow = MutableStateFlow<Resource<Habit>?>(null)
+    val habitFlow: StateFlow<Resource<Habit>?> = _habitFlow
 
     private fun shouldEnabledConfirmButton() {
         isEnabledConfirmButton.value =
@@ -104,6 +84,14 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
         descriptionValue.value = ""
         frequencyValue.value = ""
     }
+    fun resetValue(){
+        _habitState.value = null
+    }
+    fun getAllHabits(){
+        viewModelScope.launch {
+            _habitState.value = repository.getHabits()
+        }
+    }
 
     fun addHabit(
         title: String,
@@ -113,17 +101,10 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
         isCompleted: Boolean,
         isExpanded: Boolean
     ) {
-
         viewModelScope.launch {
             _habitFlow.value = Resource.Loading()
-            val result = repository.addHabit(title, description, image, frequently, isCompleted, isExpanded)
-            _habitFlow.value = result
-        }
-    }
-
-    fun getAllHabits() {
-        viewModelScope.launch {
-            _habitState.value = repository.getHabits()
+            _habitFlow.value = repository.addHabit(title, description, image, frequently, isCompleted, isExpanded)
+            getAllHabits()
         }
     }
 

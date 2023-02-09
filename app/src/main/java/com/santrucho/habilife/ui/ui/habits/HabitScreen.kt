@@ -39,13 +39,9 @@ import kotlinx.coroutines.flow.StateFlow
 @Composable
 fun HabitScreen(habitViewModel:HabitViewModel,
                 navController: NavController,
-                isRefreshing: Boolean,
-                refreshData: () -> Unit,
-                habitsStateFlow: StateFlow<List<Habit>>
 ) {
 
     habitViewModel.resetResult()
-    val state = habitViewModel.habitState.collectAsState()
 
     Column(
         modifier = Modifier
@@ -74,9 +70,7 @@ fun HabitScreen(habitViewModel:HabitViewModel,
                 .padding(8.dp), horizontalArrangement = Arrangement.Center
         ) {
             Button(
-                onClick = { navController.navigate(Screen.NewHabitScreen.route){
-                    popUpTo(BottomNavScreen.Habit.screen_route) {inclusive = true}
-                } },
+                onClick = { navController.navigate(Screen.NewHabitScreen.route)},
                 modifier = Modifier.defaultMinSize(240.dp, 56.dp),
                 shape = CircleShape
 

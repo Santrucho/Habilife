@@ -18,8 +18,9 @@ class DefaultGoalsRepository @Inject constructor(private val firestore:FirebaseF
         release_date: String
     ): Resource<Goals> {
         return try {
-            val docRef = firestore.collection("goals").document()
+
             firebaseAuth.currentUser.let { userLogged ->
+                val docRef = firestore.collection("goals").document()
                 val goalToSave = Goals(
                     id = docRef.id,
                     userId = userLogged?.uid.toString(),
@@ -38,7 +39,6 @@ class DefaultGoalsRepository @Inject constructor(private val firestore:FirebaseF
 }
     override suspend fun getGoals(): Resource<List<Goals>> {
         return try {
-
             val resultData = firestore.collection("goals")
                 .whereEqualTo("userId",firebaseAuth.currentUser?.uid)
                 .get().await().toObjects(Goals::class.java)
