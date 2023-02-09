@@ -114,7 +114,7 @@ fun NewGoalScreen(goalViewModel: GoalViewModel, navController: NavController) {
                 Spacer(modifier = Modifier.padding(16.dp))
                 Column(modifier = Modifier.fillMaxWidth()){
                     Button(
-                        onClick = {goalViewModel.addGoal(goalViewModel.release_dateValue.value,goalViewModel.descriptionValue.value,false,goalViewModel.release_dateValue.value)},
+                        onClick = {goalViewModel.addGoal(goalViewModel.titleValue.value,goalViewModel.descriptionValue.value,false,goalViewModel.release_dateValue.value)},
                         enabled = goalViewModel.isEnabledConfirmButton.value,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -134,7 +134,7 @@ fun NewGoalScreen(goalViewModel: GoalViewModel, navController: NavController) {
                                     }
                                     Toast.makeText(
                                         context,
-                                        "Habito creado con exito!",
+                                        "Objetivo creado con exito!",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
@@ -156,19 +156,4 @@ fun NewGoalScreen(goalViewModel: GoalViewModel, navController: NavController) {
             }
         }
     }
-}
-
-@Composable
-fun DetailsAppBar(onBack: () -> Unit){
-    TopAppBar(
-        title = { Text(text = stringResource(id = R.string.app_name)) },
-        navigationIcon = {
-            IconButton(onClick = onBack) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = stringResource(id = R.string.app_name),
-                )
-            }
-        }
-    )
 }
