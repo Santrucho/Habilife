@@ -38,9 +38,9 @@ fun HomeScreen(navController: NavController,userViewModel: SignUpViewModel,goalV
         userViewModel.currentUser?.let{
             UserInfo(name = it.displayName.toString())
         }
-        HomeHabitList(habitViewModel)
+        HomeHabitList(navController,habitViewModel)
         Spacer(modifier = Modifier.height(18.dp))
-        HomeGoalList(goalViewModel)
+        HomeGoalList(navController,goalViewModel)
     }
 }
 

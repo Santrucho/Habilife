@@ -112,7 +112,6 @@ fun HabitCard(habit: Habit,onDelete:(Habit)-> Unit) {
                         )
                     }
                 }
-
             }
         }
     }

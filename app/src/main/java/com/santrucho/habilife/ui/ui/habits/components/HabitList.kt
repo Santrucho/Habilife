@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,27 +22,29 @@ import com.santrucho.habilife.ui.utils.Resource
 @Composable
 fun HabitList(habitViewModel: HabitViewModel) {
 
-    val habits = remember(habitViewModel.habitState) { habitViewModel.habitState.value }
+    val habits = habitViewModel.habitState.collectAsState()
 
-    when (habits) {
-        is Resource.Loading -> {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                CircularProgressIndicator()
+    habits.value.let { result ->
+        when (result) {
+            is Resource.Loading -> {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    CircularProgressIndicator()
+                }
             }
-        }
-        is Resource.Success -> {
-            HabitUI(habits = habits.data, habitViewModel::deleteHabit)
-        }
-        is Resource.Failure -> {
-            LaunchedEffect(habits) {
-                habits.exception.message.toString()
+            is Resource.Success -> {
+                HabitUI(habits = result.data, habitViewModel::deleteHabit)
             }
-        }
-        else -> {
-            IllegalAccessException()
+            is Resource.Failure -> {
+                LaunchedEffect(habits) {
+                    result.exception.message.toString()
+                }
+            }
+            else -> {
+                IllegalAccessException()
+            }
         }
     }
 }

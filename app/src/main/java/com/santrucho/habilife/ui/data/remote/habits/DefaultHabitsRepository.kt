@@ -11,8 +11,6 @@ import javax.inject.Inject
 class DefaultHabitsRepository @Inject constructor(private val firestore: FirebaseFirestore
         ,private val firebaseAuth: FirebaseAuth) : HabitsRepository {
 
-    var documentReference = firestore.collection("habits").document()
-
     override suspend fun addHabit(
         title: String,
         description: String,
@@ -24,6 +22,7 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
 
         return try {
             firebaseAuth.currentUser.let { userLogged ->
+                var documentReference = firestore.collection("habits").document()
                 val habitToSave = Habit(
                     id = documentReference.id,
                     userId = userLogged?.uid.toString(),

@@ -14,16 +14,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.santrucho.habilife.ui.data.model.Habit
 import com.santrucho.habilife.ui.presentation.HabitViewModel
+import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.habits.HabitCard
 import com.santrucho.habilife.ui.ui.habits.HabitList
 import com.santrucho.habilife.ui.ui.habits.HabitUI
 import com.santrucho.habilife.ui.utils.Resource
 
 @Composable
-fun HomeHabitList(habitViewModel: HabitViewModel) {
+fun HomeHabitList(navController: NavController, habitViewModel: HabitViewModel) {
 
+    val habit = habitViewModel.habitState.collectAsState()
     Card(
         shape = MaterialTheme.shapes.medium,
         elevation = 3.dp,
@@ -49,7 +52,7 @@ fun HomeHabitList(habitViewModel: HabitViewModel) {
                     textAlign = TextAlign.Start,
                     fontSize = 20.sp
                 )
-                TextButton(onClick = { /*TODO*/ }) {
+                TextButton(onClick = { navController.navigate(BottomNavScreen.Habit.screen_route) }) {
                     Text(
                         text = "Ver todos",
                         fontWeight = FontWeight.Bold,
@@ -60,7 +63,38 @@ fun HomeHabitList(habitViewModel: HabitViewModel) {
                     )
                 }
             }
-            HabitList(habitViewModel = habitViewModel)
+            habit.value.let { result ->
+                when (result) {
+                    is Resource.Loading -> {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            CircularProgressIndicator()
+                        }
+                    }
+                    is Resource.Success -> {
+                        val filteredList = result.data.filter{it.frequently.contains("a")}
+                        if (filteredList.isEmpty()) {
+                            EmptyMessage("No tienes ningun habito actualmente!\nCrea uno nuevo!!")
+                        }
+                        else{
+                            HabitUI(
+                                filteredList,
+                                habitViewModel::deleteHabit
+                            )
+                        }
+                    }
+                    is Resource.Failure -> {
+                        LaunchedEffect(habit) {
+                            result.exception.message.toString()
+                        }
+                    }
+                    else -> {
+                        IllegalAccessException()
+                    }
+                }
+            }
         }
     }
 }

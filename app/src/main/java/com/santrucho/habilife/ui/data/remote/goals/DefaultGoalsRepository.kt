@@ -11,8 +11,6 @@ import javax.inject.Inject
 class DefaultGoalsRepository @Inject constructor(private val firestore:FirebaseFirestore,
                                                  private val firebaseAuth:FirebaseAuth) : GoalsRepository {
 
-    val docRef = firestore.collection("goals").document()
-
     override suspend fun addGoal(
         title: String,
         description: String,
@@ -22,6 +20,7 @@ class DefaultGoalsRepository @Inject constructor(private val firestore:FirebaseF
         return try {
 
             firebaseAuth.currentUser.let { userLogged ->
+                val docRef = firestore.collection("goals").document()
                 val goalToSave = Goals(
                     id = docRef.id,
                     userId = userLogged?.uid.toString(),

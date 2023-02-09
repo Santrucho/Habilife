@@ -31,19 +31,21 @@ fun GoalCard(goal: Goals,onDelete:(Goals) -> Unit) {
         shape = MaterialTheme.shapes.small,
         modifier = Modifier
             .padding(
-                start = 4.dp,
-                end = 4.dp,
+                start = 8.dp,
+                end = 8.dp,
                 top = 2.dp,
                 bottom = 2.dp
             )
             .fillMaxWidth()
-            .animateContentSize (animationSpec = tween(
-            durationMillis = 300,
-            easing = LinearOutSlowInEasing
-    )),
+            .animateContentSize(
+                animationSpec = tween(
+                    durationMillis = 300,
+                    easing = LinearOutSlowInEasing
+                )
+            ),
         elevation = 3.dp,
         onClick = {expandedState = !expandedState},
-        backgroundColor = MaterialTheme.colors.primary
+        backgroundColor = MaterialTheme.colors.secondary
     ) {
         Column(
             modifier = Modifier
@@ -51,12 +53,13 @@ fun GoalCard(goal: Goals,onDelete:(Goals) -> Unit) {
                 .padding(all = 12.dp)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
+
                 Text(
                     text = goal.title,
                     modifier = Modifier
                         .fillMaxWidth(0.85f)
                         .wrapContentHeight(Alignment.Top),
-                    color = Color.Black,
+                    color = Color.White,
                     fontSize = 25.sp
                 )
                 IconButton(
@@ -68,27 +71,28 @@ fun GoalCard(goal: Goals,onDelete:(Goals) -> Unit) {
                         expandedState = !expandedState
                     }) {
                     Icon(
-                        imageVector = Icons.Filled.ArrowDropDown,
+                        imageVector = Icons.Default.ArrowDropDown,
                         contentDescription = "Drop-Down Arrow"
                     )
                 }
             }
-            if (expandedState) {
+            if(expandedState) {
                 Text(
                     text = goal.description,
                     modifier = Modifier
                         .wrapContentHeight(Alignment.Top),
                     color = Color.White,
-                    fontSize = 25.sp
+                    fontSize = 16.sp
                 )
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween,modifier=Modifier.fillMaxWidth()) {
 
                     Text(
                         text = goal.release_date,
                         modifier = Modifier
-                            .wrapContentHeight(Alignment.Bottom),
+                            .wrapContentHeight(Alignment.Bottom)
+                            .wrapContentWidth(Alignment.Start),
                         color = Color.White,
-                        fontSize = 25.sp
+                        fontSize = 12.sp
                     )
                     IconButton(
                         modifier = Modifier

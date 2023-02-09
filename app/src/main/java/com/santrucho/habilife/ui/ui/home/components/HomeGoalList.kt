@@ -14,13 +14,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.santrucho.habilife.ui.data.model.Goals
 import com.santrucho.habilife.ui.presentation.GoalViewModel
+import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.goals.components.GoalCard
+import com.santrucho.habilife.ui.ui.goals.components.GoalsUI
+import com.santrucho.habilife.ui.ui.habits.HabitUI
 import com.santrucho.habilife.ui.utils.Resource
 
 @Composable
-fun HomeGoalList(goalViewModel: GoalViewModel) {
+fun HomeGoalList(navController: NavController,goalViewModel: GoalViewModel) {
 
     val goal = goalViewModel.goalState.collectAsState()
 
@@ -51,7 +55,7 @@ fun HomeGoalList(goalViewModel: GoalViewModel) {
                     textAlign = TextAlign.Start,
                     fontSize = 20.sp
                 )
-                TextButton(onClick = { /*TODO*/ }) {
+                TextButton(onClick = {navController.navigate(BottomNavScreen.Goals.screen_route) }) {
                     Text(
                         text = "Ver todos",
                         fontWeight = FontWeight.Bold,
@@ -73,10 +77,16 @@ fun HomeGoalList(goalViewModel: GoalViewModel) {
                         }
                     }
                     is Resource.Success -> {
-                        GoalOfTheDay(
-                            goals = result.data,
-                            goalViewModel::deleteGoal
-                        )
+                        val filteredList = result.data.filter{it.release_date.contains("1")}
+                        if (filteredList.isEmpty()) {
+                            EmptyMessage("No tienes ningun habito actualmente!\nCrea uno nuevo!!")
+                        }
+                        else{
+                            GoalsUI(
+                                filteredList,
+                                goalViewModel::deleteGoal
+                            )
+                        }
                     }
                     is Resource.Failure -> {
                         LaunchedEffect(goal.value) {
@@ -93,30 +103,7 @@ fun HomeGoalList(goalViewModel: GoalViewModel) {
 }
 
 @Composable
-fun GoalOfTheDay(goals: List<Goals>, onDelete: (Goals) -> Unit) {
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .padding(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        val filteredList = goals.filter { it.release_date.contains("02") }
-        if (filteredList.isEmpty()) {
-            EmptyGoals()
-        } else {
-            LazyColumn(modifier = Modifier.padding(0.dp,0.dp,0.dp,8.dp)) {
-                items(filteredList) {
-                    GoalCard(goal = it, onDelete = onDelete)
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun EmptyGoals() {
+fun EmptyMessage(text:String) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -124,13 +111,12 @@ fun EmptyGoals() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "No tienes ningun objetivo actualmente!" +
-                    "Crea uno nuevo y hazlo!!",
+            text = text,
             fontWeight = FontWeight.Medium,
             color = Color.DarkGray,
             modifier = Modifier.wrapContentWidth(Alignment.CenterHorizontally),
             textAlign = TextAlign.Start,
-            fontSize = 20.sp
+            fontSize = 16.sp
         )
     }
 }
