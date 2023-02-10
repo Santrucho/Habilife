@@ -8,7 +8,12 @@ import com.santrucho.habilife.ui.utils.Resource
 interface HabitsRepository {
 
     suspend fun addHabit(
-        habit:Habit) : Resource<Habit>
+        title:String,
+        description:String,
+        type:String,
+        frequently:String,
+        isCompleted : Boolean,
+        isExpanded : Boolean) : Resource<Habit>
 
     suspend fun getHabits() : Resource<List<Habit>>
 

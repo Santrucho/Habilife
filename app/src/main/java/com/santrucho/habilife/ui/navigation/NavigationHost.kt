@@ -6,7 +6,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.santrucho.habilife.ui.data.model.Habit
 import com.santrucho.habilife.ui.presentation.*
 import com.santrucho.habilife.ui.ui.*
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
@@ -26,7 +25,6 @@ fun NavigationHost(navController:NavController) {
     val signUpViewModel = viewModel<SignUpViewModel>()
     val habitViewModel = viewModel<HabitViewModel>()
     val loginViewModel = viewModel<LoginViewModel>()
-    val habit = Habit()
 
     NavHost(navController = navController as NavHostController, startDestination = Screen.LoginScreen.route,builder ={
 
@@ -44,7 +42,7 @@ fun NavigationHost(navController:NavController) {
         }
         composable(
             route = Screen.NewHabitScreen.route,
-            content = { NewHabitScreen(habitViewModel = habitViewModel,navController = navController,habit = habit)})
+            content = { NewHabitScreen(habitViewModel = habitViewModel,navController = navController)})
         composable(
             route = Screen.NewGoalScreen.route,
             content = { NewGoalScreen(goalViewModel = goalViewModel, navController = navController) })
