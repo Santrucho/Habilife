@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.santrucho.habilife.R
+import com.santrucho.habilife.ui.data.model.Habit
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.HabitViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
@@ -31,7 +32,7 @@ import com.santrucho.habilife.ui.utils.Resource
 @OptIn(ExperimentalMaterialApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController) {
+fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController,habit: Habit) {
 
     val habitValue = habitViewModel.habitFlow.collectAsState()
     val options = arrayOf("Food", "Sleep", "Drink")
@@ -43,6 +44,8 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
 
     // onBack can be passed down as composable param and hoisted
     val onBack = { navController.navigate(BottomNavScreen.Habit.screen_route) }
+
+    val habitToSave = Habit(habit.id,habit.userId,habit.title,habit.description,habit.type,habit.frequently,habit.isCompleted,habit.isExpanded)
 
     BackPressHandler(onBackPressed = onBack)
 
@@ -156,9 +159,7 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                     Button(
                         onClick = {
                             habitViewModel.addHabit(
-                                habitViewModel.titleValue.value,
-                                habitViewModel.descriptionValue.value, selectedOptionText,
-                                habitViewModel.frequencyValue.value, false, false
+                                habitToSave
                             )
                         },
                         enabled = habitViewModel.isEnabledConfirmButton.value,

@@ -1,6 +1,5 @@
 package com.santrucho.habilife.ui.ui.habits
 
-import android.graphics.Color
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -15,14 +14,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color.Companion.Black
-import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.Color.Companion.White
-import androidx.compose.ui.layout.HorizontalAlignmentLine
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.santrucho.habilife.ui.data.model.Habit
-import com.santrucho.habilife.ui.presentation.HabitViewModel
+import com.santrucho.habilife.ui.ui.habits.components.typeHelper
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -49,11 +45,7 @@ fun HabitCard(habit: Habit,onDelete:(Habit)-> Unit) {
             ),
         elevation = 3.dp,
         onClick = {expandedState = !expandedState},
-        backgroundColor = if(habit.type == "Food"){
-            MaterialTheme.colors.primary
-        } else{
-            MaterialTheme.colors.secondary
-        }
+        backgroundColor = typeHelper(habit = habit)
     ) {
         Column(
             modifier = Modifier

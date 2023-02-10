@@ -7,7 +7,7 @@ data class Habit(
     var userId : String="",
     var title:String="",
     var description:String="",
-    var type:String="",
+    var type:HabitType=HabitType.FOOD,
     var frequently:String="",
     var isCompleted : Boolean=false,
     var isExpanded : Boolean=false

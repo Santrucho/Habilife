@@ -11,29 +11,24 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
         ,private val firebaseAuth: FirebaseAuth) : HabitsRepository {
 
     override suspend fun addHabit(
-        title: String,
-        description: String,
-        type:String,
-        frequently: String,
-        isCompleted: Boolean,
-        isExpanded: Boolean
+        habit:Habit
     ): Resource<Habit> {
 
         return try {
             firebaseAuth.currentUser.let { userLogged ->
                 var documentReference = firestore.collection("habits").document()
-                val habitToSave = Habit(
-                    id = documentReference.id,
-                    userId = userLogged?.uid.toString(),
-                    title = title,
-                    description = description,
-                    type = type,
-                    frequently = frequently,
-                    isCompleted = isCompleted,
-                    isExpanded = isExpanded
+                val habitMap = hashMapOf(
+                    "id" to documentReference.id,
+                    "userId" to userLogged?.uid.toString(),
+                    "title" to habit.title,
+                    "description" to  habit.description,
+                    "type" to  habit.type.name,
+                    "frequently" to  habit.frequently,
+                    "isCompleted" to  habit.isCompleted,
+                    "isExpanded" to habit.isExpanded
                 )
-                documentReference.set(habitToSave).await()
-                Resource.Success(habitToSave)
+                documentReference.set(habitMap).await()
+                Resource.Success(habit)
             }
         } catch(e:Exception){
             return Resource.Failure(e)
