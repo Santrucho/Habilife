@@ -10,7 +10,7 @@ interface HabitsRepository {
     suspend fun addHabit(
         title:String,
         description:String,
-        image:String,
+        type:String,
         frequently:String,
         isCompleted : Boolean,
         isExpanded : Boolean) : Resource<Habit>

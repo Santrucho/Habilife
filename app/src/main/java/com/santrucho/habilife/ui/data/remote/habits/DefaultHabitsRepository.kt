@@ -1,6 +1,5 @@
 package com.santrucho.habilife.ui.data.remote.habits
 
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.santrucho.habilife.ui.data.model.Habit
@@ -14,7 +13,7 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
     override suspend fun addHabit(
         title: String,
         description: String,
-        image: String,
+        type:String,
         frequently: String,
         isCompleted: Boolean,
         isExpanded: Boolean
@@ -28,7 +27,7 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
                     userId = userLogged?.uid.toString(),
                     title = title,
                     description = description,
-                    image = image,
+                    type = type,
                     frequently = frequently,
                     isCompleted = isCompleted,
                     isExpanded = isExpanded

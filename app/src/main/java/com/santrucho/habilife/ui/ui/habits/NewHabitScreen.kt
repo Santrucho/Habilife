@@ -9,9 +9,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,11 +27,17 @@ import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.utils.BackPressHandler
 import com.santrucho.habilife.ui.utils.Resource
 
-@SuppressLint("StateFlowValueCalledInComposition")
+
+@OptIn(ExperimentalMaterialApi::class)
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController) {
 
     val habitValue = habitViewModel.habitFlow.collectAsState()
+    val options = arrayOf("Food", "Sleep", "Drink")
+
+    var expanded by remember { mutableStateOf(false) }
+    var selectedOptionText by remember { mutableStateOf(options[0]) }
 
     val context = LocalContext.current
 
@@ -116,14 +120,44 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                     fontSize = 14.sp,
                     color = Color.Red
                 )
-
+                ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = !expanded } ) {
+                    TextField(
+                        readOnly = true,
+                        value = selectedOptionText,
+                        onValueChange = { },
+                        label = { Text("Categories") },
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(
+                                expanded = expanded
+                            )
+                        },
+                        colors = ExposedDropdownMenuDefaults.textFieldColors()
+                    )
+                    ExposedDropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = {
+                            expanded = false
+                        }
+                    ) {
+                        options.forEach { selectionOption ->
+                            DropdownMenuItem(
+                                onClick = {
+                                    selectedOptionText = selectionOption
+                                    expanded = false
+                                }
+                            ) {
+                                Text(text = selectionOption)
+                            }
+                        }
+                    }
+                }
                 Spacer(modifier = Modifier.padding(16.dp))
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Button(
                         onClick = {
                             habitViewModel.addHabit(
                                 habitViewModel.titleValue.value,
-                                habitViewModel.descriptionValue.value, "",
+                                habitViewModel.descriptionValue.value, selectedOptionText,
                                 habitViewModel.frequencyValue.value, false, false
                             )
                         },
@@ -165,7 +199,9 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                                     CircularProgressIndicator()
                                 }
                             }
-                            else -> {IllegalAccessException()}
+                            else -> {
+                                IllegalAccessException()
+                            }
                         }
                     }
                 }

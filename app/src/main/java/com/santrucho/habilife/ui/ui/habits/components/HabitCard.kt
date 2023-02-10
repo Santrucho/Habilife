@@ -49,7 +49,11 @@ fun HabitCard(habit: Habit,onDelete:(Habit)-> Unit) {
             ),
         elevation = 3.dp,
         onClick = {expandedState = !expandedState},
-        backgroundColor = MaterialTheme.colors.secondary
+        backgroundColor = if(habit.type == "Food"){
+            MaterialTheme.colors.primary
+        } else{
+            MaterialTheme.colors.secondary
+        }
     ) {
         Column(
             modifier = Modifier

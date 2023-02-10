@@ -96,14 +96,14 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
     fun addHabit(
         title: String,
         description: String,
-        image: String,
+        type: String,
         frequently: String,
         isCompleted: Boolean,
         isExpanded: Boolean
     ) {
         viewModelScope.launch {
             _habitFlow.value = Resource.Loading()
-            _habitFlow.value = repository.addHabit(title, description, image, frequently, isCompleted, isExpanded)
+            _habitFlow.value = repository.addHabit(title, description, type, frequently, isCompleted, isExpanded)
             getAllHabits()
         }
     }
