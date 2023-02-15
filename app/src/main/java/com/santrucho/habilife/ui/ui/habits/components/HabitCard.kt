@@ -45,7 +45,7 @@ fun HabitCard(habit: Habit,onDelete:(Habit)-> Unit) {
             ),
         elevation = 3.dp,
         onClick = {expandedState = !expandedState},
-        backgroundColor = typeHelper(habit = habit)
+        backgroundColor = typeHelper(habit.type)
     ) {
         Column(
             modifier = Modifier

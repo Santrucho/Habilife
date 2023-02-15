@@ -46,7 +46,7 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
     }
 
     fun validateTitle() {
-        if (titleValue.value.length >= 10) {
+        if (titleValue.value.length >= 20) {
             isTitleValid.value = true
             titleErrMsg.value = "Title should be less than 10 chars"
         } else {
@@ -68,7 +68,7 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
     }
 
     fun validateFrequently() {
-        if (frequencyValue.value.length <= 6) {
+        if (frequencyValue.value.length <= 5) {
             isFrequentlyValid.value = true
             frequentlyMsg.value = "Description should be 6 digit in format dd-mm-yyyy"
         } else {

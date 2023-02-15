@@ -71,7 +71,7 @@ fun HomeHabitList(navController: NavController, habitViewModel: HabitViewModel) 
                     is Resource.Success -> {
                         val filteredList = result.data.filter{it.frequently.contains("a")}
                         if (filteredList.isEmpty()) {
-                            EmptyMessage("No tienes ningun habito actualmente!\nCrea uno nuevo!!")
+                            EmptyMessage("No tienes ningun habito para realizar hoy!\nCrea uno nuevo!!")
                         }
                         else{
                             HabitUI(
