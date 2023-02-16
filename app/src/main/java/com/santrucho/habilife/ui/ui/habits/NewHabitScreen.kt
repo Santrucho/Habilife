@@ -19,7 +19,7 @@ import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.HabitViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.habits.components.Categories
-import com.santrucho.habilife.ui.ui.habits.components.HabitFields
+import com.santrucho.habilife.ui.ui.habits.components.NewHabitFields
 import com.santrucho.habilife.ui.utils.BackPressHandler
 import com.santrucho.habilife.ui.utils.Resource
 
@@ -46,12 +46,15 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier.wrapContentSize()
+                .padding(8.dp)
         ) {
             Column(Modifier.fillMaxSize()) {
 
-                HabitFields(habitViewModel)
                 Categories(options = options)
+                Spacer(modifier = Modifier.padding(2.dp))
+                NewHabitFields(habitViewModel)
 
+                Spacer(modifier = Modifier.weight(1f))
                 Button(
                     onClick = {
                         habitViewModel.addHabit(
@@ -70,6 +73,7 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                 ) {
                     Text("Guardar habito",Modifier.padding(4.dp))
                 }
+                Spacer(modifier = Modifier.height(60.dp))
                 habitValue.value.let {
                     when (it) {
                         is Resource.Success -> {
