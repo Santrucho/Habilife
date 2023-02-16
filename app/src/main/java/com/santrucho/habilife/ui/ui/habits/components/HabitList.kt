@@ -21,7 +21,8 @@ import com.santrucho.habilife.ui.utils.Resource
 @Composable
 fun HabitList(habitViewModel: HabitViewModel){
     val habits = habitViewModel.habitState.collectAsState()
-
+    //Makes the logic to collect and show the list of habits created by the user,
+    //in case is correct show the list and in case is incorrect show an error
     habits.value.let { result ->
         when (result) {
             is Resource.Loading -> {
@@ -46,6 +47,7 @@ fun HabitList(habitViewModel: HabitViewModel){
         }
     }
 }
+//Makes the LazyColumn or "RecyclerView" to show a list of each Habit created
 @Composable
 fun HabitUI(habits: List<Habit>, onDelete: (Habit) -> Unit) {
     LazyColumn(modifier = Modifier.padding(8.dp)) {

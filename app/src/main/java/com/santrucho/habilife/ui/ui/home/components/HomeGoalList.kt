@@ -22,7 +22,7 @@ import com.santrucho.habilife.ui.utils.Resource
 fun HomeGoalList(navController: NavController,goalViewModel: GoalViewModel) {
 
     val goal = goalViewModel.goalState.collectAsState()
-
+    //Set the box to show the Goals to make that day
     Card(
         shape = MaterialTheme.shapes.medium,
         elevation = 3.dp,
@@ -61,6 +61,7 @@ fun HomeGoalList(navController: NavController,goalViewModel: GoalViewModel) {
                     )
                 }
             }
+            //Make the logic to call a list of Goals which coincide with the current day
             goal.value.let { result ->
                 when (result) {
                     is Resource.Loading -> {
@@ -74,7 +75,7 @@ fun HomeGoalList(navController: NavController,goalViewModel: GoalViewModel) {
                     is Resource.Success -> {
                         val filteredList = result.data.filter{it.release_date.contains("1")}
                         if (filteredList.isEmpty()) {
-                            EmptyMessage("No tienes ningun habito actualmente!\nCrea uno nuevo!!")
+                            EmptyMessage("objetivo")
                         }
                         else{
                             GoalsUI(
@@ -97,6 +98,7 @@ fun HomeGoalList(navController: NavController,goalViewModel: GoalViewModel) {
     }
 }
 
+//In case there doesn't exist any Habit or Goals to make that day, show a Empty Message to notify the user
 @Composable
 fun EmptyMessage(text:String) {
     Column(
@@ -106,7 +108,8 @@ fun EmptyMessage(text:String) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = text,
+            text = "No tienes ningun $text para realizar hoy!!\n" +
+                    "Crea uno nuevo!!",
             fontWeight = FontWeight.Medium,
             color = Color.DarkGray,
             modifier = Modifier.wrapContentWidth(Alignment.CenterHorizontally),

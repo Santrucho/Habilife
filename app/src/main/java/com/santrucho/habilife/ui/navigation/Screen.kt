@@ -1,5 +1,6 @@
 package com.santrucho.habilife.ui.navigation
 
+//Set each screen as an object to navigate between screens
 sealed class Screen(val route: String) {
     object LoginScreen : Screen("login_screen")
     object SignUpScreen : Screen("signup_screen")

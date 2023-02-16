@@ -2,6 +2,7 @@ package com.santrucho.habilife.ui.ui.bottombar
 
 import com.santrucho.habilife.R
 
+//Set each screen as an object to display it in the bottom bar
 sealed class BottomNavScreen(var title:String, var icon:Int, var screen_route:String){
 
     object Home : BottomNavScreen("Home", R.drawable.ic_home,"home")

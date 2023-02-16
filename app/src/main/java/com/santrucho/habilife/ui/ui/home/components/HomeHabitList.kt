@@ -22,6 +22,8 @@ import com.santrucho.habilife.ui.utils.Resource
 fun HomeHabitList(navController: NavController, habitViewModel: HabitViewModel) {
 
     val habit = habitViewModel.habitState.collectAsState()
+
+    //Set the box to show the habit to make that day
     Card(
         shape = MaterialTheme.shapes.medium,
         elevation = 3.dp,
@@ -58,6 +60,7 @@ fun HomeHabitList(navController: NavController, habitViewModel: HabitViewModel) 
                     )
                 }
             }
+            //Make the logic to call a list of habits which coincide with the current day
             habit.value.let { result ->
                 when (result) {
                     is Resource.Loading -> {
@@ -71,7 +74,8 @@ fun HomeHabitList(navController: NavController, habitViewModel: HabitViewModel) 
                     is Resource.Success -> {
                         val filteredList = result.data.filter{it.frequently.contains("a")}
                         if (filteredList.isEmpty()) {
-                            EmptyMessage("No tienes ningun habito para realizar hoy!\nCrea uno nuevo!!")
+                            //Call EmptyMessage from HomeGoalList to show it
+                            EmptyMessage("habito")
                         }
                         else{
                             HabitUI(

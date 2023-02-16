@@ -32,6 +32,7 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
 
     val context = LocalContext.current
 
+    //Create the options to choose a type for any Habits
     val options = arrayOf("Salud", "Finanzas", "Social", "Relaciones", "Sueño", "Personal", "Otros")
     var selectedOption by remember { mutableStateOf(options[0]) }
 
@@ -50,6 +51,9 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
         ) {
             Column(Modifier.fillMaxSize()) {
 
+                //Set the fields to show and fill for create a new habit
+                //Call Categories and NewHabitFields in NewHabitFields function
+
                 Categories(options = options)
                 Spacer(modifier = Modifier.padding(2.dp))
                 NewHabitFields(habitViewModel)
@@ -57,6 +61,7 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                 Spacer(modifier = Modifier.weight(1f))
                 Button(
                     onClick = {
+                        //Makes the call in the ViewModel to access a database and create the habit
                         habitViewModel.addHabit(
                             habitViewModel.titleValue.value,
                             habitViewModel.descriptionValue.value, selectedOption,
@@ -74,6 +79,8 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                     Text("Guardar habito",Modifier.padding(4.dp))
                 }
                 Spacer(modifier = Modifier.height(60.dp))
+                //In case the call is correct, navigate to Habit Screen and show the habit created, in case is Incorrect, show a error message
+
                 habitValue.value.let {
                     when (it) {
                         is Resource.Success -> {
@@ -112,6 +119,7 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
     }
 }
 
+//Makes the app bar go to the last screen
 @Composable
 fun DetailsAppBar(onBack: () -> Unit) {
     TopAppBar(

@@ -35,6 +35,7 @@ fun LoginScreen(viewModel: LoginViewModel?, navController: NavController) {
     val loginFlow = viewModel?.loginFlow?.collectAsState()
     val context = LocalContext.current
 
+    //Set the fields in Login to fill
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -65,6 +66,7 @@ fun LoginScreen(viewModel: LoginViewModel?, navController: NavController) {
             )
 
             Spacer(modifier = Modifier.padding(10.dp))
+            //In case all works, navigate to Home Screen
             Button(
                 onClick = {
                     viewModel?.login(emailValue,passwordValue)
@@ -92,7 +94,8 @@ fun LoginScreen(viewModel: LoginViewModel?, navController: NavController) {
             )
         }
     }
-
+    //Make the logic to the database call, evaluating three possible cases:
+    // Success in case the call is correct, Failure in case the call is incorrect and Loading
     loginFlow?.value?.let{
         when(it){
             is Resource.Success ->{

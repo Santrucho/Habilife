@@ -35,15 +35,19 @@ fun HomeScreen(navController: NavController,userViewModel: SignUpViewModel,goalV
             .background(colorResource(id = R.color.white))
             .wrapContentSize(Alignment.Center)
     ) {
+        //Welcomes the user to the main screen
         userViewModel.currentUser?.let{
             UserInfo(name = it.displayName.toString())
         }
+        //Show a list of habits to make in that day
         HomeHabitList(navController,habitViewModel)
         Spacer(modifier = Modifier.height(18.dp))
+        //Show a list of goals to make in that day
         HomeGoalList(navController,goalViewModel)
     }
 }
 
+//Collect user data to show it
 @Composable
 fun UserInfo(name:String){
     Spacer(modifier = Modifier.height(32.dp))

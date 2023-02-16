@@ -20,6 +20,8 @@ import androidx.compose.ui.unit.sp
 import com.santrucho.habilife.ui.data.model.Habit
 import com.santrucho.habilife.ui.ui.habits.components.typeHelper
 
+
+//Set the visualization and the way in which each habit will be displayed
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HabitCard(habit: Habit,onDelete:(Habit)-> Unit) {

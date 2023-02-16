@@ -35,6 +35,7 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
     private val _habitFlow = MutableStateFlow<Resource<Habit>?>(null)
     val habitFlow: StateFlow<Resource<Habit>?> = _habitFlow
 
+    //Check if the confirm button can be activated, when the validations are correct
     private fun shouldEnabledConfirmButton() {
         isEnabledConfirmButton.value =
             titleErrMsg.value.isEmpty()
@@ -45,6 +46,7 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
                 && !frequencyValue.value.isNullOrBlank()
     }
 
+    //Check if the title is valid
     fun validateTitle() {
         if (titleValue.value.length >= 20) {
             isTitleValid.value = true
@@ -56,6 +58,7 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
         shouldEnabledConfirmButton()
     }
 
+    //Check if the description is valid
     fun validateDescription() {
         if (descriptionValue.value.length <= 5) {
             isDescriptionValid.value = true
@@ -67,32 +70,27 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
         shouldEnabledConfirmButton()
     }
 
-    fun validateFrequently() {
-        if (frequencyValue.value.length <= 5) {
-            isFrequentlyValid.value = true
-            frequentlyMsg.value = "Description should be 6 digit in format dd-mm-yyyy"
-        } else {
-            isFrequentlyValid.value = false
-            frequentlyMsg.value = ""
-        }
-        shouldEnabledConfirmButton()
-    }
-
+    //Reset the result of each fields
     fun resetResult(){
         _habitFlow.value = null
         titleValue.value = ""
         descriptionValue.value = ""
         frequencyValue.value = ""
     }
+
+    //Reset the response for the call to get the habits in the database
     fun resetValue(){
         _habitState.value = null
     }
+
+    //Call the repository and display all habits
     fun getAllHabits(){
         viewModelScope.launch {
             _habitState.value = repository.getHabits()
         }
     }
 
+    //Call to the repository and add a Habit into the database
     fun addHabit(
         title: String,
         description: String,
@@ -108,6 +106,7 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
         }
     }
 
+    //Delete an specific habit from the database
     fun deleteHabit(habit:Habit){
         viewModelScope.launch {
             repository.deleteHabit(habit)

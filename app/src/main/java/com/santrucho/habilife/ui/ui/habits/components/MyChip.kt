@@ -21,8 +21,9 @@ import androidx.compose.ui.unit.sp
 import com.santrucho.habilife.ui.data.model.ItemList
 
 
+//Set the box to choose the frequency for makes the habit
 @Composable
-fun FrequentlyPicker() {
+fun FrequencyPicker() {
 
     val itemList: List<ItemList> =
         listOf(
@@ -63,6 +64,7 @@ fun FrequentlyPicker() {
     }
 }
 
+//Set each element which represent a day of week to mark and select for the frequency in the habit
 @Composable
 fun MyChip(
     title: String,

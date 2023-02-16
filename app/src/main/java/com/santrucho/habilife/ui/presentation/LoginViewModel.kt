@@ -14,23 +14,23 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(private val repository: LoginRepository) : ViewModel() {
 
-    var userError: String = ""
-
     private val _loginFlow = MutableStateFlow<Resource<FirebaseUser>?>(null)
     val loginFlow : StateFlow<Resource<FirebaseUser>?> = _loginFlow
 
+    //If the user is register and its already login, initialize the app and go to the home screen directly
     init{
         if(repository.currentUser != null){
             _loginFlow.value = Resource.Success(repository.currentUser!!)
         }
     }
 
+    //Call the repository and sign in
     fun login(email:String,password:String) = viewModelScope.launch {
         _loginFlow.value = Resource.Loading()
         val resultData = repository.loginUser(email, password)
         _loginFlow.value = resultData
     }
-
+    //Sign out the user
     fun logout(){
         repository.logout()
         _loginFlow.value = null

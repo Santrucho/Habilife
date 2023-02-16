@@ -36,6 +36,7 @@ class GoalViewModel @Inject constructor(private val repository : GoalsRepository
     private val _goalState = MutableStateFlow<Resource<List<Goals>>?>(null)
     val goalState : StateFlow<Resource<List<Goals>>?> = _goalState
 
+    //Check if the confirm button can be activated, when the validations are correct
     private fun shouldEnabledConfirmButton() {
         isEnabledConfirmButton.value =
             titleErrMsg.value.isEmpty()
@@ -45,7 +46,7 @@ class GoalViewModel @Inject constructor(private val repository : GoalsRepository
                     && !descriptionValue.value.isNullOrBlank()
                     && !release_dateValue.value.isNullOrBlank()
     }
-
+    //Check if the title is valid
     fun validateTitle() {
         if (titleValue.value.length >= 10) {
             isTitleValid.value = true
@@ -56,7 +57,7 @@ class GoalViewModel @Inject constructor(private val repository : GoalsRepository
         }
         shouldEnabledConfirmButton()
     }
-
+    //Check if the description is valid
     fun validateDescription() {
         if (descriptionValue.value.length <= 5) {
             isDescriptionValid.value = true
@@ -67,7 +68,7 @@ class GoalViewModel @Inject constructor(private val repository : GoalsRepository
         }
         shouldEnabledConfirmButton()
     }
-
+    //Check if the release date is valid
     fun validateReleaseDate() {
         if (release_dateValue.value.length <= 6) {
             isreleaseDateValid.value = true
@@ -78,7 +79,7 @@ class GoalViewModel @Inject constructor(private val repository : GoalsRepository
         }
         shouldEnabledConfirmButton()
     }
-
+    //Call to the repository and add a Goal into the database
     fun addGoal(title:String,description:String,isCompleted:Boolean,release_date:String){
         viewModelScope.launch {
             _goalFlow.value = Resource.Loading()
@@ -86,22 +87,25 @@ class GoalViewModel @Inject constructor(private val repository : GoalsRepository
            getAllGoals()
         }
     }
-
+    //Reset the result of each fields
     fun resetResult(){
         _goalFlow.value = null
         titleValue.value = ""
         descriptionValue.value = ""
         release_dateValue.value = ""
     }
+    //Reset the response for each call to get the goals in the database
     fun resetValue(){
         _goalState.value = null
     }
+    //Call the repository and display all goals
     fun getAllGoals(){
         viewModelScope.launch {
             _goalState.value = repository.getGoals()
         }
     }
 
+    //Delete an specific goal from the database
     fun deleteGoal(goal:Goals){
         viewModelScope.launch {
             repository.deleteGoal(goal)

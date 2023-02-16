@@ -25,7 +25,7 @@ import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
-
+//Set the fields to show and fill out
 @Composable
 fun NewHabitFields(habitViewModel: HabitViewModel) {
 
@@ -79,12 +79,13 @@ fun NewHabitFields(habitViewModel: HabitViewModel) {
             fontSize = 14.sp,
             color = Color.Red
         )
-        FrequentlyPicker()
+        FrequencyPicker()
         Spacer(modifier = Modifier.padding(8.dp))
         TimePicker()
     }
 }
 
+//Show an Spinner or ExposedDropMenu to deploy a list with all the options for choose a type for each habit
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun Categories(options: Array<String>) {
@@ -161,6 +162,7 @@ fun Categories(options: Array<String>) {
     }
 }
 
+//Set an action button to select a Time to make the habit created
 @Composable
 fun TimePicker() {
 

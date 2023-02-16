@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import com.santrucho.habilife.ui.data.model.Goals
 
 
+//Set the visualization and the way in which each Goal will be displayed
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun GoalCard(goal: Goals,onDelete:(Goals) -> Unit) {
