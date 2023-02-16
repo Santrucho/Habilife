@@ -79,7 +79,7 @@ fun NewHabitFields(habitViewModel: HabitViewModel) {
             fontSize = 14.sp,
             color = Color.Red
         )
-        FrequencyRow()
+        FrequentlyPicker()
         Spacer(modifier = Modifier.padding(8.dp))
         TimePicker()
     }
@@ -160,47 +160,6 @@ fun Categories(options: Array<String>) {
         }
     }
 }
-
-@Composable
-fun FrequencyRow() {
-
-    val itemList: List<ItemList> =
-        listOf(ItemList(1, "Lun"),
-            ItemList(2, "Mar"),
-            ItemList(3, "Mier"),
-            ItemList(4, "Jue"),
-            ItemList(5, "Vier"),
-            ItemList(6, "Sab"),
-            ItemList(7, "Dom"))
-    var selectedItems by remember { mutableStateOf(emptyList<ItemList>()) }
-    var selected by remember { mutableStateOf("") }
-
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .wrapContentHeight()) {
-        Text("Frecuencia del habito:", fontSize = 20.sp, color = Color.Black)
-        LazyRow(
-            modifier = Modifier
-                .padding(4.dp)
-                .fillMaxWidth()
-        ) {
-            items(itemList){ it ->
-                MyChip(
-                    title = it.text,
-                    selected = selectedItems.contains(it),
-                    onSelected = { isSelected ->
-                        selectedItems = if (isSelected) {
-                            selectedItems + it
-                        } else {
-                            selectedItems - it
-                        }
-                    },
-                )
-            }
-        }
-    }
-}
-
 
 @Composable
 fun TimePicker() {
