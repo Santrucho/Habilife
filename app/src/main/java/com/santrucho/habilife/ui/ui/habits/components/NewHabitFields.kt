@@ -2,8 +2,6 @@ package com.santrucho.habilife.ui.ui.habits.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -16,7 +14,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
-import com.santrucho.habilife.ui.data.model.ItemList
 import com.santrucho.habilife.ui.presentation.HabitViewModel
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.time.TimePickerDefaults
@@ -34,51 +31,76 @@ fun NewHabitFields(habitViewModel: HabitViewModel) {
             .wrapContentHeight()
             .fillMaxWidth()
     ) {
+        Card(
+            shape = MaterialTheme.shapes.medium,
+            elevation = 3.dp,
+            backgroundColor = MaterialTheme.colors.background,
+            modifier = Modifier.padding(4.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .wrapContentHeight()
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            ) {
 
-        Text("Personalice su habito", fontSize = 20.sp, color = Color.Black)
-        OutlinedTextField(
-            value = habitViewModel.titleValue.value,
-            onValueChange = {
-                habitViewModel.titleValue.value = it
-                habitViewModel.validateTitle()
-            },
-            isError = habitViewModel.isTitleValid.value,
-            label = { Text(text = "Nombre del habito") },
-            placeholder = { Text(text = "Habit title") },
-            singleLine = true,
-            modifier = Modifier
-                .fillMaxWidth(1f)
-                .padding(8.dp),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-            shape = CircleShape
-        )
-        Text(
-            modifier = Modifier.padding(start = 8.dp),
-            text = habitViewModel.titleErrMsg.value,
-            fontSize = 14.sp,
-            color = Color.Red
-        )
-        OutlinedTextField(
-            value = habitViewModel.descriptionValue.value,
-            onValueChange = {
-                habitViewModel.descriptionValue.value = it
-                habitViewModel.validateDescription()
-            },
-            isError = habitViewModel.isDescriptionValid.value,
-            label = { Text(text = "Descripcion") },
-            placeholder = { Text(text = "Description") },
-            modifier = Modifier
-                .fillMaxWidth(1f)
-                .padding(8.dp),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-            shape = CircleShape
-        )
-        Text(
-            modifier = Modifier.padding(start = 8.dp),
-            text = habitViewModel.descriptionErrMsg.value,
-            fontSize = 14.sp,
-            color = Color.Red
-        )
+                Text("Personalice su habito:", fontSize = 20.sp, color = Color.Black)
+                OutlinedTextField(
+                    value = habitViewModel.titleValue.value,
+                    onValueChange = {
+                        habitViewModel.titleValue.value = it
+                        habitViewModel.validateTitle()
+                    },
+                    isError = habitViewModel.isTitleValid.value,
+                    label = { Text(text = "Nombre del habito") },
+                    singleLine = true,
+                    modifier = Modifier
+                        .fillMaxWidth(1f)
+                        .padding(8.dp),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                    shape = CircleShape,
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        textColor = Color.Black,
+                        focusedBorderColor = Color.Blue,
+                        unfocusedBorderColor = Color.Blue,
+                        focusedLabelColor = Color.Blue,
+                        unfocusedLabelColor = Color.Blue
+                    )
+                )
+                Text(
+                    modifier = Modifier.padding(start = 8.dp),
+                    text = habitViewModel.titleErrMsg.value,
+                    fontSize = 14.sp,
+                    color = Color.Red
+                )
+                OutlinedTextField(
+                    value = habitViewModel.descriptionValue.value,
+                    onValueChange = {
+                        habitViewModel.descriptionValue.value = it
+                        habitViewModel.validateDescription()
+                    },
+                    isError = habitViewModel.isDescriptionValid.value,
+                    label = { Text(text = "Descripcion") },
+                    modifier = Modifier
+                        .fillMaxWidth(1f)
+                        .padding(8.dp),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                    shape = CircleShape,
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color.Blue,
+                        unfocusedBorderColor = Color.Blue,
+                        focusedLabelColor = Color.Blue,
+                        unfocusedLabelColor = Color.Blue
+                    )
+                )
+                Text(
+                    modifier = Modifier.padding(start = 8.dp),
+                    text = habitViewModel.descriptionErrMsg.value,
+                    fontSize = 14.sp,
+                    color = Color.Red
+                )
+            }
+        }
         FrequencyPicker()
         Spacer(modifier = Modifier.padding(8.dp))
         TimePicker()
@@ -93,14 +115,18 @@ fun Categories(options: Array<String>) {
     var selectedOption by remember { mutableStateOf(options[0]) }
     var expanded by remember { mutableStateOf(false) }
 
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
+
+    Card(
+        shape = MaterialTheme.shapes.medium,
+        elevation = 3.dp,
+        backgroundColor = MaterialTheme.colors.background,
+        modifier = Modifier.padding(4.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentSize()
+                .padding(8.dp)
         ) {
             Text("Seleccione un tipo de habito:", fontSize = 20.sp, color = Color.Black)
             Spacer(modifier = Modifier.padding(2.dp))
@@ -111,7 +137,6 @@ fun Categories(options: Array<String>) {
                     readOnly = true,
                     value = selectedOption,
                     onValueChange = { },
-                    label = { Text("Categories", color = Color.Black) },
                     placeholder = { Text("Seleccione un tipo de habito") },
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon(
@@ -119,13 +144,22 @@ fun Categories(options: Array<String>) {
                         )
                     },
                     colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(
-                        textColor = Color.Black, focusedBorderColor = typeHelper(
+                        textColor = Color.White,
+                        backgroundColor = typeHelper(
                             habitType = selectedOption
-                        ), focusedTrailingIconColor = typeHelper(habitType = selectedOption)
+                        ),
+                        focusedTrailingIconColor = Color.White, trailingIconColor = Color.White,
+                        focusedBorderColor = typeHelper(
+                            habitType = selectedOption
+                        ),
+                        unfocusedBorderColor = typeHelper(
+                            habitType = selectedOption
+                        ),
                     ),
                     shape = CircleShape,
                     modifier = Modifier
                         .fillMaxWidth(1f)
+                        .align(Alignment.CenterHorizontally)
                 )
                 ExposedDropdownMenu(
                     expanded = expanded,
@@ -152,7 +186,7 @@ fun Categories(options: Array<String>) {
                                 text = selectionOption,
                                 fontSize = 24.sp,
                                 textAlign = TextAlign.Center,
-                                color = Color.Black
+                                color = Color.White
                             )
                         }
                     }
@@ -190,10 +224,16 @@ fun TimePicker() {
         timepicker(
             initialTime = LocalTime.now(),
             is24HourClock = true,
-            title = "Elija un horario para comenzar el habito",
+            title = "Elija un horario para comenzar el habito:",
             colors = TimePickerDefaults.colors(
-                MaterialTheme.colors.secondary,
-                inactiveBackgroundColor = MaterialTheme.colors.background
+                activeTextColor = Color.Black,
+                inactiveTextColor = Color.Black,
+                inactivePeriodBackground = Color.Black,
+                headerTextColor = Color.Black ,
+                activeBackgroundColor = Color.White,
+                selectorColor = Color.Blue,
+                selectorTextColor = Color.White,
+                inactiveBackgroundColor = Color.White
             )
         ) { time ->
             pickedTime = time
@@ -204,17 +244,23 @@ fun TimePicker() {
             }
         }
     }
-    Box(
-        modifier = Modifier
-            .padding(8.dp)
+    Card(
+        shape = MaterialTheme.shapes.medium,
+        elevation = 3.dp,
+        backgroundColor = MaterialTheme.colors.background,
+        modifier = Modifier.padding(4.dp)
     ) {
-
-        Column(modifier = Modifier.wrapContentSize(), horizontalAlignment = Alignment.Start) {
-            Text("Hora para realizar el habito", color = Color.Black, fontSize = 20.sp)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .padding(8.dp)
+        ) {
+            Text("Hora para realizar el habito:", color = Color.Black, fontSize = 20.sp)
             Button(
                 onClick = { dialogState.show() },
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = MaterialTheme.colors.secondary,
+                    backgroundColor = Color.Blue,
                     contentColor = MaterialTheme.colors.background
                 ),
                 shape = CircleShape,
@@ -224,7 +270,7 @@ fun TimePicker() {
             ) {
                 Text(
                     "$formattedTime $timeSystem",
-                    fontSize = 24.sp,
+                    fontSize = 20.sp,
                     modifier = Modifier.padding(8.dp)
                 )
             }
