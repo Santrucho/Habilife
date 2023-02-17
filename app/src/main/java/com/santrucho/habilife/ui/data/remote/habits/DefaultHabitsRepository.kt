@@ -3,6 +3,7 @@ package com.santrucho.habilife.ui.data.remote.habits
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.santrucho.habilife.ui.data.model.Habit
+import com.santrucho.habilife.ui.data.model.ItemList
 import com.santrucho.habilife.ui.utils.Resource
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -14,7 +15,7 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
         title: String,
         description: String,
         type:String,
-        frequently: String,
+        frequently : List<String>,
         isCompleted: Boolean,
         isExpanded: Boolean
     ): Resource<Habit> {
@@ -22,6 +23,7 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
         return try {
             firebaseAuth.currentUser.let { userLogged ->
                 var documentReference = firestore.collection("habits").document()
+
                 val habitToSave = Habit(
                     id = documentReference.id,
                     userId = userLogged?.uid.toString(),
@@ -32,6 +34,7 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
                     isCompleted = isCompleted,
                     isExpanded = isExpanded
                 )
+
                 documentReference.set(habitToSave).await()
                 Resource.Success(habitToSave)
             }

@@ -1,4 +1,4 @@
-package com.santrucho.habilife.ui.ui.habits
+package com.santrucho.habilife.ui.ui.habits.components
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.santrucho.habilife.ui.data.model.Habit
-import com.santrucho.habilife.ui.ui.habits.components.typeHelper
+import com.santrucho.habilife.ui.utils.typeHelper
 
 
 //Set the visualization and the way in which each habit will be displayed
@@ -89,7 +89,7 @@ fun HabitCard(habit: Habit,onDelete:(Habit)-> Unit) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween,modifier=Modifier.fillMaxWidth()) {
 
                     Text(
-                        text = habit.frequently,
+                        text = habit.frequently.toString(),
                         modifier = Modifier
                             .wrapContentHeight(Alignment.Bottom)
                             .wrapContentWidth(Alignment.Start),

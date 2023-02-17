@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import com.santrucho.habilife.ui.presentation.HabitViewModel
+import com.santrucho.habilife.ui.utils.typeHelper
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.time.TimePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
@@ -87,6 +88,7 @@ fun NewHabitFields(habitViewModel: HabitViewModel) {
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                     shape = CircleShape,
                     colors = TextFieldDefaults.outlinedTextFieldColors(
+                        textColor = Color.Black,
                         focusedBorderColor = Color.Blue,
                         unfocusedBorderColor = Color.Blue,
                         focusedLabelColor = Color.Blue,
@@ -101,7 +103,6 @@ fun NewHabitFields(habitViewModel: HabitViewModel) {
                 )
             }
         }
-        FrequencyPicker()
         Spacer(modifier = Modifier.padding(8.dp))
         TimePicker()
     }
@@ -110,7 +111,7 @@ fun NewHabitFields(habitViewModel: HabitViewModel) {
 //Show an Spinner or ExposedDropMenu to deploy a list with all the options for choose a type for each habit
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun Categories(options: Array<String>) {
+fun Categories(options: Array<String>,onTypeSelection:(String) -> Unit) {
 
     var selectedOption by remember { mutableStateOf(options[0]) }
     var expanded by remember { mutableStateOf(false) }
@@ -170,20 +171,22 @@ fun Categories(options: Array<String>) {
                         .fillMaxWidth(1f)
                         .wrapContentHeight()
                 ) {
-                    options.forEach { selectionOption ->
+                    options.forEach { option ->
+                        val isSelected = option == selectedOption
                         DropdownMenuItem(
                             onClick = {
-                                selectedOption = selectionOption
+                                selectedOption = option
+                                onTypeSelection(selectedOption)
                                 expanded = false
                             },
                             modifier = Modifier
                                 .wrapContentSize()
                                 .padding(4.dp)
-                                .background(typeHelper(selectionOption), shape = CircleShape)
+                                .background(typeHelper(option), shape = CircleShape)
                         )
                         {
                             Text(
-                                text = selectionOption,
+                                text = option,
                                 fontSize = 24.sp,
                                 textAlign = TextAlign.Center,
                                 color = Color.White

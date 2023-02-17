@@ -1,4 +1,4 @@
-package com.santrucho.habilife.ui.ui.habits.components
+package com.santrucho.habilife.ui.utils
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -27,7 +27,7 @@ fun typeHelper(habitType: String):Color{
             MaterialTheme.colors.onBackground
         }
         else -> {
-            MaterialTheme.colors.secondary
+            MaterialTheme.colors.onBackground
         }
     }
 }

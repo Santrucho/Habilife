@@ -13,6 +13,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.santrucho.habilife.ui.data.model.ItemList
 import com.santrucho.habilife.ui.presentation.HabitViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.habits.components.HabitUI
@@ -72,7 +73,7 @@ fun HomeHabitList(navController: NavController, habitViewModel: HabitViewModel) 
                         }
                     }
                     is Resource.Success -> {
-                        val filteredList = result.data.filter{it.frequently.contains("a")}
+                        val filteredList = result.data.filter{it.frequently.contains("Lun")}
                         if (filteredList.isEmpty()) {
                             //Call EmptyMessage from HomeGoalList to show it
                             EmptyMessage("habito")

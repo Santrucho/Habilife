@@ -4,6 +4,7 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.santrucho.habilife.ui.data.model.Habit
+import com.santrucho.habilife.ui.data.model.ItemList
 import com.santrucho.habilife.ui.data.remote.habits.HabitsRepository
 import com.santrucho.habilife.ui.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -40,10 +41,8 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
         isEnabledConfirmButton.value =
             titleErrMsg.value.isEmpty()
                 && descriptionErrMsg.value.isEmpty()
-                && frequentlyMsg.value.isEmpty()
                 && !titleValue.value.isNullOrBlank()
                 && !descriptionValue.value.isNullOrBlank()
-                && !frequencyValue.value.isNullOrBlank()
     }
 
     //Check if the title is valid
@@ -95,13 +94,14 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
         title: String,
         description: String,
         type: String,
-        frequently: String,
+        frequently: List<String>,
         isCompleted: Boolean,
         isExpanded: Boolean
     ) {
+
         viewModelScope.launch {
             _habitFlow.value = Resource.Loading()
-            _habitFlow.value = repository.addHabit(title, description, type, frequently, isCompleted, isExpanded)
+            _habitFlow.value = repository.addHabit(title, description, type, frequently,isCompleted, isExpanded)
             getAllHabits()
         }
     }

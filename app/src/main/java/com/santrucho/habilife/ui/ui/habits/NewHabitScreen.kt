@@ -1,6 +1,7 @@
 package com.santrucho.habilife.ui.ui.habits
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -16,10 +17,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.santrucho.habilife.R
+import com.santrucho.habilife.ui.data.model.ItemList
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.HabitViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.habits.components.Categories
+import com.santrucho.habilife.ui.ui.habits.components.FrequencyPicker
 import com.santrucho.habilife.ui.ui.habits.components.NewHabitFields
 import com.santrucho.habilife.ui.utils.BackPressHandler
 import com.santrucho.habilife.ui.utils.Resource
@@ -36,6 +39,14 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
     //Create the options to choose a type for any Habits
     val options = arrayOf("Salud", "Finanzas", "Social", "Relaciones", "Sueño", "Personal", "Otros")
     var selectedOption by remember { mutableStateOf(options[0]) }
+
+    //Create the list of days for frequency
+    val itemList: List<String> =
+        listOf("Lun", "Mar", "Mier", "Jue", "Vier", "Sab", "Dom")
+
+    var selectedDays by remember { mutableStateOf(emptyList<String>()) }
+    //Check if at least one day is selected to enabled the confirm button
+    var areDaysSelected by remember { mutableStateOf(false) }
 
     // onBack can be passed down as composable param and hoisted
     val onBack = { navController.navigate(BottomNavScreen.Habit.screen_route) }
@@ -55,9 +66,15 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                 //Set the fields to show and fill for create a new habit
                 //Call Categories and NewHabitFields in NewHabitFields function
 
-                Categories(options = options)
+                Categories(options = options, onTypeSelection = { newOption ->
+                    selectedOption = newOption
+                })
                 Spacer(modifier = Modifier.padding(2.dp))
                 NewHabitFields(habitViewModel)
+                FrequencyPicker(itemList) { days ->
+                    selectedDays = days
+                    areDaysSelected = days.isNotEmpty()
+                }
 
                 Spacer(modifier = Modifier.weight(1f))
                 Button(
@@ -66,10 +83,12 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                         habitViewModel.addHabit(
                             habitViewModel.titleValue.value,
                             habitViewModel.descriptionValue.value, selectedOption,
-                            habitViewModel.frequencyValue.value, false, false
+                            selectedDays, false, false
                         )
+                        Log.d("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",selectedOption)
+                        Log.d("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",selectedOption)
                     },
-                    enabled = habitViewModel.isEnabledConfirmButton.value,
+                    enabled = areDaysSelected && habitViewModel.isEnabledConfirmButton.value,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)

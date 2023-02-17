@@ -1,6 +1,7 @@
 package com.santrucho.habilife.ui.ui.habits.components
 
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -15,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.santrucho.habilife.ui.data.model.Habit
 import com.santrucho.habilife.ui.presentation.HabitViewModel
-import com.santrucho.habilife.ui.ui.habits.HabitCard
 import com.santrucho.habilife.ui.utils.Resource
 
 @Composable
@@ -53,6 +53,8 @@ fun HabitUI(habits: List<Habit>, onDelete: (Habit) -> Unit) {
     LazyColumn(modifier = Modifier.padding(8.dp)) {
         items(habits) {
             HabitCard(habit = it, onDelete)
+
         }
+        Log.d("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",habits.toString())
     }
 }
