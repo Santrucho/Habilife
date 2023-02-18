@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.santrucho.habilife.ui.data.model.Habit
 import com.santrucho.habilife.ui.utils.typeHelper
+import java.time.format.DateTimeFormatter
 
 
 //Set the visualization and the way in which each habit will be displayed
@@ -28,6 +29,7 @@ fun HabitCard(habit: Habit,onDelete:(Habit)-> Unit) {
 
     var expandedState by remember { mutableStateOf(false)}
     val rotationState by animateFloatAsState(targetValue = if (expandedState) 180f else 0f)
+
 
     Card(
         shape = MaterialTheme.shapes.small,
@@ -86,10 +88,17 @@ fun HabitCard(habit: Habit,onDelete:(Habit)-> Unit) {
                     color = White,
                     fontSize = 16.sp
                 )
+                Text(
+                    text = habit.timePicker,
+                    modifier = Modifier
+                        .wrapContentHeight(Alignment.Top),
+                    color = White,
+                    fontSize = 16.sp
+                )
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween,modifier=Modifier.fillMaxWidth()) {
 
                     Text(
-                        text = habit.frequently.toString(),
+                        text = habit.frequently.joinToString(),
                         modifier = Modifier
                             .wrapContentHeight(Alignment.Bottom)
                             .wrapContentWidth(Alignment.Start),

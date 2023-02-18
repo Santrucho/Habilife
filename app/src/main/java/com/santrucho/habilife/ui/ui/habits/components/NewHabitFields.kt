@@ -104,7 +104,6 @@ fun NewHabitFields(habitViewModel: HabitViewModel) {
             }
         }
         Spacer(modifier = Modifier.padding(8.dp))
-        TimePicker()
     }
 }
 
@@ -201,10 +200,10 @@ fun Categories(options: Array<String>,onTypeSelection:(String) -> Unit) {
 
 //Set an action button to select a Time to make the habit created
 @Composable
-fun TimePicker() {
+fun TimePicker(pickTime:LocalTime,onTimePicked:(LocalTime)->Unit) {
 
     var pickedTime by remember {
-        mutableStateOf(LocalTime.now())
+        mutableStateOf(pickTime)
     }
     val formattedTime by remember {
         derivedStateOf {
@@ -237,7 +236,7 @@ fun TimePicker() {
                 selectorColor = Color.Blue,
                 selectorTextColor = Color.White,
                 inactiveBackgroundColor = Color.White
-            )
+            ),
         ) { time ->
             pickedTime = time
             if (time.isAfter(LocalTime.NOON)) {
@@ -245,6 +244,7 @@ fun TimePicker() {
             } else {
                 timeSystem = "AM"
             }
+            onTimePicked(time)
         }
     }
     Card(

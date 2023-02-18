@@ -3,9 +3,9 @@ package com.santrucho.habilife.ui.data.remote.habits
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.santrucho.habilife.ui.data.model.Habit
-import com.santrucho.habilife.ui.data.model.ItemList
 import com.santrucho.habilife.ui.utils.Resource
 import kotlinx.coroutines.tasks.await
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 class DefaultHabitsRepository @Inject constructor(private val firestore: FirebaseFirestore
@@ -16,6 +16,7 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
         description: String,
         type:String,
         frequently : List<String>,
+        timePicker : String,
         isCompleted: Boolean,
         isExpanded: Boolean
     ): Resource<Habit> {
@@ -31,10 +32,10 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
                     description = description,
                     type = type,
                     frequently = frequently,
+                    timePicker = timePicker,
                     isCompleted = isCompleted,
                     isExpanded = isExpanded
                 )
-
                 documentReference.set(habitToSave).await()
                 Resource.Success(habitToSave)
             }
@@ -48,6 +49,7 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
             val resultData = firestore.collection("habits")
                 .whereEqualTo("userId",firebaseAuth.currentUser?.uid)
                 .get().await().toObjects(Habit::class.java)
+
             Resource.Success(resultData)
         } catch (e: Exception) {
             Resource.Failure(e)

@@ -1,5 +1,6 @@
 package com.santrucho.habilife.ui.ui.home.components
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -18,6 +19,10 @@ import com.santrucho.habilife.ui.presentation.HabitViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.habits.components.HabitUI
 import com.santrucho.habilife.ui.utils.Resource
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.TextStyle
+import java.util.*
 
 @Composable
 fun HomeHabitList(navController: NavController, habitViewModel: HabitViewModel) {
@@ -62,6 +67,7 @@ fun HomeHabitList(navController: NavController, habitViewModel: HabitViewModel) 
                 }
             }
             //Make the logic to call a list of habits which coincide with the current day
+            Log.d("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",LocalDate.now().dayOfWeek.getDisplayName(TextStyle.SHORT, Locale("es","AR")))
             habit.value.let { result ->
                 when (result) {
                     is Resource.Loading -> {
@@ -73,7 +79,12 @@ fun HomeHabitList(navController: NavController, habitViewModel: HabitViewModel) 
                         }
                     }
                     is Resource.Success -> {
-                        val filteredList = result.data.filter{it.frequently.contains("Lun")}
+                        val filteredList = result.data.filter{ habit ->
+                            habit.frequently.any{ day ->
+                                day.equals(LocalDate.now().dayOfWeek.getDisplayName(TextStyle.FULL, Locale("es","ARG")),ignoreCase = true)
+                            }
+
+                        }
                         if (filteredList.isEmpty()) {
                             //Call EmptyMessage from HomeGoalList to show it
                             EmptyMessage("habito")

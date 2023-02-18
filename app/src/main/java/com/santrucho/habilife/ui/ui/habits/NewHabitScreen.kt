@@ -24,8 +24,11 @@ import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.habits.components.Categories
 import com.santrucho.habilife.ui.ui.habits.components.FrequencyPicker
 import com.santrucho.habilife.ui.ui.habits.components.NewHabitFields
+import com.santrucho.habilife.ui.ui.habits.components.TimePicker
 import com.santrucho.habilife.ui.utils.BackPressHandler
 import com.santrucho.habilife.ui.utils.Resource
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -42,11 +45,20 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
 
     //Create the list of days for frequency
     val itemList: List<String> =
-        listOf("Lun", "Mar", "Mier", "Jue", "Vier", "Sab", "Dom")
+        listOf("Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sábado", "Domingo")
 
     var selectedDays by remember { mutableStateOf(emptyList<String>()) }
     //Check if at least one day is selected to enabled the confirm button
     var areDaysSelected by remember { mutableStateOf(false) }
+
+    //TimePicker
+    var pickedTime by remember { mutableStateOf(LocalTime.now()) }
+
+    val formattedTime by remember {
+        derivedStateOf {
+            DateTimeFormatter.ofPattern("hh:mm").format(pickedTime)
+        }
+    }
 
     // onBack can be passed down as composable param and hoisted
     val onBack = { navController.navigate(BottomNavScreen.Habit.screen_route) }
@@ -71,6 +83,9 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                 })
                 Spacer(modifier = Modifier.padding(2.dp))
                 NewHabitFields(habitViewModel)
+                TimePicker(pickedTime, onTimePicked = { time ->
+                    pickedTime = time
+                })
                 FrequencyPicker(itemList) { days ->
                     selectedDays = days
                     areDaysSelected = days.isNotEmpty()
@@ -83,10 +98,8 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                         habitViewModel.addHabit(
                             habitViewModel.titleValue.value,
                             habitViewModel.descriptionValue.value, selectedOption,
-                            selectedDays, false, false
+                            selectedDays, formattedTime, false, false
                         )
-                        Log.d("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",selectedOption)
-                        Log.d("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",selectedOption)
                     },
                     enabled = areDaysSelected && habitViewModel.isEnabledConfirmButton.value,
                     modifier = Modifier

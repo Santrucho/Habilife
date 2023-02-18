@@ -35,10 +35,14 @@ fun HabitList(habitViewModel: HabitViewModel){
             }
             is Resource.Success -> {
                 HabitUI(habits = result.data, habitViewModel::deleteHabit)
+                Log.d("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",result.data.toString())
+                Log.d("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",result.data.toString())
             }
             is Resource.Failure -> {
                 LaunchedEffect(habits) {
                     result.exception.message.toString()
+                    Log.d("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",result.exception.toString())
+                    Log.d("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",result.exception.toString())
                 }
             }
             else -> {

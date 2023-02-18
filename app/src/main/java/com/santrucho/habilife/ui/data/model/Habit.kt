@@ -1,6 +1,6 @@
 package com.santrucho.habilife.ui.data.model
 
-import androidx.compose.ui.graphics.Color
+import java.time.LocalTime
 
 data class Habit(
     var id: String="",
@@ -9,6 +9,7 @@ data class Habit(
     var description:String="",
     var type:String="",
     var frequently: List<String> = emptyList(),
+    var timePicker: String = "",
     var isCompleted: Boolean=false,
     var isExpanded: Boolean=false
 ) {

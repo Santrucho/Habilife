@@ -11,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -95,13 +96,14 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
         description: String,
         type: String,
         frequently: List<String>,
+        timePicker: String,
         isCompleted: Boolean,
         isExpanded: Boolean
     ) {
 
         viewModelScope.launch {
             _habitFlow.value = Resource.Loading()
-            _habitFlow.value = repository.addHabit(title, description, type, frequently,isCompleted, isExpanded)
+            _habitFlow.value = repository.addHabit(title, description, type, frequently,timePicker,isCompleted, isExpanded)
             getAllHabits()
         }
     }
