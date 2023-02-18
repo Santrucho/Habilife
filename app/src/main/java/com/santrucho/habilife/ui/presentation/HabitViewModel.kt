@@ -50,7 +50,7 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
     fun validateTitle() {
         if (titleValue.value.length >= 20) {
             isTitleValid.value = true
-            titleErrMsg.value = "Title should be less than 10 chars"
+            titleErrMsg.value = "Title should be less than 20 chars"
         } else {
             isTitleValid.value = false
             titleErrMsg.value = ""
