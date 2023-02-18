@@ -1,163 +1,103 @@
 package com.santrucho.habilife.ui.ui.habits
 
-import android.annotation.SuppressLint
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color.Companion.Black
-import androidx.compose.ui.graphics.Color.Companion.Gray
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.santrucho.habilife.R
-import com.santrucho.habilife.ui.data.model.Habit
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.HabitViewModel
-import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
-import kotlinx.coroutines.flow.StateFlow
+import com.santrucho.habilife.ui.ui.habits.components.HabitList
+import com.santrucho.habilife.ui.ui.habits.components.HabitUI
+import com.santrucho.habilife.ui.utils.Resource
 
 @Composable
-fun HabitScreen(habitViewModel:HabitViewModel,
-                navController: NavController,
+fun HabitScreen(
+    habitViewModel: HabitViewModel,
+    navController: NavController,
 ) {
 
     habitViewModel.resetResult()
-
+    //Set the screen in habits
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .background(colorResource(id = R.color.white))
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        RecommendedHabitsSection()
-        Spacer(modifier = Modifier.height(32.dp))
-        Text("MIS HABITOS", modifier = Modifier.padding(8.dp))
-        //Set each element inside column
+
+        MyHabitsSection(habitViewModel = habitViewModel)
+        Spacer(modifier = Modifier.weight(1f))
+        FABButton(navController = navController)
+    }
+}
+
+//Set the button to access or navigate to create a new habit
+@Composable
+fun FABButton(navController: NavController) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp), horizontalArrangement = Arrangement.Center
+    ) {
+        Button(
+            onClick = { navController.navigate(Screen.NewHabitScreen.route) },
+            modifier = Modifier.defaultMinSize(240.dp, 56.dp),
+            shape = CircleShape
+
+        ) {
+            Text("Crear nuevo habito")
+        }
+    }
+    Spacer(modifier = Modifier.height(60.dp))
+}
+
+//Set and display the currents habits create for the user
+//Calling the list of habits in HabitList
+@Composable
+fun MyHabitsSection(habitViewModel: HabitViewModel) {
+
+    Card(
+        shape = MaterialTheme.shapes.medium,
+        elevation = 3.dp,
+        backgroundColor = MaterialTheme.colors.background,
+        modifier = Modifier.padding(8.dp)
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(420.dp)
-                .padding(8.dp)
-                .background(colorResource(id = R.color.white)),
-            horizontalAlignment = Alignment.Start
+                .wrapContentSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .padding(8.dp, 0.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "Mis habitos",
+                    fontWeight = FontWeight.Medium,
+                    color = Color.Black,
+                    modifier = Modifier.wrapContentWidth(Alignment.Start),
+                    textAlign = TextAlign.Start,
+                    fontSize = 20.sp
+                )
+            }
             HabitList(habitViewModel)
         }
-        //Set FAB Button Row above BottomBar
-        Spacer(modifier = Modifier.weight(1f))
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp), horizontalArrangement = Arrangement.Center
-        ) {
-            Button(
-                onClick = { navController.navigate(Screen.NewHabitScreen.route)},
-                modifier = Modifier.defaultMinSize(240.dp, 56.dp),
-                shape = CircleShape
-
-            ) {
-                Text("Crear nuevo habito")
-            }
-        }
-        Spacer(modifier = Modifier.height(60.dp))
-    }
-
-}
-//Set recommended habits section in screen
-@Composable
-fun RecommendedHabitsSection() {
-    Text(text = "HABITOS RECOMENDADOS", modifier = Modifier.padding(8.dp), color = Black)
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .padding(8.dp)
-        .border(1.dp, Black)){
-        LazyRow(
-            modifier = Modifier.padding(8.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalAlignment = Alignment.Top
-
-        ) {
-            items(habitsData) { item ->
-                RecommendedHabitsElement(item.drawable, item.text)
-            }
-        }
     }
 }
 
-//Set each element in recommended habits section
-@Composable
-fun RecommendedHabitsElement(
-    @DrawableRes drawable: Int,
-    @StringRes text: Int,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .width(72.dp)
-            .padding(8.dp)
-    ) {
-        Row(
-            modifier
-                .height(48.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                painter = painterResource(R.drawable.ic_habits),
-                contentDescription = null
-            )
-        }
-        Row(
-            modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = stringResource(R.string.app_name)
-            )
-        }
-    }
-}
-
-
-//Set Fab Button which navigate to Create New Habit screen
-
-
-
-private val habitsData = listOf(
-    R.drawable.ic_habits to R.string.app_name,
-    R.drawable.ic_habits to R.string.app_name,
-    R.drawable.ic_habits to R.string.app_name,
-    R.drawable.ic_habits to R.string.app_name,
-    R.drawable.ic_habits to R.string.app_name,
-    R.drawable.ic_habits to R.string.app_name,
-).map { DrawableStringPair(it.first, it.second) }
-
-private data class DrawableStringPair(
-    @DrawableRes val drawable: Int,
-    @StringRes val text: Int
-)
 
 
 

@@ -20,6 +20,9 @@ fun GoalList(
 ) {
     val goals = goalsViewModel.goalState.collectAsState()
 
+    //Makes the logic to collect and show the list of habits created by the user,
+    //in case is correct show the list and in case is incorrect show an error
+
     goals.value.let { result ->
         when(result){
             is Resource.Loading -> {
@@ -43,6 +46,7 @@ fun GoalList(
     }
 }
 
+//Makes the LazyColumn or "RecyclerView" to show a list of each Goal created
 @Composable
 fun GoalsUI(goals:List<Goals>,onDelete:(Goals) -> Unit){
     LazyColumn(modifier = Modifier.padding(8.dp)){

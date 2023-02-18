@@ -41,6 +41,7 @@ fun SignUpScreen(navController: NavController,viewModel: SignUpViewModel = hiltN
     val signUpFlow = viewModel.signUpFlow.collectAsState()
     val context = LocalContext.current
 
+    //Set the fields in SignUp to fill
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -92,6 +93,7 @@ fun SignUpScreen(navController: NavController,viewModel: SignUpViewModel = hiltN
             )
             Spacer(modifier = Modifier.padding(10.dp))
 
+            //In case the call is correct, call ViewModel to add user in the database, and navigate to HomeScreen
             Button(
                 onClick = {
                     viewModel.signUp(usernameValue,emailValue,passwordValue)
@@ -119,6 +121,8 @@ fun SignUpScreen(navController: NavController,viewModel: SignUpViewModel = hiltN
             )
         }
     }
+    //Make the logic to the database call to add a new user, evaluating three possible cases:
+    //Success in case the call is correct, Failure in case the call is incorrect and Loading
     signUpFlow.value?.let{
         when(it){
             is Resource.Success ->{

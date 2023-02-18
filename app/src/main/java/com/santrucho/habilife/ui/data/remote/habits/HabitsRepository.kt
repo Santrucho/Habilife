@@ -2,7 +2,9 @@ package com.santrucho.habilife.ui.data.remote.habits
 
 
 import com.santrucho.habilife.ui.data.model.Habit
+import com.santrucho.habilife.ui.data.model.ItemList
 import com.santrucho.habilife.ui.utils.Resource
+import java.time.LocalTime
 
 
 interface HabitsRepository {
@@ -10,8 +12,9 @@ interface HabitsRepository {
     suspend fun addHabit(
         title:String,
         description:String,
-        image:String,
-        frequently:String,
+        type:String,
+        frequently : List<String>,
+        timePicker : String,
         isCompleted : Boolean,
         isExpanded : Boolean) : Resource<Habit>
 

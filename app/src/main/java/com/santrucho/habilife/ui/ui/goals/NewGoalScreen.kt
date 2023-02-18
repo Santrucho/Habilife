@@ -1,5 +1,6 @@
 package com.santrucho.habilife.ui.ui.goals
 
+import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -30,6 +31,7 @@ import com.santrucho.habilife.ui.ui.habits.DetailsAppBar
 import com.santrucho.habilife.ui.utils.BackPressHandler
 import com.santrucho.habilife.ui.utils.Resource
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun NewGoalScreen(goalViewModel: GoalViewModel, navController: NavController) {
 
@@ -53,6 +55,10 @@ fun NewGoalScreen(goalViewModel: GoalViewModel, navController: NavController) {
                     .fillMaxSize()
                     .background(colorResource(id = R.color.white))
             ) {
+
+                //Set the fields to show and fill for create a new habit
+                //Call Categories and NewHabitFields in NewHabitFields function
+
                 TextField(
                     value = goalViewModel.titleValue.value,
                     onValueChange = { goalViewModel.titleValue.value = it

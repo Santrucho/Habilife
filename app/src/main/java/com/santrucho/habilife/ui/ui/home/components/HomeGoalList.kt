@@ -1,8 +1,6 @@
 package com.santrucho.habilife.ui.ui.home.components
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -15,19 +13,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.santrucho.habilife.ui.data.model.Goals
 import com.santrucho.habilife.ui.presentation.GoalViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
-import com.santrucho.habilife.ui.ui.goals.components.GoalCard
 import com.santrucho.habilife.ui.ui.goals.components.GoalsUI
-import com.santrucho.habilife.ui.ui.habits.HabitUI
 import com.santrucho.habilife.ui.utils.Resource
 
 @Composable
 fun HomeGoalList(navController: NavController,goalViewModel: GoalViewModel) {
 
     val goal = goalViewModel.goalState.collectAsState()
-
+    //Set the box to show the Goals to make that day
     Card(
         shape = MaterialTheme.shapes.medium,
         elevation = 3.dp,
@@ -37,7 +32,7 @@ fun HomeGoalList(navController: NavController,goalViewModel: GoalViewModel) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentHeight(),
+                .wrapContentSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(
@@ -66,6 +61,7 @@ fun HomeGoalList(navController: NavController,goalViewModel: GoalViewModel) {
                     )
                 }
             }
+            //Make the logic to call a list of Goals which coincide with the current day
             goal.value.let { result ->
                 when (result) {
                     is Resource.Loading -> {
@@ -79,7 +75,7 @@ fun HomeGoalList(navController: NavController,goalViewModel: GoalViewModel) {
                     is Resource.Success -> {
                         val filteredList = result.data.filter{it.release_date.contains("1")}
                         if (filteredList.isEmpty()) {
-                            EmptyMessage("No tienes ningun habito actualmente!\nCrea uno nuevo!!")
+                            EmptyMessage("objetivo")
                         }
                         else{
                             GoalsUI(
@@ -102,6 +98,7 @@ fun HomeGoalList(navController: NavController,goalViewModel: GoalViewModel) {
     }
 }
 
+//In case there doesn't exist any Habit or Goals to make that day, show a Empty Message to notify the user
 @Composable
 fun EmptyMessage(text:String) {
     Column(
@@ -111,7 +108,8 @@ fun EmptyMessage(text:String) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = text,
+            text = "No tienes ningun $text para realizar hoy!!\n" +
+                    "Crea uno nuevo!!",
             fontWeight = FontWeight.Medium,
             color = Color.DarkGray,
             modifier = Modifier.wrapContentWidth(Alignment.CenterHorizontally),

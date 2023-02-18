@@ -14,6 +14,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.santrucho.habilife.R
 
+//Set the bottom bar to navigate between screens
 @Composable
 fun BottomBar(
     items:List<BottomNavScreen>,

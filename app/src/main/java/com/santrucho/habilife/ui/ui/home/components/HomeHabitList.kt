@@ -1,8 +1,7 @@
 package com.santrucho.habilife.ui.ui.home.components
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -15,18 +14,22 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.santrucho.habilife.ui.data.model.Habit
+import com.santrucho.habilife.ui.data.model.ItemList
 import com.santrucho.habilife.ui.presentation.HabitViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
-import com.santrucho.habilife.ui.ui.habits.HabitCard
-import com.santrucho.habilife.ui.ui.habits.HabitList
-import com.santrucho.habilife.ui.ui.habits.HabitUI
+import com.santrucho.habilife.ui.ui.habits.components.HabitUI
 import com.santrucho.habilife.ui.utils.Resource
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.TextStyle
+import java.util.*
 
 @Composable
 fun HomeHabitList(navController: NavController, habitViewModel: HabitViewModel) {
 
     val habit = habitViewModel.habitState.collectAsState()
+
+    //Set the box to show the habit to make that day
     Card(
         shape = MaterialTheme.shapes.medium,
         elevation = 3.dp,
@@ -63,6 +66,8 @@ fun HomeHabitList(navController: NavController, habitViewModel: HabitViewModel) 
                     )
                 }
             }
+            //Make the logic to call a list of habits which coincide with the current day
+            Log.d("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",LocalDate.now().dayOfWeek.getDisplayName(TextStyle.SHORT, Locale("es","AR")))
             habit.value.let { result ->
                 when (result) {
                     is Resource.Loading -> {
@@ -74,9 +79,15 @@ fun HomeHabitList(navController: NavController, habitViewModel: HabitViewModel) 
                         }
                     }
                     is Resource.Success -> {
-                        val filteredList = result.data.filter{it.frequently.contains("a")}
+                        val filteredList = result.data.filter{ habit ->
+                            habit.frequently.any{ day ->
+                                day.equals(LocalDate.now().dayOfWeek.getDisplayName(TextStyle.FULL, Locale("es","ARG")),ignoreCase = true)
+                            }
+
+                        }
                         if (filteredList.isEmpty()) {
-                            EmptyMessage("No tienes ningun habito actualmente!\nCrea uno nuevo!!")
+                            //Call EmptyMessage from HomeGoalList to show it
+                            EmptyMessage("habito")
                         }
                         else{
                             HabitUI(
