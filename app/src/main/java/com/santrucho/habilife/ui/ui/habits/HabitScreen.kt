@@ -28,18 +28,20 @@ fun HabitScreen(
 ) {
 
     habitViewModel.resetResult()
-
+    //Set the screen in habits
     Column(
         modifier = Modifier
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        CalendarView()
         MyHabitsSection(habitViewModel = habitViewModel)
         Spacer(modifier = Modifier.weight(1f))
         FABButton(navController = navController)
     }
 }
 
+//Set the button to access or navigate to create a new habit
 @Composable
 fun FABButton(navController: NavController) {
     Row(
@@ -59,6 +61,8 @@ fun FABButton(navController: NavController) {
     Spacer(modifier = Modifier.height(60.dp))
 }
 
+//Set and display the currents habits create for the user
+//Calling the list of habits in HabitList
 @Composable
 fun MyHabitsSection(habitViewModel: HabitViewModel) {
 

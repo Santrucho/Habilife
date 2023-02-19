@@ -1,6 +1,5 @@
-package com.santrucho.habilife.ui.ui.habits
+package com.santrucho.habilife.ui.ui.habits.components
 
-import android.graphics.Color
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -15,21 +14,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color.Companion.Black
-import androidx.compose.ui.graphics.Color.Companion.Gray
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
-import androidx.compose.ui.layout.HorizontalAlignmentLine
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.santrucho.habilife.ui.data.model.Habit
-import com.santrucho.habilife.ui.presentation.HabitViewModel
+import com.santrucho.habilife.ui.utils.typeHelper
 
+
+//Set the visualization and the way in which each habit will be displayed
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun HabitCard(habit: Habit,onDelete:(Habit)-> Unit) {
+fun HabitCard(habit: Habit, onDelete: (Habit) -> Unit) {
 
-    var expandedState by remember { mutableStateOf(false)}
+    var expandedState by remember { mutableStateOf(false) }
     val rotationState by animateFloatAsState(targetValue = if (expandedState) 180f else 0f)
+
 
     Card(
         shape = MaterialTheme.shapes.small,
@@ -48,8 +48,8 @@ fun HabitCard(habit: Habit,onDelete:(Habit)-> Unit) {
                 )
             ),
         elevation = 3.dp,
-        onClick = {expandedState = !expandedState},
-        backgroundColor = MaterialTheme.colors.secondary
+        onClick = { expandedState = !expandedState },
+        backgroundColor = typeHelper(habit.type)
     ) {
         Column(
             modifier = Modifier
@@ -80,7 +80,7 @@ fun HabitCard(habit: Habit,onDelete:(Habit)-> Unit) {
                     )
                 }
             }
-            if(expandedState) {
+            if (expandedState) {
                 Text(
                     text = habit.description,
                     modifier = Modifier
@@ -88,16 +88,29 @@ fun HabitCard(habit: Habit,onDelete:(Habit)-> Unit) {
                     color = White,
                     fontSize = 16.sp
                 )
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween,modifier=Modifier.fillMaxWidth()) {
+                Text(
+                    text = habit.timePicker,
+                    modifier = Modifier
+                        .wrapContentHeight(Alignment.Top),
+                    color = White,
+                    fontSize = 16.sp
+                )
 
-                    Text(
-                        text = habit.frequently,
-                        modifier = Modifier
-                            .wrapContentHeight(Alignment.Bottom)
-                            .wrapContentWidth(Alignment.Start),
-                        color = White,
-                        fontSize = 12.sp
-                    )
+                Text(
+                    text = habit.frequently.joinToString(),
+                    modifier = Modifier
+                        .wrapContentHeight(Alignment.Bottom)
+                        .wrapContentWidth(Alignment.Start),
+                    color = White,
+                    fontSize = 12.sp
+                )
+                Row(
+                    modifier = Modifier
+                        .wrapContentWidth(Alignment.End),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End
+                ) {
+
                     IconButton(
                         modifier = Modifier
                             .weight(1f)
@@ -108,7 +121,8 @@ fun HabitCard(habit: Habit,onDelete:(Habit)-> Unit) {
                         }) {
                         Icon(
                             imageVector = Icons.Filled.Delete,
-                            contentDescription = "Drop-Down Arrow"
+                            contentDescription = "Drop-Down Arrow",
+                            tint = Color.Black
                         )
                     }
                 }

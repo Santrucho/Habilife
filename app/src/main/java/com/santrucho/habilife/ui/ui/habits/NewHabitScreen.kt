@@ -1,41 +1,64 @@
 package com.santrucho.habilife.ui.ui.habits
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.santrucho.habilife.R
+import com.santrucho.habilife.ui.data.model.ItemList
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.HabitViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
+import com.santrucho.habilife.ui.ui.habits.components.Categories
+import com.santrucho.habilife.ui.ui.habits.components.FrequencyPicker
+import com.santrucho.habilife.ui.ui.habits.components.NewHabitFields
+import com.santrucho.habilife.ui.ui.habits.components.TimePicker
 import com.santrucho.habilife.ui.utils.BackPressHandler
 import com.santrucho.habilife.ui.utils.Resource
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
-@SuppressLint("StateFlowValueCalledInComposition")
+
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController) {
 
     val habitValue = habitViewModel.habitFlow.collectAsState()
 
     val context = LocalContext.current
+
+    //Create the options to choose a type for any Habits
+    val options = arrayOf("Salud", "Finanzas", "Social", "Relaciones", "Sueño", "Personal", "Otros")
+    var selectedOption by remember { mutableStateOf(options[0]) }
+
+    //Create the list of days for frequency
+    val itemList: List<String> =
+        listOf("Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sábado", "Domingo")
+
+    var selectedDays by remember { mutableStateOf(emptyList<String>()) }
+    //Check if at least one day is selected to enabled the confirm button
+    var areDaysSelected by remember { mutableStateOf(false) }
+
+    //TimePicker
+    var pickedTime by remember { mutableStateOf(LocalTime.now()) }
+
+    val formattedTime by remember {
+        derivedStateOf {
+            DateTimeFormatter.ofPattern("hh:mm").format(pickedTime)
+        }
+    }
 
     // onBack can be passed down as composable param and hoisted
     val onBack = { navController.navigate(BottomNavScreen.Habit.screen_route) }
@@ -47,125 +70,80 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
     ) {
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.wrapContentSize()
+                .padding(8.dp)
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(colorResource(id = R.color.white))
-            ) {
-                TextField(
-                    value = habitViewModel.titleValue.value,
-                    onValueChange = {
-                        habitViewModel.titleValue.value = it
-                        habitViewModel.validateTitle()
+            Column(Modifier.fillMaxSize()) {
+
+                //Set the fields to show and fill for create a new habit
+                //Call Categories and NewHabitFields in NewHabitFields function
+
+                Categories(options = options, onTypeSelection = { newOption ->
+                    selectedOption = newOption
+                })
+                Spacer(modifier = Modifier.padding(2.dp))
+                NewHabitFields(habitViewModel)
+                TimePicker(pickedTime, onTimePicked = { time ->
+                    pickedTime = time
+                })
+                FrequencyPicker(itemList) { days ->
+                    selectedDays = days
+                    areDaysSelected = days.isNotEmpty()
+                }
+
+                Spacer(modifier = Modifier.weight(1f))
+                Button(
+                    onClick = {
+                        //Makes the call in the ViewModel to access a database and create the habit
+                        habitViewModel.addHabit(
+                            habitViewModel.titleValue.value,
+                            habitViewModel.descriptionValue.value, selectedOption,
+                            selectedDays, formattedTime, false, false
+                        )
                     },
-                    isError = habitViewModel.isTitleValid.value,
-                    placeholder = { Text(text = "Habit title") },
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth(1f),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
-                )
-                Text(
-                    modifier = Modifier.padding(start = 8.dp),
-                    text = habitViewModel.titleErrMsg.value,
-                    fontSize = 14.sp,
-                    color = Color.Red
-                )
-                TextField(
-                    value = habitViewModel.descriptionValue.value,
-                    onValueChange = {
-                        habitViewModel.descriptionValue.value = it
-                        habitViewModel.validateDescription()
-                    },
-                    isError = habitViewModel.isDescriptionValid.value,
-                    label = { Text(text = "Descripcion") },
-                    placeholder = { Text(text = "Description") },
+                    enabled = areDaysSelected && habitViewModel.isEnabledConfirmButton.value,
                     modifier = Modifier
-                        .fillMaxWidth(1f)
-                        .fillMaxHeight(0.5f),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
-                )
-                Text(
-                    modifier = Modifier.padding(start = 8.dp),
-                    text = habitViewModel.descriptionErrMsg.value,
-                    fontSize = 14.sp,
-                    color = Color.Red
-                )
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                        .height(56.dp),
+                    shape = CircleShape
 
-                Spacer(modifier = Modifier.padding(8.dp))
+                ) {
+                    Text("Guardar habito",Modifier.padding(4.dp))
+                }
+                Spacer(modifier = Modifier.height(60.dp))
+                //In case the call is correct, navigate to Habit Screen and show the habit created, in case is Incorrect, show a error message
 
-                TextField(
-                    value = habitViewModel.frequencyValue.value,
-                    onValueChange = {
-                        habitViewModel.frequencyValue.value = it
-                        habitViewModel.validateFrequently()
-                    },
-                    isError = habitViewModel.isFrequentlyValid.value,
-                    label = { Text(text = "Frecuencia") },
-                    placeholder = { Text(text = "frequency") },
-                    singleLine = true,
-                    modifier = Modifier
-                        .fillMaxWidth(1f)
-                        .padding(8.dp),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
-                )
-                Text(
-                    modifier = Modifier.padding(start = 8.dp),
-                    text = habitViewModel.frequentlyMsg.value,
-                    fontSize = 14.sp,
-                    color = Color.Red
-                )
-
-                Spacer(modifier = Modifier.padding(16.dp))
-                Column(modifier = Modifier.fillMaxWidth()) {
-                    Button(
-                        onClick = {
-                            habitViewModel.addHabit(
-                                habitViewModel.titleValue.value,
-                                habitViewModel.descriptionValue.value, "",
-                                habitViewModel.frequencyValue.value, false, false
-                            )
-                        },
-                        enabled = habitViewModel.isEnabledConfirmButton.value,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                            .fillMaxHeight(0.2f),
-                        shape = CircleShape
-
-                    ) {
-                        Text("Guardar habito")
-                    }
-                    habitValue.value.let {
-                        when (it) {
-                            is Resource.Success -> {
-                                LaunchedEffect(Unit) {
-                                    navController.navigate(BottomNavScreen.Habit.screen_route) {
-                                        popUpTo(Screen.NewHabitScreen.route) { inclusive = true }
-                                    }
-                                    Toast.makeText(
-                                        context,
-                                        "Habito creado correctamente!",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                habitValue.value.let {
+                    when (it) {
+                        is Resource.Success -> {
+                            LaunchedEffect(Unit) {
+                                navController.navigate(BottomNavScreen.Habit.screen_route) {
+                                    popUpTo(Screen.NewHabitScreen.route) { inclusive = true }
                                 }
+                                Toast.makeText(
+                                    context,
+                                    "Habito creado correctamente!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
-                            is Resource.Failure -> {
-                                LaunchedEffect(habitValue.value) {
-                                    Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG)
-                                        .show()
-                                }
+                        }
+                        is Resource.Failure -> {
+                            LaunchedEffect(habitValue.value) {
+                                Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG)
+                                    .show()
                             }
-                            is Resource.Loading -> {
-                                Box(
-                                    contentAlignment = Alignment.Center,
-                                    modifier = Modifier.fillMaxSize()
-                                ) {
-                                    CircularProgressIndicator()
-                                }
+                        }
+                        is Resource.Loading -> {
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier.fillMaxSize()
+                            ) {
+                                CircularProgressIndicator()
                             }
-                            else -> {IllegalAccessException()}
+                        }
+                        else -> {
+                            IllegalAccessException()
                         }
                     }
                 }
@@ -174,10 +152,12 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
     }
 }
 
+//Makes the app bar go to the last screen
 @Composable
 fun DetailsAppBar(onBack: () -> Unit) {
     TopAppBar(
         title = { Text(text = stringResource(id = R.string.app_name)) },
+        backgroundColor = Color.Blue,
         navigationIcon = {
             IconButton(onClick = onBack) {
                 Icon(

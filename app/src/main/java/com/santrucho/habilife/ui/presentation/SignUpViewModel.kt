@@ -14,20 +14,20 @@ import javax.inject.Inject
 @HiltViewModel
 class SignUpViewModel @Inject constructor(private val repository: SignUpRepository) : ViewModel() {
 
-    var userError: String = ""
-
     private val _signUpFlow = MutableStateFlow<Resource<FirebaseUser>?>(null)
     val signUpFlow : StateFlow<Resource<FirebaseUser>?> = _signUpFlow
 
     val currentUser : FirebaseUser?
         get() = repository.currentUser
 
+    //Call the repository and create an new user
     fun signUp(username:String,email:String,password:String) = viewModelScope.launch {
         _signUpFlow.value = Resource.Loading()
         val resultData = repository.createUser(username,email, password)
         _signUpFlow.value = resultData
     }
 
+    //Sign out the user
     fun logout(){
         repository.logout()
         _signUpFlow.value = null

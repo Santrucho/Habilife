@@ -10,18 +10,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.santrucho.habilife.R
-import com.santrucho.habilife.ui.data.model.Habit
 import com.santrucho.habilife.ui.presentation.*
-import com.santrucho.habilife.ui.ui.habits.HabitCard
 import com.santrucho.habilife.ui.ui.habits.components.CalendarView
 import com.santrucho.habilife.ui.ui.home.components.HomeGoalList
 import com.santrucho.habilife.ui.ui.home.components.HomeHabitList
-import com.santrucho.habilife.ui.utils.Resource
 
 
 @Composable
@@ -36,16 +32,20 @@ fun HomeScreen(navController: NavController,userViewModel: SignUpViewModel,goalV
             .background(colorResource(id = R.color.white))
             .wrapContentSize(Alignment.Center)
     ) {
+        //Welcomes the user to the main screen
         userViewModel.currentUser?.let{
             UserInfo(name = it.displayName.toString())
         }
-        CalendarView()
+
+        //Show a list of habits to make in that day
         HomeHabitList(navController,habitViewModel)
         Spacer(modifier = Modifier.height(18.dp))
+        //Show a list of goals to make in that day
         HomeGoalList(navController,goalViewModel)
     }
 }
 
+//Collect user data to show it
 @Composable
 fun UserInfo(name:String){
     Spacer(modifier = Modifier.height(32.dp))
