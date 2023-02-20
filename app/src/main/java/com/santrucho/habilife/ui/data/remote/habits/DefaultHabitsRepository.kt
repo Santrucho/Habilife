@@ -17,8 +17,7 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
         type:String,
         frequently : List<String>,
         timePicker : String,
-        isCompleted: Boolean,
-        isExpanded: Boolean
+        completed: Boolean
     ): Resource<Habit> {
 
         return try {
@@ -33,8 +32,7 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
                     type = type,
                     frequently = frequently,
                     timePicker = timePicker,
-                    isCompleted = isCompleted,
-                    isExpanded = isExpanded
+                    completed = completed,
                 )
                 documentReference.set(habitToSave).await()
                 Resource.Success(habitToSave)
@@ -63,5 +61,9 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
         catch(e:Exception){
             Resource.Failure(e)
         }
+    }
+
+    override suspend fun updateHabit(habitId:String,isChecked:Boolean){
+        firestore.collection("habits").document(habitId).update("completed",isChecked).await()
     }
 }

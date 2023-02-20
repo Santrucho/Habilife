@@ -98,7 +98,7 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                         habitViewModel.addHabit(
                             habitViewModel.titleValue.value,
                             habitViewModel.descriptionValue.value, selectedOption,
-                            selectedDays, formattedTime, false, false
+                            selectedDays, formattedTime, false
                         )
                     },
                     enabled = areDaysSelected && habitViewModel.isEnabledConfirmButton.value,

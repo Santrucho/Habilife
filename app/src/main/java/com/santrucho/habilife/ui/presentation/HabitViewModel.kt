@@ -37,6 +37,10 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
     private val _habitFlow = MutableStateFlow<Resource<Habit>?>(null)
     val habitFlow: StateFlow<Resource<Habit>?> = _habitFlow
 
+    private val _selectedState = MutableStateFlow<Resource<Habit?>>(Resource.Loading())
+    val selectedState : StateFlow<Resource<Habit?>> = _selectedState
+
+
     //Check if the confirm button can be activated, when the validations are correct
     private fun shouldEnabledConfirmButton() {
         isEnabledConfirmButton.value =
@@ -98,12 +102,11 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
         frequently: List<String>,
         timePicker: String,
         isCompleted: Boolean,
-        isExpanded: Boolean
     ) {
 
         viewModelScope.launch {
             _habitFlow.value = Resource.Loading()
-            _habitFlow.value = repository.addHabit(title, description, type, frequently,timePicker,isCompleted, isExpanded)
+            _habitFlow.value = repository.addHabit(title, description, type, frequently,timePicker,isCompleted)
             getAllHabits()
         }
     }
@@ -112,13 +115,19 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
     fun deleteHabit(habit:Habit){
         viewModelScope.launch {
             repository.deleteHabit(habit)
-            val currentResource = _habitState.value
-            val currentHabits = when (currentResource) {
+            val currentHabits = when (val currentResource = _habitState.value) {
                 is Resource.Success -> currentResource.data
                 else -> emptyList()
             }
             val updatedHabits = currentHabits.toMutableList().apply { remove(habit) }
             _habitState.value = Resource.Success(updatedHabits)
+        }
+    }
+
+    fun onCompleted(habit:Habit,isChecked:Boolean){
+        viewModelScope.launch {
+            repository.updateHabit(habit.id,isChecked)
+            getAllHabits()
         }
     }
 }

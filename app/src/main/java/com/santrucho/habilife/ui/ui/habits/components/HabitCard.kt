@@ -19,111 +19,134 @@ import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.santrucho.habilife.ui.data.model.Habit
+import com.santrucho.habilife.ui.presentation.HabitViewModel
+import com.santrucho.habilife.ui.utils.Resource
 import com.santrucho.habilife.ui.utils.typeHelper
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.TextStyle
+import java.util.*
 
 
 //Set the visualization and the way in which each habit will be displayed
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun HabitCard(habit: Habit, onDelete: (Habit) -> Unit) {
+fun HabitCard(
+    habit: Habit, onDelete: (Habit) -> Unit, viewModel: HabitViewModel
+) {
 
     var expandedState by remember { mutableStateOf(false) }
     val rotationState by animateFloatAsState(targetValue = if (expandedState) 180f else 0f)
 
+    val isEnabled = habit.frequently.any{ day ->
+        day.equals(LocalDate.now().dayOfWeek.getDisplayName(TextStyle.FULL, Locale("es","ARG")),ignoreCase = true)
+    }
 
-    Card(
-        shape = MaterialTheme.shapes.small,
-        modifier = Modifier
-            .padding(
-                start = 8.dp,
-                end = 8.dp,
-                top = 2.dp,
-                bottom = 2.dp
-            )
-            .fillMaxWidth()
-            .animateContentSize(
-                animationSpec = tween(
-                    durationMillis = 300,
-                    easing = LinearOutSlowInEasing
-                )
-            ),
-        elevation = 3.dp,
-        onClick = { expandedState = !expandedState },
-        backgroundColor = typeHelper(habit.type)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(all = 12.dp)
+    Column(modifier = Modifier.wrapContentSize()) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-
-                Text(
-                    text = habit.title,
-                    modifier = Modifier
-                        .fillMaxWidth(0.85f)
-                        .wrapContentHeight(Alignment.Top),
-                    color = White,
-                    fontSize = 25.sp
-                )
-                IconButton(
-                    modifier = Modifier
-                        .weight(1f)
-                        .alpha(ContentAlpha.medium)
-                        .rotate(rotationState),
-                    onClick = {
-                        expandedState = !expandedState
-                    }) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowDropDown,
-                        contentDescription = "Drop-Down Arrow"
-                    )
-                }
-            }
-            if (expandedState) {
-                Text(
-                    text = habit.description,
-                    modifier = Modifier
-                        .wrapContentHeight(Alignment.Top),
-                    color = White,
-                    fontSize = 16.sp
-                )
-                Text(
-                    text = habit.timePicker,
-                    modifier = Modifier
-                        .wrapContentHeight(Alignment.Top),
-                    color = White,
-                    fontSize = 16.sp
-                )
-
-                Text(
-                    text = habit.frequently.joinToString(),
-                    modifier = Modifier
-                        .wrapContentHeight(Alignment.Bottom)
-                        .wrapContentWidth(Alignment.Start),
-                    color = White,
-                    fontSize = 12.sp
-                )
-                Row(
-                    modifier = Modifier
-                        .wrapContentWidth(Alignment.End),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.End
-                ) {
-
-                    IconButton(
-                        modifier = Modifier
-                            .weight(1f)
-                            .alpha(ContentAlpha.medium)
-                            .wrapContentWidth(Alignment.End),
-                        onClick = {
-                            onDelete(habit)
-                        }) {
-                        Icon(
-                            imageVector = Icons.Filled.Delete,
-                            contentDescription = "Drop-Down Arrow",
-                            tint = Color.Black
+            Checkbox(
+                modifier = Modifier.wrapContentHeight(Alignment.Top),
+                checked = habit.completed,
+                onCheckedChange = { isChecked ->
+                   viewModel.onCompleted(habit, isChecked)
+                },
+                colors = CheckboxDefaults.colors(checkedColor = Color.Blue),
+                enabled = isEnabled
+            )
+            Card(
+                shape = MaterialTheme.shapes.small,
+                modifier = Modifier
+                    .padding(8.dp, 2.dp)
+                    .fillMaxWidth()
+                    .animateContentSize(
+                        animationSpec = tween(
+                            durationMillis = 300,
+                            easing = LinearOutSlowInEasing
                         )
+                    ),
+                elevation = 3.dp,
+                onClick = { expandedState = !expandedState },
+                backgroundColor = typeHelper(habit.type)
+            ) {
+                Column(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)) {
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = habit.title,
+                            modifier = Modifier
+                                .fillMaxWidth(0.85f)
+                                .wrapContentHeight(Alignment.Top),
+                            color = White,
+                            fontSize = 25.sp
+                        )
+                        IconButton(
+                            modifier = Modifier
+                                .weight(1f)
+                                .alpha(ContentAlpha.medium)
+                                .rotate(rotationState),
+                            onClick = {
+                                expandedState = !expandedState
+                            }) {
+                            Icon(
+                                imageVector = Icons.Default.ArrowDropDown,
+                                contentDescription = "Drop-Down Arrow"
+                            )
+                        }
+                    }
+                    if (expandedState) {
+                        Text(
+                            text = habit.description,
+                            modifier = Modifier
+                                .wrapContentHeight(Alignment.Top),
+                            color = White,
+                            fontSize = 16.sp
+                        )
+                        Text(
+                            text = habit.timePicker,
+                            modifier = Modifier
+                                .wrapContentHeight(Alignment.Top),
+                            color = White,
+                            fontSize = 16.sp
+                        )
+
+                        Text(
+                            text = habit.frequently.joinToString(),
+                            modifier = Modifier
+                                .wrapContentHeight(Alignment.Bottom)
+                                .wrapContentWidth(Alignment.Start),
+                            color = White,
+                            fontSize = 12.sp
+                        )
+                        Row(
+                            modifier = Modifier
+                                .wrapContentWidth(Alignment.End),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.End
+                        ) {
+
+                            IconButton(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .alpha(ContentAlpha.medium)
+                                    .wrapContentWidth(Alignment.End),
+                                onClick = {
+                                    onDelete(habit)
+                                }) {
+                                Icon(
+                                    imageVector = Icons.Filled.Delete,
+                                    contentDescription = "Drop-Down Arrow",
+                                    tint = Color.Black
+                                )
+                            }
+                        }
                     }
                 }
             }

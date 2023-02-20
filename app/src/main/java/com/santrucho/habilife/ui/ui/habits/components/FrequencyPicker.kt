@@ -5,21 +5,20 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.List
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.santrucho.habilife.ui.data.model.ItemList
+import com.santrucho.habilife.R
 
 
 //Set the box to choose the frequency for makes the habit
@@ -71,7 +70,7 @@ fun FrequencyPicker(itemList: List<String>, onDaySelected:(List<String>) -> Unit
                             onDaySelected(selectedDays)
                         }) {
                         Icon(
-                            imageVector = if (selectAll) Icons.Filled.Check else Icons.Filled.List,
+                            painter = if (selectAll) painterResource(R.drawable.ic_check_square) else painterResource(id=R.drawable.ic_checkbox_square),
                             contentDescription = "check",
                             tint = if (selectAll) Color.Blue else Color.Black
                         )
