@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.presentation.*
+import com.santrucho.habilife.ui.ui.habits.components.CalendarView
 import com.santrucho.habilife.ui.ui.home.components.HomeGoalList
 import com.santrucho.habilife.ui.ui.home.components.HomeHabitList
 
@@ -35,10 +36,10 @@ fun HomeScreen(navController: NavController,userViewModel: SignUpViewModel,goalV
         userViewModel.currentUser?.let{
             UserInfo(name = it.displayName.toString())
         }
-        //Show a list of habits to make in that day
+
+        //Show a list of habits to make in the current day
         HomeHabitList(navController,habitViewModel)
-        Spacer(modifier = Modifier.height(18.dp))
-        //Show a list of goals to make in that day
+        //Show a list of goals to make in the current day
         HomeGoalList(navController,goalViewModel)
     }
 }

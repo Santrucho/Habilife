@@ -110,7 +110,7 @@ fun NewHabitFields(habitViewModel: HabitViewModel) {
 //Show an Spinner or ExposedDropMenu to deploy a list with all the options for choose a type for each habit
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun Categories(options: Array<String>,onTypeSelection:(String) -> Unit) {
+fun Categories(options: List<String>,onTypeSelection:(String) -> Unit) {
 
     var selectedOption by remember { mutableStateOf(options[0]) }
     var expanded by remember { mutableStateOf(false) }

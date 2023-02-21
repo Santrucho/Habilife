@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/santi/Escritorio/Habilife/app/src/main/res/drawable/ic_check.xml" value="0.1" />
+        <entry key="..\:/Users/santi/Escritorio/Habilife/app/src/main/res/drawable/ic_check_circle.xml" value="0.1" />
+        <entry key="..\:/Users/santi/Escritorio/Habilife/app/src/main/res/drawable/ic_checkbox.xml" value="0.1" />
+        <entry key="..\:/Users/santi/Escritorio/Habilife/app/src/main/res/drawable/ic_health.xml" value="0.1" />
+        <entry key="..\:/Users/santi/Escritorio/Habilife/app/src/main/res/drawable/ic_unchecked_circle.xml" value="0.1" />
+        <entry key="..\:/Users/santi/Escritorio/Habilife/app/src/main/res/drawable/ic_water.xml" value="0.1" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

@@ -15,11 +15,16 @@ interface HabitsRepository {
         type:String,
         frequently : List<String>,
         timePicker : String,
-        isCompleted : Boolean,
-        isExpanded : Boolean) : Resource<Habit>
+        completed : Boolean) : Resource<Habit>
 
     suspend fun getHabits() : Resource<List<Habit>>
 
     suspend fun deleteHabit(habit:Habit)
+
+    suspend fun updateHabit(habitId:String,isChecked:Boolean)
+
+    suspend fun getOptions() : Resource<List<String>>
+
+    suspend fun getDaysOfWeek() : Resource<List<String>>
 
 }

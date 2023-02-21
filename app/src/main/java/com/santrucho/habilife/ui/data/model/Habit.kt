@@ -1,5 +1,6 @@
 package com.santrucho.habilife.ui.data.model
 
+import com.google.firebase.firestore.PropertyName
 import java.time.LocalTime
 
 data class Habit(
@@ -10,7 +11,6 @@ data class Habit(
     var type:String="",
     var frequently: List<String> = emptyList(),
     var timePicker: String = "",
-    var isCompleted: Boolean=false,
-    var isExpanded: Boolean=false
+    var completed: Boolean=false,
 ) {
 }

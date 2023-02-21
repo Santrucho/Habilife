@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.HabitViewModel
+import com.santrucho.habilife.ui.ui.habits.components.CalendarView
 import com.santrucho.habilife.ui.ui.habits.components.HabitList
 import com.santrucho.habilife.ui.ui.habits.components.HabitUI
 import com.santrucho.habilife.ui.utils.Resource
@@ -33,7 +34,7 @@ fun HabitScreen(
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
+        CalendarView()
         MyHabitsSection(habitViewModel = habitViewModel)
         Spacer(modifier = Modifier.weight(1f))
         FABButton(navController = navController)
@@ -65,6 +66,23 @@ fun FABButton(navController: NavController) {
 @Composable
 fun MyHabitsSection(habitViewModel: HabitViewModel) {
 
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .padding(8.dp, 0.dp)
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = "Mis habitos",
+            fontWeight = FontWeight.Medium,
+            color = Color.Black,
+            modifier = Modifier.wrapContentWidth(Alignment.Start),
+            textAlign = TextAlign.Start,
+            fontSize = 20.sp
+        )
+    }
+
     Card(
         shape = MaterialTheme.shapes.medium,
         elevation = 3.dp,
@@ -74,25 +92,9 @@ fun MyHabitsSection(habitViewModel: HabitViewModel) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentSize(),
+                .fillMaxHeight(.75f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .padding(8.dp, 0.dp)
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = "Mis habitos",
-                    fontWeight = FontWeight.Medium,
-                    color = Color.Black,
-                    modifier = Modifier.wrapContentWidth(Alignment.Start),
-                    textAlign = TextAlign.Start,
-                    fontSize = 20.sp
-                )
-            }
             HabitList(habitViewModel)
         }
     }
