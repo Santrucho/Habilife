@@ -25,6 +25,6 @@ interface HabitsRepository {
 
     suspend fun getOptions() : Resource<List<String>>
 
-    suspend fun getDaysOfWeek() : List<String>
+    suspend fun getDaysOfWeek() : Resource<List<String>>
 
 }

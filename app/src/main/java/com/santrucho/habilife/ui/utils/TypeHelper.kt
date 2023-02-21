@@ -5,34 +5,38 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.santrucho.habilife.ui.data.model.Habit
 
-val LightSteelYellow = Color(0xFFE0E0A0)
 val MustardYellow = Color(0xFFE6B800)
-val LightGreen = Color(0xFF3CEB54)
+val Green = Color(0xFF005C1B)
 val Red = Color(0xFFEB3A0C)
 val Pink = Color(0xFFE495F5)
 val Dark = Color(0xFF2C332A)
 val Blue = Color(0xFF0000FF)
+val Orange = Color(0xFFE66E00)
+val Purple = Color(0xFF8200F5)
 
 @Composable
 fun typeHelper(habitType: String):Color{
     return when(habitType){
-        "Relaciones" -> {
-            Color(0xFFE0E0A0)
-        }
-        "Finanzas" -> {
-            Color(0xFFE6B800)
+        "Salud" -> {
+            Red
         }
         "Personal" -> {
-            Color(0xFF3CEB54)
+            Green
         }
-        "Salud" -> {
-            Color(0xFFEB3A0C)
+        "Beber" -> {
+            Purple
         }
-        "Sueño" -> {
-            Color(0xFFE495F5)
+        "Finanzas" -> {
+            MustardYellow
         }
-        "Otros" -> {
-            Color(0xFF2C332A)
+        "Social" -> {
+            Pink
+        }
+        "Alimenticio" -> {
+            Orange
+        }
+        "Entrenamiento" -> {
+            Blue
         }
         else -> {
             Dark

@@ -37,15 +37,15 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
     private val _habitFlow = MutableStateFlow<Resource<Habit>?>(null)
     val habitFlow: StateFlow<Resource<Habit>?> = _habitFlow
 
-    private val _selectedState = MutableStateFlow<Resource<Habit?>>(Resource.Loading())
-    val selectedState : StateFlow<Resource<Habit?>> = _selectedState
-
     private val _options = MutableStateFlow<Resource<List<String>>?>(null)
     val options: StateFlow<Resource<List<String>>?> = _options
 
+    private val _daysOfWeek = MutableStateFlow<Resource<List<String>>>(Resource.Loading())
+    val daysOfWeek : StateFlow<Resource<List<String>>> = _daysOfWeek
 
     init {
         getOptions()
+        getDays()
     }
     //Check if the confirm button can be activated, when the validations are correct
     private fun shouldEnabledConfirmButton() {
@@ -97,6 +97,12 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
     private fun getOptions(){
         viewModelScope.launch {
             _options.value = repository.getOptions()
+        }
+    }
+
+    private fun getDays(){
+        viewModelScope.launch {
+            _daysOfWeek.value = repository.getDaysOfWeek()
         }
     }
 

@@ -49,13 +49,21 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
     }
     var selectedOption by remember { mutableStateOf(options?.get(0) ) }
 
-    //Create the list of days for frequency
-    val itemList: List<String> =
-        listOf("Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sábado", "Domingo")
 
+    //Create the states and list of days calling viewmodel and firestore to display
+    val daysState = habitViewModel.daysOfWeek.collectAsState()
+    val daysList = daysState.value.let { result ->
+        when(result){
+            is Resource.Success -> {result.data}
+            else -> {null}
+        }
+    }
     var selectedDays by remember { mutableStateOf(emptyList<String>()) }
     //Check if at least one day is selected to enabled the confirm button
     var areDaysSelected by remember { mutableStateOf(false) }
+    var orderedDays = daysList?.filter { day ->
+        selectedDays.contains(day) }?.sortedBy{ day -> daysList.indexOf(day)}
+
 
     //TimePicker
     var pickedTime by remember { mutableStateOf(LocalTime.now()) }
@@ -85,19 +93,21 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                 //Set the fields to show and fill for create a new habit
                 //Call Categories and NewHabitFields in NewHabitFields function
 
-                if (options != null) {
-                    Categories(options = options, onTypeSelection = { newOption ->
+
+                Categories(options = options!!, onTypeSelection = { newOption ->
                         selectedOption = newOption
-                    })
-                }
+                })
                 Spacer(modifier = Modifier.padding(2.dp))
                 NewHabitFields(habitViewModel)
                 TimePicker(pickedTime, onTimePicked = { time ->
                     pickedTime = time
                 })
-                FrequencyPicker(itemList) { days ->
+                FrequencyPicker(daysList!!) { days ->
                     selectedDays = days
                     areDaysSelected = days.isNotEmpty()
+                    if (orderedDays != null) {
+                        orderedDays = selectedDays
+                    }
                 }
 
                 Spacer(modifier = Modifier.weight(1f))
@@ -108,7 +118,7 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                             habitViewModel.addHabit(
                                 habitViewModel.titleValue.value,
                                 habitViewModel.descriptionValue.value, selectedOption,
-                                selectedDays, formattedTime, false
+                                orderedDays!!, formattedTime, false
                             )
                         }
                     },

@@ -74,7 +74,7 @@ fun MyHabitsSection(habitViewModel: HabitViewModel) {
     ) {
         Column(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .wrapContentHeight()
                 .fillMaxHeight(.8f),
             horizontalAlignment = Alignment.CenterHorizontally
