@@ -40,8 +40,14 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
     val context = LocalContext.current
 
     //Create the options to choose a type for any Habits
-    val options = arrayOf("Salud", "Finanzas", "Social", "Relaciones", "Sueño", "Personal", "Otros")
-    var selectedOption by remember { mutableStateOf(options[0]) }
+    val optionsState = habitViewModel.options.collectAsState()
+    val options = optionsState.value?.let { result ->
+        when(result){
+            is Resource.Success -> {result.data}
+            else -> {null}
+        }
+    }
+    var selectedOption by remember { mutableStateOf(options?.get(0) ) }
 
     //Create the list of days for frequency
     val itemList: List<String> =
@@ -70,7 +76,8 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
     ) {
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier.wrapContentSize()
+            modifier = Modifier
+                .wrapContentSize()
                 .padding(8.dp)
         ) {
             Column(Modifier.fillMaxSize()) {
@@ -78,9 +85,11 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                 //Set the fields to show and fill for create a new habit
                 //Call Categories and NewHabitFields in NewHabitFields function
 
-                Categories(options = options, onTypeSelection = { newOption ->
-                    selectedOption = newOption
-                })
+                if (options != null) {
+                    Categories(options = options, onTypeSelection = { newOption ->
+                        selectedOption = newOption
+                    })
+                }
                 Spacer(modifier = Modifier.padding(2.dp))
                 NewHabitFields(habitViewModel)
                 TimePicker(pickedTime, onTimePicked = { time ->
@@ -95,11 +104,13 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                 Button(
                     onClick = {
                         //Makes the call in the ViewModel to access a database and create the habit
-                        habitViewModel.addHabit(
-                            habitViewModel.titleValue.value,
-                            habitViewModel.descriptionValue.value, selectedOption,
-                            selectedDays, formattedTime, false
-                        )
+                        selectedOption?.let { selectedOption ->
+                            habitViewModel.addHabit(
+                                habitViewModel.titleValue.value,
+                                habitViewModel.descriptionValue.value, selectedOption,
+                                selectedDays, formattedTime, false
+                            )
+                        }
                     },
                     enabled = areDaysSelected && habitViewModel.isEnabledConfirmButton.value,
                     modifier = Modifier
@@ -113,38 +124,37 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                 }
                 Spacer(modifier = Modifier.height(60.dp))
                 //In case the call is correct, navigate to Habit Screen and show the habit created, in case is Incorrect, show a error message
-
-                habitValue.value.let {
-                    when (it) {
-                        is Resource.Success -> {
-                            LaunchedEffect(Unit) {
-                                navController.navigate(BottomNavScreen.Habit.screen_route) {
-                                    popUpTo(Screen.NewHabitScreen.route) { inclusive = true }
-                                }
-                                Toast.makeText(
-                                    context,
-                                    "Habito creado correctamente!",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+            }
+            habitValue.value.let {
+                when (it) {
+                    is Resource.Success -> {
+                        LaunchedEffect(Unit) {
+                            navController.navigate(BottomNavScreen.Habit.screen_route) {
+                                popUpTo(Screen.NewHabitScreen.route) { inclusive = true }
                             }
+                            Toast.makeText(
+                                context,
+                                "Habito creado correctamente!",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
-                        is Resource.Failure -> {
-                            LaunchedEffect(habitValue.value) {
-                                Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG)
-                                    .show()
-                            }
+                    }
+                    is Resource.Failure -> {
+                        LaunchedEffect(habitValue.value) {
+                            Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG)
+                                .show()
                         }
-                        is Resource.Loading -> {
-                            Box(
-                                contentAlignment = Alignment.Center,
-                                modifier = Modifier.fillMaxSize()
-                            ) {
-                                CircularProgressIndicator()
-                            }
+                    }
+                    is Resource.Loading -> {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier.wrapContentHeight()
+                        ) {
+                            CircularProgressIndicator()
                         }
-                        else -> {
-                            IllegalAccessException()
-                        }
+                    }
+                    else -> {
+                        IllegalAccessException()
                     }
                 }
             }

@@ -66,4 +66,18 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
     override suspend fun updateHabit(habitId:String,isChecked:Boolean){
         firestore.collection("habits").document(habitId).update("completed",isChecked).await()
     }
+
+    override suspend fun getOptions(): Resource<List<String>> {
+        return try {
+            val result = firestore.collection("typeOptions").get().await()
+                .documents.flatMap { it.data?.values?.mapNotNull { value -> value as String? } ?: emptyList() }
+            Resource.Success(result)
+        } catch (e:Exception){
+            Resource.Failure(e)
+        }
+    }
+
+    override suspend fun getDaysOfWeek(): List<String> {
+        TODO("Not yet implemented")
+    }
 }

@@ -23,4 +23,8 @@ interface HabitsRepository {
 
     suspend fun updateHabit(habitId:String,isChecked:Boolean)
 
+    suspend fun getOptions() : Resource<List<String>>
+
+    suspend fun getDaysOfWeek() : List<String>
+
 }

@@ -31,11 +31,11 @@ fun CalendarView(){
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            val background = MaterialTheme.colors.onSecondary
-            val dayBackgroundColor = MaterialTheme.colors.background
-            val headerTextColor = MaterialTheme.colors.background
-            val textColor = MaterialTheme.colors.primaryVariant
-            val selectedColor = MaterialTheme.colors.secondary
+            val background = MaterialTheme.colors.onBackground
+            val dayBackgroundColor = MaterialTheme.colors.primary
+            val headerTextColor = MaterialTheme.colors.primary
+            val textColor = MaterialTheme.colors.primary
+            val selectedColor = MaterialTheme.colors.background
 
             Kalendar(kalendarDayColors = KalendarDayColors(textColor,selectedColor),kalendarThemeColor = KalendarThemeColor(background,dayBackgroundColor,headerTextColor), kalendarType = KalendarType.Oceanic)
         }

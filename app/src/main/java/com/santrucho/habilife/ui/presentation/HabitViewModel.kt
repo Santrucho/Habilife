@@ -40,7 +40,13 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
     private val _selectedState = MutableStateFlow<Resource<Habit?>>(Resource.Loading())
     val selectedState : StateFlow<Resource<Habit?>> = _selectedState
 
+    private val _options = MutableStateFlow<Resource<List<String>>?>(null)
+    val options: StateFlow<Resource<List<String>>?> = _options
 
+
+    init {
+        getOptions()
+    }
     //Check if the confirm button can be activated, when the validations are correct
     private fun shouldEnabledConfirmButton() {
         isEnabledConfirmButton.value =
@@ -85,6 +91,13 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
     //Reset the response for the call to get the habits in the database
     fun resetValue(){
         _habitState.value = null
+    }
+
+    //Call the options to select a type in NewHabitScreen
+    private fun getOptions(){
+        viewModelScope.launch {
+            _options.value = repository.getOptions()
+        }
     }
 
     //Call the repository and display all habits
