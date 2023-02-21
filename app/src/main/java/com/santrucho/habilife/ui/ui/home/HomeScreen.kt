@@ -37,10 +37,9 @@ fun HomeScreen(navController: NavController,userViewModel: SignUpViewModel,goalV
             UserInfo(name = it.displayName.toString())
         }
 
-        //Show a list of habits to make in that day
+        //Show a list of habits to make in the current day
         HomeHabitList(navController,habitViewModel)
-        Spacer(modifier = Modifier.height(18.dp))
-        //Show a list of goals to make in that day
+        //Show a list of goals to make in the current day
         HomeGoalList(navController,goalViewModel)
     }
 }

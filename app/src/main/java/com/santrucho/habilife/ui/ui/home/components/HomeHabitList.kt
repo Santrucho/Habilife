@@ -37,7 +37,7 @@ fun HomeHabitList(navController: NavController, habitViewModel: HabitViewModel) 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentSize(),
+                .fillMaxHeight(.55f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(verticalAlignment = Alignment.CenterVertically,

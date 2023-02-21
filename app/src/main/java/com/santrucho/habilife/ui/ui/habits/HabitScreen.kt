@@ -66,6 +66,23 @@ fun FABButton(navController: NavController) {
 @Composable
 fun MyHabitsSection(habitViewModel: HabitViewModel) {
 
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .padding(8.dp, 0.dp)
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = "Mis habitos",
+            fontWeight = FontWeight.Medium,
+            color = Color.Black,
+            modifier = Modifier.wrapContentWidth(Alignment.Start),
+            textAlign = TextAlign.Start,
+            fontSize = 20.sp
+        )
+    }
+
     Card(
         shape = MaterialTheme.shapes.medium,
         elevation = 3.dp,
@@ -74,27 +91,10 @@ fun MyHabitsSection(habitViewModel: HabitViewModel) {
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .wrapContentHeight()
-                .fillMaxHeight(.8f),
+                .fillMaxWidth()
+                .fillMaxHeight(.75f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .padding(8.dp, 0.dp)
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = "Mis habitos",
-                    fontWeight = FontWeight.Medium,
-                    color = Color.Black,
-                    modifier = Modifier.wrapContentWidth(Alignment.Start),
-                    textAlign = TextAlign.Start,
-                    fontSize = 20.sp
-                )
-            }
             HabitList(habitViewModel)
         }
     }
