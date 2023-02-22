@@ -2,9 +2,7 @@ package com.santrucho.habilife.ui.data.remote.habits
 
 
 import com.santrucho.habilife.ui.data.model.Habit
-import com.santrucho.habilife.ui.data.model.ItemList
 import com.santrucho.habilife.ui.utils.Resource
-import java.time.LocalTime
 
 
 interface HabitsRepository {
