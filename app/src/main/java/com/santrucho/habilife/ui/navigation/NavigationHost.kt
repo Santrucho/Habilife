@@ -38,14 +38,14 @@ fun NavigationHost(navController:NavController) {
         composable(
             route = Screen.SignUpScreen.route) {
             SignUpScreen(
-                navController = navController)
+                navController = navController,signUpViewModel)
         }
         composable(
             route = Screen.NewHabitScreen.route,
             content = { NewHabitScreen(habitViewModel = habitViewModel,navController = navController)})
         composable(
             route = Screen.NewGoalScreen.route,
-            content = { NewGoalScreen(goalViewModel = goalViewModel, navController = navController) })
+            content = { NewGoalScreen(goalViewModel = goalViewModel,navController) })
 
         composable(
             route = BottomNavScreen.Home.screen_route,

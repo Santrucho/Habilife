@@ -2,6 +2,7 @@ package com.santrucho.habilife.ui.data.remote.goals
 
 
 import com.santrucho.habilife.ui.data.model.Goals
+import com.santrucho.habilife.ui.data.model.GoalsOption
 import com.santrucho.habilife.ui.utils.Resource
 
 interface GoalsRepository {
@@ -15,4 +16,6 @@ interface GoalsRepository {
     suspend fun getGoals() : Resource<List<Goals>>
 
     suspend fun deleteGoal(goal:Goals)
+
+    suspend fun getGoalsOptions() : Resource<List<GoalsOption>>
 }

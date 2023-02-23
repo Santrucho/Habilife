@@ -51,7 +51,14 @@ fun LoginScreen(viewModel: LoginViewModel?, navController: NavController) {
                 placeholder = { Text(text = "Enter email") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(0.8f),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    textColor = Color.Black,
+                    focusedBorderColor = Color.Blue,
+                    unfocusedBorderColor = Color.Blue,
+                    focusedLabelColor = Color.Blue,
+                    unfocusedLabelColor = Color.Blue
+                )
             )
 
             OutlinedTextField(
@@ -62,7 +69,14 @@ fun LoginScreen(viewModel: LoginViewModel?, navController: NavController) {
                 singleLine = true,
                 visualTransformation = if (passwordVisibility.value) VisualTransformation.None
                 else PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth(0.8f)
+                modifier = Modifier.fillMaxWidth(0.8f),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    textColor = Color.Black,
+                    focusedBorderColor = Color.Blue,
+                    unfocusedBorderColor = Color.Blue,
+                    focusedLabelColor = Color.Blue,
+                    unfocusedLabelColor = Color.Blue
+                )
             )
 
             Spacer(modifier = Modifier.padding(10.dp))

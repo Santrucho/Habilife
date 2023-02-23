@@ -18,6 +18,7 @@ import com.santrucho.habilife.ui.utils.Resource
 fun GoalList(
     goalsViewModel: GoalViewModel
 ) {
+
     val goals = goalsViewModel.goalState.collectAsState()
 
     //Makes the logic to collect and show the list of habits created by the user,

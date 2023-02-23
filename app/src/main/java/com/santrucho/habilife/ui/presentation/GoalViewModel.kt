@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.santrucho.habilife.ui.data.model.Goals
+import com.santrucho.habilife.ui.data.model.GoalsOption
 import com.santrucho.habilife.ui.data.remote.goals.GoalsRepository
 import com.santrucho.habilife.ui.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,6 +36,13 @@ class GoalViewModel @Inject constructor(private val repository : GoalsRepository
 
     private val _goalState = MutableStateFlow<Resource<List<Goals>>?>(null)
     val goalState : StateFlow<Resource<List<Goals>>?> = _goalState
+
+    private val _goalsOptionState = MutableStateFlow<Resource<List<GoalsOption>>?>(null)
+    val goalsOptionState : StateFlow<Resource<List<GoalsOption>>?> = _goalsOptionState
+
+    init {
+        getOptionsGoals()
+    }
 
     //Check if the confirm button can be activated, when the validations are correct
     private fun shouldEnabledConfirmButton() {
@@ -116,6 +124,12 @@ class GoalViewModel @Inject constructor(private val repository : GoalsRepository
             }
             val updatedHabits = currentGoals.toMutableList().apply { remove(goal) }
             _goalState.value = Resource.Success(updatedHabits)
+        }
+    }
+
+    fun getOptionsGoals(){
+        viewModelScope.launch {
+            _goalsOptionState.value = repository.getGoalsOptions()
         }
     }
 }

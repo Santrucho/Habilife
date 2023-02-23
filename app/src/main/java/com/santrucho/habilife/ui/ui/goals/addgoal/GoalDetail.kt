@@ -26,7 +26,7 @@ import java.time.format.DateTimeFormatter
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun NewGoalScreen(goalViewModel: GoalViewModel, navController: NavController) {
+fun GoalDetail(goalViewModel: GoalViewModel, navController: NavController) {
 
     val goalValue = goalViewModel.goalFlow.collectAsState()
     val context = LocalContext.current
