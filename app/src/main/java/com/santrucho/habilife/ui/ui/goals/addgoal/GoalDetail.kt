@@ -4,16 +4,17 @@ import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Button
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.GoalViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
@@ -26,7 +27,7 @@ import java.time.format.DateTimeFormatter
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun GoalDetail(goalViewModel: GoalViewModel, navController: NavController) {
+fun GoalDetail(goalViewModel: GoalViewModel, navController: NavController,type:String) {
 
     val goalValue = goalViewModel.goalFlow.collectAsState()
     val context = LocalContext.current
@@ -40,12 +41,11 @@ fun GoalDetail(goalViewModel: GoalViewModel, navController: NavController) {
     }
 
     // onBack can be passed down as composable param and hoisted
-    val onBack = { navController.navigate(BottomNavScreen.Goals.screen_route) }
-
+    val onBack = { navController.navigate(Screen.NewGoalScreen.route) }
     BackPressHandler(onBackPressed = onBack)
 
     Scaffold(
-        topBar = { DetailsAppBar(onBack) }
+        topBar = { DetailsAppBar(onBack,"Crear objetivo") }
     ) {
         Box(
             contentAlignment = Alignment.Center,
@@ -59,6 +59,22 @@ fun GoalDetail(goalViewModel: GoalViewModel, navController: NavController) {
                     pickedDate = date
                 } )*/
                 NewGoalFields(goalViewModel = goalViewModel)
+                OutlinedTextField(
+                        value = type,
+                        onValueChange = {},
+                        enabled = false,
+                        label = { Text(text = "Tipo") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(1f),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                        shape = CircleShape,
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            textColor = Color.Black,
+                            focusedBorderColor = Color.Blue,
+                            unfocusedBorderColor = Color.Blue,
+                            focusedLabelColor = Color.Blue,
+                            unfocusedLabelColor = Color.Blue)
+                    )
 
                 Spacer(modifier = Modifier.weight(1f))
                 Button(
@@ -72,13 +88,12 @@ fun GoalDetail(goalViewModel: GoalViewModel, navController: NavController) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
-                        .fillMaxHeight(0.2f),
+                        .height(56.dp),
                     shape = CircleShape
 
                 ) {
                     Text("Guardar objetivo")
                 }
-                Spacer(modifier = Modifier.height(60.dp))
             }
             goalValue.value?.let {
                 when (it) {

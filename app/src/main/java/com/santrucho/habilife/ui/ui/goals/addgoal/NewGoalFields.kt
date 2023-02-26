@@ -44,7 +44,7 @@ fun NewGoalFields(goalViewModel: GoalViewModel){
                         goalViewModel.titleValue.value = it
                         goalViewModel.validateTitle()
                     },
-                    label = { Text(text = "Descripcion") },
+                    label = { Text(text = "Nombre del objetivo") },
                     isError = goalViewModel.isTitleValid.value,
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(1f),
@@ -72,9 +72,7 @@ fun NewGoalFields(goalViewModel: GoalViewModel){
                     },
                     label = { Text(text = "Descripcion") },
                     isError = goalViewModel.isDescriptionValid.value,
-                    modifier = Modifier
-                        .fillMaxWidth(1f)
-                        .padding(8.dp),
+                    modifier = Modifier.fillMaxWidth(1f),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                     shape = CircleShape,
                     colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -91,7 +89,6 @@ fun NewGoalFields(goalViewModel: GoalViewModel){
                     fontSize = 14.sp,
                     color = Color.Red
                 )
-
             }
         }
         Spacer(modifier = Modifier.padding(8.dp))

@@ -48,7 +48,7 @@ fun NewGoalScreen(goalViewModel: GoalViewModel,navController:NavController){
     BackPressHandler(onBackPressed = onBack)
 
     Scaffold(
-        topBar = { DetailsAppBar(onBack) }
+        topBar = { DetailsAppBar(onBack,"Objetivos recomendados") }
     ) {
         Box(
             contentAlignment = Alignment.Center,
@@ -68,8 +68,7 @@ fun NewGoalScreen(goalViewModel: GoalViewModel,navController:NavController){
                         .background(colorResource(id = R.color.white)),
                     horizontalAlignment = Alignment.Start
                 ) {
-
-                    GoalsOptionList(goalViewModel)
+                    GoalsOptionList(goalViewModel,navController)
                 }
             }
         }
@@ -77,7 +76,7 @@ fun NewGoalScreen(goalViewModel: GoalViewModel,navController:NavController){
 }
 
 @Composable
-fun GoalsOptionList(goalViewModel: GoalViewModel){
+fun GoalsOptionList(goalViewModel: GoalViewModel,navController: NavController){
     val goalsOptionState = goalViewModel.goalsOptionState.collectAsState()
 
     goalsOptionState.value.let { result ->
@@ -93,7 +92,7 @@ fun GoalsOptionList(goalViewModel: GoalViewModel){
             is Resource.Success -> {
                 Log.d("@@@@@@@@@@@@@@@@@@@@@@@@@@@@",result.data.toString())
                 Log.d("@@@@@@@@@@@@@@@@@@@@@@@@@@@@",result.data.toString())
-                GoalsOptionUI(goalsOptions = result.data)
+                GoalsOptionUI(goalsOptions = result.data,navController)
             }
             is Resource.Failure -> {
                 Log.d("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",result.exception.toString())
@@ -108,10 +107,10 @@ fun GoalsOptionList(goalViewModel: GoalViewModel){
 }
 
 @Composable
-fun GoalsOptionUI(goalsOptions:List<GoalsOption>){
+fun GoalsOptionUI(goalsOptions:List<GoalsOption>,navController: NavController){
     LazyColumn(modifier = Modifier.padding(8.dp)){
         items(goalsOptions) {
-            GoalOptionCard(goalOption = it)
+            GoalOptionCard(goalOption = it,navController)
         }
     }
 }

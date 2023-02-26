@@ -75,6 +75,24 @@ fun CheckOptions(goalsOption: GoalsOption) {
                     fontSize = 12.sp
                 )
             }
+            "health" -> {
+                Text(
+                    text = "Subir/bajar:",
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .wrapContentWidth(Alignment.Start),
+                    color = Color.Black,
+                    fontSize = 12.sp
+                )
+                Text(
+                    text = "4 kilos",
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .wrapContentWidth(Alignment.Start),
+                    color = Color.Black,
+                    fontSize = 12.sp
+                )
+            }
             else -> {
                 Unit
             }

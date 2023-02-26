@@ -1,5 +1,6 @@
 package com.santrucho.habilife.ui.ui.goals.addgoal
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.LinearProgressIndicator
@@ -11,14 +12,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.os.bundleOf
+import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.santrucho.habilife.ui.data.model.GoalsOption
+import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.utils.CheckOptions
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun GoalOptionCard(goalOption: GoalsOption) {
+fun GoalOptionCard(goalOption: GoalsOption,navController:NavController) {
+    Box(modifier = Modifier.fillMaxWidth().wrapContentSize()
+        .clickable {
+            navController.navigate("goal_detail_screen/${goalOption.title}")}){
     Card(
         modifier = Modifier
             .wrapContentSize()
@@ -95,5 +102,6 @@ fun GoalOptionCard(goalOption: GoalsOption) {
                 }
             }
         }
+    }
     }
 }

@@ -4,11 +4,14 @@ import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.santrucho.habilife.ui.presentation.*
 import com.santrucho.habilife.ui.ui.*
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
+import com.santrucho.habilife.ui.ui.goals.GoalDetail
 import com.santrucho.habilife.ui.ui.login.LoginScreen
 import com.santrucho.habilife.ui.ui.signup.SignUpScreen
 import com.santrucho.habilife.ui.ui.habits.HabitScreen
@@ -46,6 +49,15 @@ fun NavigationHost(navController:NavController) {
         composable(
             route = Screen.NewGoalScreen.route,
             content = { NewGoalScreen(goalViewModel = goalViewModel,navController) })
+
+        composable(
+            route = "goal_detail_screen/{type}",
+            arguments = listOf(navArgument("type"){type = NavType.StringType}))
+            { backStackEntry ->
+                val type = backStackEntry.arguments?.getString("type")
+                requireNotNull(type)
+                GoalDetail(goalViewModel = goalViewModel,navController,type)
+            }
 
         composable(
             route = BottomNavScreen.Home.screen_route,
