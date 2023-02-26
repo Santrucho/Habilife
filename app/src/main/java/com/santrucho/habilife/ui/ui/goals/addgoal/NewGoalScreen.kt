@@ -19,20 +19,11 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.santrucho.habilife.R
-import com.santrucho.habilife.ui.data.model.Goals
-import com.santrucho.habilife.ui.data.model.GoalsOption
-import com.santrucho.habilife.ui.navigation.Screen
+import com.santrucho.habilife.ui.data.model.goals.GoalsOption
 import com.santrucho.habilife.ui.presentation.GoalViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.goals.addgoal.GoalOptionCard
-import com.santrucho.habilife.ui.ui.goals.components.GoalCard
-import com.santrucho.habilife.ui.ui.goals.components.GoalList
-import com.santrucho.habilife.ui.ui.goals.components.GoalsUI
 import com.santrucho.habilife.ui.ui.habits.DetailsAppBar
-import com.santrucho.habilife.ui.ui.habits.components.Categories
-import com.santrucho.habilife.ui.ui.habits.components.FrequencyPicker
-import com.santrucho.habilife.ui.ui.habits.components.NewHabitFields
-import com.santrucho.habilife.ui.ui.habits.components.TimePicker
 import com.santrucho.habilife.ui.utils.BackPressHandler
 import com.santrucho.habilife.ui.utils.Resource
 
@@ -107,7 +98,7 @@ fun GoalsOptionList(goalViewModel: GoalViewModel,navController: NavController){
 }
 
 @Composable
-fun GoalsOptionUI(goalsOptions:List<GoalsOption>,navController: NavController){
+fun GoalsOptionUI(goalsOptions:List<GoalsOption>, navController: NavController){
     LazyColumn(modifier = Modifier.padding(8.dp)){
         items(goalsOptions) {
             GoalOptionCard(goalOption = it,navController)

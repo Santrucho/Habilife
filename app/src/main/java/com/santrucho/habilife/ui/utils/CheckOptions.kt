@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.santrucho.habilife.ui.data.model.GoalsOption
+import com.santrucho.habilife.ui.data.model.goals.GoalsOption
 
 @Composable
 fun CheckOptions(goalsOption: GoalsOption) {

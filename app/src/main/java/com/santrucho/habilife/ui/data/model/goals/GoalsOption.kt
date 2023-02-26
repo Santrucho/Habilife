@@ -1,4 +1,4 @@
-package com.santrucho.habilife.ui.data.model
+package com.santrucho.habilife.ui.data.model.goals
 
 data class GoalsOption(
     var id : String = "",

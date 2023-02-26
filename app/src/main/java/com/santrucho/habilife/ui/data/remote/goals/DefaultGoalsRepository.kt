@@ -2,9 +2,8 @@ package com.santrucho.habilife.ui.data.remote.goals
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.santrucho.habilife.ui.data.model.Goals
-import com.santrucho.habilife.ui.data.model.GoalsOption
-import com.santrucho.habilife.ui.data.model.Habit
+import com.santrucho.habilife.ui.data.model.goals.Goals
+import com.santrucho.habilife.ui.data.model.goals.GoalsOption
 import com.santrucho.habilife.ui.utils.Resource
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -49,7 +48,7 @@ class DefaultGoalsRepository @Inject constructor(private val firestore:FirebaseF
         }
     }
 
-    override suspend fun deleteGoal(goal:Goals){
+    override suspend fun deleteGoal(goal: Goals){
         try {
             firestore.collection("goals").document(goal.id).delete().await()
         }

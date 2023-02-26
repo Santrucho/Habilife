@@ -4,8 +4,8 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.santrucho.habilife.ui.data.model.Goals
-import com.santrucho.habilife.ui.data.model.GoalsOption
+import com.santrucho.habilife.ui.data.model.goals.Goals
+import com.santrucho.habilife.ui.data.model.goals.GoalsOption
 import com.santrucho.habilife.ui.data.remote.goals.GoalsRepository
 import com.santrucho.habilife.ui.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -114,7 +114,7 @@ class GoalViewModel @Inject constructor(private val repository : GoalsRepository
     }
 
     //Delete an specific goal from the database
-    fun deleteGoal(goal:Goals){
+    fun deleteGoal(goal: Goals){
         viewModelScope.launch {
             repository.deleteGoal(goal)
             val currentResource = _goalState.value
