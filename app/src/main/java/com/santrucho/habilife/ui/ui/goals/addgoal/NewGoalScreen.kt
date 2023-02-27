@@ -1,4 +1,4 @@
-package com.santrucho.habilife.ui.ui.goals
+package com.santrucho.habilife.ui.ui.goals.addgoal
 
 import android.annotation.SuppressLint
 import android.util.Log
@@ -22,7 +22,6 @@ import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.data.model.goals.GoalsOption
 import com.santrucho.habilife.ui.presentation.GoalViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
-import com.santrucho.habilife.ui.ui.goals.addgoal.GoalOptionCard
 import com.santrucho.habilife.ui.ui.habits.DetailsAppBar
 import com.santrucho.habilife.ui.utils.BackPressHandler
 import com.santrucho.habilife.ui.utils.Resource

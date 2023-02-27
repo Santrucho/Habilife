@@ -22,7 +22,7 @@ import com.santrucho.habilife.ui.utils.CheckOptions
 fun GoalOptionCard(goalOption: GoalsOption, navController:NavController) {
     Box(modifier = Modifier.fillMaxWidth().wrapContentSize()
         .clickable {
-            navController.navigate("goal_detail_screen/${goalOption.title}")}){
+            navController.navigate("goal_detail_screen/${goalOption.type}")}){
     Card(
         modifier = Modifier
             .wrapContentSize()

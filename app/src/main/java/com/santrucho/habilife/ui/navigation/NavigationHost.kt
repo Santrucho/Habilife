@@ -11,13 +11,13 @@ import androidx.navigation.navArgument
 import com.santrucho.habilife.ui.presentation.*
 import com.santrucho.habilife.ui.ui.*
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
-import com.santrucho.habilife.ui.ui.goals.GoalDetail
+import com.santrucho.habilife.ui.ui.goals.addgoal.GoalDetail
 import com.santrucho.habilife.ui.ui.login.LoginScreen
 import com.santrucho.habilife.ui.ui.signup.SignUpScreen
 import com.santrucho.habilife.ui.ui.habits.HabitScreen
 import com.santrucho.habilife.ui.ui.habits.NewHabitScreen
 import com.santrucho.habilife.ui.ui.goals.GoalsScreen
-import com.santrucho.habilife.ui.ui.goals.NewGoalScreen
+import com.santrucho.habilife.ui.ui.goals.addgoal.NewGoalScreen
 import com.santrucho.habilife.ui.ui.home.HomeScreen
 
 

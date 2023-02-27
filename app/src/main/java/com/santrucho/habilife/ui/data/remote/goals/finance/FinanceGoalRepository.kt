@@ -5,8 +5,11 @@ import com.santrucho.habilife.ui.utils.Resource
 
 interface FinanceGoalRepository {
 
-    fun addFinanceGoal(title: String,
-                       description: String,
-                       isCompleted: Boolean,
-                       release_date: String) : Resource<FinanceGoal>
+    suspend fun addFinanceGoal(title: String,
+                               description: String,
+                               isCompleted: Boolean,
+                               release_date: String,
+                               amount : Int?,
+                               amountGoal : String
+    ) : Resource<FinanceGoal>
 }

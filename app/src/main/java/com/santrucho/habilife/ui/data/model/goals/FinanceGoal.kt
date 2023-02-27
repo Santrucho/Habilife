@@ -8,10 +8,9 @@ data class FinanceGoal(
     var isCompleted : Boolean=false,
     var release_date : String= "",
     var image : String = "",
-    var type : String = "",
+    var type : String = "Finance",
     //New parameters
-    var amount : Int = 0,
-    var addAmount : Int = 0,
+    var amount : Int? = null,
     var amountGoal : String = ""
 ) {
 }

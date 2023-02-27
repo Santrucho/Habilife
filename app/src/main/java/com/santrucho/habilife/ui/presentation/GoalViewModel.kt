@@ -1,12 +1,17 @@
 package com.santrucho.habilife.ui.presentation
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.santrucho.habilife.ui.data.model.goals.AcademicGoal
+import com.santrucho.habilife.ui.data.model.goals.FinanceGoal
 import com.santrucho.habilife.ui.data.model.goals.Goals
 import com.santrucho.habilife.ui.data.model.goals.GoalsOption
 import com.santrucho.habilife.ui.data.remote.goals.GoalsRepository
+import com.santrucho.habilife.ui.data.remote.goals.academic.AcademicGoalRepository
+import com.santrucho.habilife.ui.data.remote.goals.finance.FinanceGoalRepository
 import com.santrucho.habilife.ui.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,24 +20,28 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class GoalViewModel @Inject constructor(private val repository : GoalsRepository) : ViewModel() {
+class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
+                                        private val academicRepo : AcademicGoalRepository,
+                                        private val financeRepo: FinanceGoalRepository) : ViewModel() {
 
     var titleValue : MutableState<String> = mutableStateOf("")
     var isTitleValid: MutableState<Boolean> = mutableStateOf(false)
     var titleErrMsg: MutableState<String> = mutableStateOf("")
 
+    var subjectValue : MutableState<String> = mutableStateOf("")
+    var amountValue : MutableState<Int?> = mutableStateOf(null)
+
     var descriptionValue: MutableState<String> = mutableStateOf("")
     var isDescriptionValid: MutableState<Boolean> = mutableStateOf(false)
     var descriptionErrMsg: MutableState<String> = mutableStateOf("")
 
-    var release_dateValue: MutableState<String> = mutableStateOf("")
-    var isreleaseDateValid: MutableState<Boolean> = mutableStateOf(false)
-    var release_dateMsg: MutableState<String> = mutableStateOf("")
-
     var isEnabledConfirmButton: MutableState<Boolean> = mutableStateOf(false)
 
-    private val _goalFlow = MutableStateFlow<Resource<Goals>?>(null)
-    val goalFlow : StateFlow<Resource<Goals>?> = _goalFlow
+    private val _goalFlow = MutableStateFlow<Resource<FinanceGoal>?>(null)
+    val goalFlow : StateFlow<Resource<FinanceGoal>?> = _goalFlow
+
+    private val _academicFlow = MutableStateFlow<Resource<AcademicGoal>?>(null)
+    val academicFlow : StateFlow<Resource<AcademicGoal>?> = _academicFlow
 
     private val _goalState = MutableStateFlow<Resource<List<Goals>>?>(null)
     val goalState : StateFlow<Resource<List<Goals>>?> = _goalState
@@ -49,10 +58,8 @@ class GoalViewModel @Inject constructor(private val repository : GoalsRepository
         isEnabledConfirmButton.value =
             titleErrMsg.value.isEmpty()
                     && descriptionErrMsg.value.isEmpty()
-                    && release_dateMsg.value.isEmpty()
                     && !titleValue.value.isNullOrBlank()
                     && !descriptionValue.value.isNullOrBlank()
-                    && !release_dateValue.value.isNullOrBlank()
     }
     //Check if the title is valid
     fun validateTitle() {
@@ -76,31 +83,94 @@ class GoalViewModel @Inject constructor(private val repository : GoalsRepository
         }
         shouldEnabledConfirmButton()
     }
-    //Check if the release date is valid
-    fun validateReleaseDate() {
-        if (release_dateValue.value.length <= 6) {
-            isreleaseDateValid.value = true
-            release_dateMsg.value = "Release date should be 6 digit in format dd-mm-yyyy"
-        } else {
-            isreleaseDateValid.value = false
-            release_dateMsg.value = ""
+    //Call academic Repository and add goal into the database
+    private fun addAcademicGoal(
+        title: String,
+        description: String,
+        isCompleted: Boolean,
+        release_date: String,
+        subject: String,
+        subjectGoal: Int,
+        subjectApprove : Int,
+    ){
+        viewModelScope.launch {
+            _academicFlow.value = Resource.Loading()
+            _academicFlow.value = academicRepo.addAcademicGoal(title,description,isCompleted,release_date,subject,subjectGoal,subjectApprove)
+            Log.d("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",_academicFlow.value.toString())
+            Log.d("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",_academicFlow.value.toString())
+            Log.d("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",_academicFlow.value.toString())
         }
-        shouldEnabledConfirmButton()
+            getAllGoals()
     }
-    //Call to the repository and add a Goal into the database
-    fun addGoal(title:String,description:String,isCompleted:Boolean,release_date:String){
+    private fun addFinanceGoal(
+        title: String,
+        description: String,
+        isCompleted: Boolean,
+        release_date: String,
+        amount:Int?,
+        amountGoal:String,
+    ){
         viewModelScope.launch {
             _goalFlow.value = Resource.Loading()
-            _goalFlow.value = repository.addGoal(title,description,isCompleted,release_date)
-           getAllGoals()
+            _goalFlow.value = financeRepo.addFinanceGoal(title,description,isCompleted,release_date,amount,amountGoal)
+            Log.d("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",_academicFlow.value.toString())
+            Log.d("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",_academicFlow.value.toString())
+            Log.d("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",_academicFlow.value.toString())
+        }
+        getAllGoals()
+    }
+    //Call to the repository and add a Goal into the database
+    fun addGoal(
+        title: String,
+        description: String,
+        isCompleted: Boolean,
+        release_date: String,
+        type:String,
+        amount: Int? = null,
+        amountGoal: String = "",
+        subject: String = "",
+        subjectGoal: Int = 0,
+        subjectApprove : Int = 0,
+    ) {
+        viewModelScope.launch {
+            _goalFlow.value = Resource.Loading()
+            when (type) {
+                "Finance" -> {
+                    addFinanceGoal(
+                        title,
+                        description,
+                        isCompleted,
+                        release_date,
+                        amount,
+                        amountGoal
+                    )
+                }
+                "Academic" -> {
+                   addAcademicGoal(
+                        title,
+                        description,
+                        isCompleted,
+                        release_date,
+                        subject,
+                        subjectGoal,
+                        subjectApprove
+                    )
+                }
+                else -> {
+                    Unit
+                }
+            }
+            getAllGoals()
         }
     }
     //Reset the result of each fields
     fun resetResult(){
         _goalFlow.value = null
+        _academicFlow.value = null
         titleValue.value = ""
         descriptionValue.value = ""
-        release_dateValue.value = ""
+        subjectValue.value = ""
+        amountValue.value = null
     }
     //Reset the response for each call to get the goals in the database
     fun resetValue(){

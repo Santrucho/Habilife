@@ -8,7 +8,7 @@ data class AcademicGoal(
     var isCompleted : Boolean=false,
     var release_date : String= "",
     var image : String = "",
-    var type : String = "",
+    var type : String = "Academic",
     //New parameters
     var subject : String = "",
     var subjectApprove : Int = 0,
