@@ -1,7 +1,6 @@
 package com.santrucho.habilife.ui.ui.habits
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -17,7 +16,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.santrucho.habilife.R
-import com.santrucho.habilife.ui.data.model.ItemList
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.HabitViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
@@ -80,7 +78,7 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
     BackPressHandler(onBackPressed = onBack)
 
     Scaffold(
-        topBar = { DetailsAppBar(onBack) }
+        topBar = { DetailsAppBar(onBack,"Crear nuevo habito") }
     ) {
         Box(
             contentAlignment = Alignment.Center,
@@ -174,9 +172,9 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
 
 //Makes the app bar go to the last screen
 @Composable
-fun DetailsAppBar(onBack: () -> Unit) {
+fun DetailsAppBar(onBack: () -> Unit,title:String) {
     TopAppBar(
-        title = { Text(text = stringResource(id = R.string.app_name)) },
+        title = { Text(text = title) },
         backgroundColor = Color.Blue,
         navigationIcon = {
             IconButton(onClick = onBack) {

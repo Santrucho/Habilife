@@ -40,7 +40,6 @@ fun GoalsScreen(goalViewModel: GoalViewModel, navController: NavController) {
             .fillMaxSize()
             .background(colorResource(id = R.color.white))
     ) {
-        RecommendedGoalsSection()
         Spacer(modifier = Modifier.height(32.dp))
         //Set each element inside column
         Column(
@@ -67,63 +66,6 @@ fun GoalsScreen(goalViewModel: GoalViewModel, navController: NavController) {
     }
 
 }
-//Set recommended habits section in screen
-@Composable
-fun RecommendedGoalsSection() {
-    Text(text = "OBJETIVOS RECOMENDADOS", modifier = Modifier.padding(8.dp), color = Color.Black)
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .padding(8.dp)
-        .border(1.dp, Color.Black)){
-        LazyRow(
-            modifier = Modifier.padding(8.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalAlignment = Alignment.Top
-
-        ) {
-            items(goalsData) { item ->
-                RecommendedGoalsElement(item.drawable, item.text)
-            }
-        }
-    }
-}
-
-//Set each element in recommended habits section
-@Composable
-fun RecommendedGoalsElement(
-    @DrawableRes drawable: Int,
-    @StringRes text: Int,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .width(72.dp)
-            .padding(8.dp)
-    ) {
-        Row(
-            modifier
-                .height(48.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                painter = painterResource(R.drawable.ic_habits),
-                contentDescription = null
-            )
-        }
-        Row(
-            modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = stringResource(R.string.app_name)
-            )
-        }
-    }
-}
 
 //Set Fab Button which navigate to Create New Habit screen
 @Composable
@@ -137,18 +79,3 @@ fun FabButton(navController: NavController) {
         Text("Crear nuevo objetivo")
     }
 }
-
-
-private val goalsData = listOf(
-    R.drawable.ic_habits to R.string.app_name,
-    R.drawable.ic_habits to R.string.app_name,
-    R.drawable.ic_habits to R.string.app_name,
-    R.drawable.ic_habits to R.string.app_name,
-    R.drawable.ic_habits to R.string.app_name,
-    R.drawable.ic_habits to R.string.app_name,
-).map { DrawableStringPair(it.first, it.second) }
-
-private data class DrawableStringPair(
-    @DrawableRes val drawable: Int,
-    @StringRes val text: Int
-)

@@ -30,7 +30,7 @@ import com.santrucho.habilife.ui.utils.Resource
 
 
 @Composable
-fun SignUpScreen(navController: NavController,viewModel: SignUpViewModel = hiltNavGraphViewModel() , ) {
+fun SignUpScreen(navController: NavController,viewModel: SignUpViewModel) {
 
     var usernameValue by remember { mutableStateOf("") }
     var emailValue by remember { mutableStateOf("") }

@@ -4,14 +4,12 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.santrucho.habilife.ui.data.model.Habit
-import com.santrucho.habilife.ui.data.model.ItemList
 import com.santrucho.habilife.ui.data.remote.habits.HabitsRepository
 import com.santrucho.habilife.ui.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltViewModel

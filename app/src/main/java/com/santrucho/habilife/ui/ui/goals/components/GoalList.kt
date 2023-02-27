@@ -10,7 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.santrucho.habilife.ui.data.model.Goals
+import com.santrucho.habilife.ui.data.model.goals.Goals
 import com.santrucho.habilife.ui.presentation.GoalViewModel
 import com.santrucho.habilife.ui.utils.Resource
 
@@ -18,6 +18,7 @@ import com.santrucho.habilife.ui.utils.Resource
 fun GoalList(
     goalsViewModel: GoalViewModel
 ) {
+
     val goals = goalsViewModel.goalState.collectAsState()
 
     //Makes the logic to collect and show the list of habits created by the user,
@@ -48,7 +49,7 @@ fun GoalList(
 
 //Makes the LazyColumn or "RecyclerView" to show a list of each Goal created
 @Composable
-fun GoalsUI(goals:List<Goals>,onDelete:(Goals) -> Unit){
+fun GoalsUI(goals:List<Goals>, onDelete:(Goals) -> Unit){
     LazyColumn(modifier = Modifier.padding(8.dp)){
         items(goals) {
             GoalCard(goal = it,onDelete)

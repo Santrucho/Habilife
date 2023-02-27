@@ -52,8 +52,6 @@ fun HabitList(habitViewModel: HabitViewModel){
 fun HabitUI(
     habits: List<Habit>, onDelete: (Habit) -> Unit,viewModel: HabitViewModel
 ) {
-    var selectedCard by remember { mutableStateOf(-1) }
-
     LazyColumn(modifier = Modifier.padding(8.dp)) {
         items(habits) {
             HabitCard(habit = it, onDelete,viewModel)

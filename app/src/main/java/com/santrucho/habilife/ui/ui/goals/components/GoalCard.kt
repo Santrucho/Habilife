@@ -17,13 +17,13 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.santrucho.habilife.ui.data.model.Goals
+import com.santrucho.habilife.ui.data.model.goals.Goals
 
 
 //Set the visualization and the way in which each Goal will be displayed
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun GoalCard(goal: Goals,onDelete:(Goals) -> Unit) {
+fun GoalCard(goal: Goals, onDelete:(Goals) -> Unit) {
 
     var expandedState by remember { mutableStateOf(false) }
     val rotationState by animateFloatAsState(targetValue = if (expandedState) 180f else 0f)
