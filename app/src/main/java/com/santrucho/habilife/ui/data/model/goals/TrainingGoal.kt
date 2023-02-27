@@ -10,8 +10,8 @@ data class TrainingGoal(
     var image : String = "",
     var type : String = "",
     //New parameters
-    var kilometers : Int = 0,
-    var addKilometers : Int = 0,
-    var kilometersGoal : String = ""
+    var kilometers : Int? = null,
+    var addKilometers : Int? = null,
+    var kilometersGoal : Int? = null
 ) {
 }

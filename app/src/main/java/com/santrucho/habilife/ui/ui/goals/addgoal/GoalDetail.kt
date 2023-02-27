@@ -30,14 +30,15 @@ import java.time.LocalDate
 @Composable
 fun GoalDetail(goalViewModel: GoalViewModel, navController: NavController,type:String) {
 
-
-    val goalValue = goalViewModel.goalFlow.collectAsState()
+    val financeValue = goalViewModel.financeFlow.collectAsState()
     val academicValue = goalViewModel.academicFlow.collectAsState()
+    val workValue = goalViewModel.workFlow.collectAsState()
+    val trainingValue = goalViewModel.trainingFlow.collectAsState()
 
-    HandleGoalFlow(flow = goalValue, navController = navController )
+    HandleGoalFlow(flow = financeValue, navController = navController )
     HandleGoalFlow(flow = academicValue, navController = navController)
-
-    val context = LocalContext.current
+    HandleGoalFlow(flow = workValue , navController = navController)
+    HandleGoalFlow(flow = trainingValue , navController = navController)
 
     val pickedDate by remember { mutableStateOf(LocalDate.now()) }
 
@@ -83,7 +84,7 @@ fun GoalDetail(goalViewModel: GoalViewModel, navController: NavController,type:S
                             unfocusedLabelColor = Color.Blue)
                     )
 
-                FieldsHelper(type = type,goalViewModel.subjectValue,goalViewModel.amountValue)
+                FieldsHelper(type = type,goalViewModel.subjectValue,goalViewModel.amountValue,goalViewModel.workValue,goalViewModel.trainingValue)
                 Spacer(modifier = Modifier.weight(1f))
 
                 //Set the button to add the goal into database
@@ -95,7 +96,9 @@ fun GoalDetail(goalViewModel: GoalViewModel, navController: NavController,type:S
                             false,
                             "25/02",type,
                             amount = goalViewModel.amountValue.value,
-                            subject = goalViewModel.subjectValue.value
+                            subject = goalViewModel.subjectValue.value,
+                            actualJob = goalViewModel.workValue.value,
+                            kilometers = goalViewModel.trainingValue.value
                         )
                     },
                     enabled = goalViewModel.isEnabledConfirmButton.value,

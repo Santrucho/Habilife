@@ -17,14 +17,16 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun FieldsHelper(type: String, subject:MutableState<String> = mutableStateOf(""),
-                 amountValue:MutableState<Int?> = mutableStateOf(null)) {
+                 amountValue:MutableState<Int?> = mutableStateOf(null),
+                actualJob:MutableState<String> = mutableStateOf(""),
+                kilometers:MutableState<Int?> = mutableStateOf(null)) {
 
     Box(modifier = Modifier.padding(4.dp)) {
         return when (type) {
             "Finance" -> {
                 OutlinedTextField(
-                    value = amountValue.value.toString(),
-                    onValueChange = { amountValue.value = it.toInt() },
+                    value = amountValue.value?.toString() ?: "",
+                    onValueChange = { amountValue.value = it.toIntOrNull() },
                     enabled = true,
                     label = { Text(text = "Monto") },
                     singleLine = true,
@@ -46,6 +48,44 @@ fun FieldsHelper(type: String, subject:MutableState<String> = mutableStateOf("")
                     onValueChange = { subject.value = it },
                     enabled = true,
                     label = { Text(text = "Nombre de la materia") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(1f),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                    shape = CircleShape,
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        textColor = Color.Black,
+                        focusedBorderColor = Color.Blue,
+                        unfocusedBorderColor = Color.Blue,
+                        focusedLabelColor = Color.Blue,
+                        unfocusedLabelColor = Color.Blue
+                    )
+                )
+            }
+            "Work" -> {
+                OutlinedTextField(
+                    value = actualJob.value,
+                    onValueChange = { actualJob.value = it },
+                    enabled = true,
+                    label = { Text(text = "Puesto actual") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(1f),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                    shape = CircleShape,
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        textColor = Color.Black,
+                        focusedBorderColor = Color.Blue,
+                        unfocusedBorderColor = Color.Blue,
+                        focusedLabelColor = Color.Blue,
+                        unfocusedLabelColor = Color.Blue
+                    )
+                )
+            }
+            "Training" -> {
+                OutlinedTextField(
+                    value = kilometers.value?.toString() ?: "",
+                    onValueChange = { kilometers.value = it.toIntOrNull() },
+                    enabled = true,
+                    label = { Text(text = "Kilometros a recorrer") },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(1f),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),

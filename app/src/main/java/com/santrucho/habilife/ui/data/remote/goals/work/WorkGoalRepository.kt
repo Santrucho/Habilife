@@ -6,8 +6,11 @@ import com.santrucho.habilife.ui.utils.Resource
 
 interface WorkGoalRepository {
 
-    fun addWorkGoal(title: String,
+    suspend fun addWorkGoal(title: String,
                        description: String,
                        isCompleted: Boolean,
-                       release_date: String) : Resource<WorkGoal>
+                       release_date: String,
+                       actualJob : String,
+                       jobGoal : String) : Resource<WorkGoal>
+
 }

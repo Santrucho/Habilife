@@ -23,7 +23,7 @@ fun CheckOptions(goalsOption: GoalsOption) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         return when (goalsOption.type) {
-            "finance" -> {
+            "Finance" -> {
                     Text(
                         text = "Monto conseguido:",
                         modifier = Modifier
@@ -39,7 +39,7 @@ fun CheckOptions(goalsOption: GoalsOption) {
                             .width(200.dp)
                     )
                 }
-            "work" -> {
+            "Work" -> {
                     Text(
                         text = "Puesto a ascender:",
                         modifier = Modifier
@@ -57,7 +57,7 @@ fun CheckOptions(goalsOption: GoalsOption) {
                         fontSize = 12.sp
                     )
                 }
-            "academic" -> {
+            "Academic" -> {
                 Text(
                     text = "Materias aprobadas:",
                     modifier = Modifier
@@ -75,7 +75,7 @@ fun CheckOptions(goalsOption: GoalsOption) {
                     fontSize = 12.sp
                 )
             }
-            "health" -> {
+            "Training" -> {
                 Text(
                     text = "Subir/bajar:",
                     modifier = Modifier
