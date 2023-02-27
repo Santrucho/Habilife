@@ -1,8 +1,8 @@
 package com.santrucho.habilife.ui.data.remote.goals
 
 
-import com.santrucho.habilife.ui.data.model.goals.Goals
 import com.santrucho.habilife.ui.data.model.goals.GoalsOption
+import com.santrucho.habilife.ui.data.model.goals.GoalsResponse
 import com.santrucho.habilife.ui.utils.Resource
 
 interface GoalsRepository {
@@ -11,11 +11,11 @@ interface GoalsRepository {
         title:String,
         description:String,
         isCompleted : Boolean,
-        release_date:String) : Resource<Goals>
+        release_date:String) : Resource<GoalsResponse>
 
-    suspend fun getGoals() : Resource<List<Goals>>
+    suspend fun getGoals() : Resource<List<GoalsResponse>>
 
-    suspend fun deleteGoal(goal: Goals)
+    suspend fun deleteGoal(goal: GoalsResponse)
 
     suspend fun getGoalsOptions() : Resource<List<GoalsOption>>
 }

@@ -6,11 +6,11 @@ import com.santrucho.habilife.ui.utils.Resource
 interface AcademicGoalRepository {
 
     suspend fun addAcademicGoal(title: String,
-                        description: String,
-                        isCompleted: Boolean,
-                        release_date: String,
-                        subject : String,
-                        subjectApprove : Int,
-                        subjectGoal : Int
+                                description: String,
+                                isCompleted: Boolean,
+                                release_date: String,
+                                subject : String,
+                                subjectApprove : Int,
+                                subjectGoal : Int
     ) : Resource<AcademicGoal>
 }

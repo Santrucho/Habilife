@@ -80,13 +80,9 @@ fun GoalsOptionList(goalViewModel: GoalViewModel,navController: NavController){
                 }
             }
             is Resource.Success -> {
-                Log.d("@@@@@@@@@@@@@@@@@@@@@@@@@@@@",result.data.toString())
-                Log.d("@@@@@@@@@@@@@@@@@@@@@@@@@@@@",result.data.toString())
                 GoalsOptionUI(goalsOptions = result.data,navController)
             }
             is Resource.Failure -> {
-                Log.d("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",result.exception.toString())
-                Log.d("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",result.exception.toString())
                 LaunchedEffect(goalsOptionState.value){
                     result.exception.message.toString()
                 }

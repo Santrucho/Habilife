@@ -2,15 +2,16 @@ package com.santrucho.habilife.ui.data.remote.goals.finance
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import com.santrucho.habilife.ui.data.model.goals.FinanceGoal
-import com.santrucho.habilife.ui.data.model.goals.Goals
 import com.santrucho.habilife.ui.utils.Resource
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 
 class DefaultFinanceGoalRepository @Inject constructor(private val firestore: FirebaseFirestore,
-                                                       private val firebaseAuth: FirebaseAuth
+                                                       private val firebaseAuth: FirebaseAuth,
+                                                       private val fireStorage:FirebaseStorage
 ) : FinanceGoalRepository {
 
     override suspend fun addFinanceGoal(
@@ -22,6 +23,8 @@ class DefaultFinanceGoalRepository @Inject constructor(private val firestore: Fi
         amountGoal : String
     ): Resource<FinanceGoal> {
         return try {
+            val storageRef = fireStorage.reference.child("chanchito.jpg")
+            val downloadUrl = storageRef.downloadUrl.await()
             firebaseAuth.currentUser.let { userLogged ->
                 val docRef = firestore.collection("goals").document()
                 val goalToSave = FinanceGoal(
@@ -31,6 +34,7 @@ class DefaultFinanceGoalRepository @Inject constructor(private val firestore: Fi
                     description = description,
                     isCompleted = isCompleted,
                     release_date = release_date,
+                    image = downloadUrl.toString(),
                     amount = amount,
                     amountGoal = amountGoal
                 )

@@ -1,6 +1,5 @@
 package com.santrucho.habilife.ui.presentation
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -52,8 +51,8 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
     private val _trainingFlow = MutableStateFlow<Resource<TrainingGoal>?>(null)
     val trainingFlow : StateFlow<Resource<TrainingGoal>?> = _trainingFlow
 
-    private val _goalState = MutableStateFlow<Resource<List<Goals>>?>(null)
-    val goalState : StateFlow<Resource<List<Goals>>?> = _goalState
+    private val _goalState = MutableStateFlow<Resource<List<GoalsResponse>>?>(null)
+    val goalState : StateFlow<Resource<List<GoalsResponse>>?> = _goalState
 
     private val _goalsOptionState = MutableStateFlow<Resource<List<GoalsOption>>?>(null)
     val goalsOptionState : StateFlow<Resource<List<GoalsOption>>?> = _goalsOptionState
@@ -133,6 +132,7 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
             _workFlow.value = Resource.Loading()
             _workFlow.value = workRepo.addWorkGoal(title,description,isCompleted,release_date,actualJob,jobGoal)
         }
+        getAllGoals()
     }
 
     private fun addTrainingGoal(title: String,
@@ -145,6 +145,7 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
             _trainingFlow.value = Resource.Loading()
             _trainingFlow.value = trainingRepo.addTrainingGoal(title,description,isCompleted,release_date,kilometers,kilometersGoal)
         }
+        getAllGoals()
     }
 
     //Call to the repository and add a Goal into the database
@@ -171,7 +172,7 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
                     addFinanceGoal(title, description, isCompleted, release_date, amount, amountGoal)
                 }
                 "Academic" -> {
-                   addAcademicGoal(title, description, isCompleted, release_date, subject, subjectGoal, subjectApprove)
+                   addAcademicGoal(title, description, isCompleted, release_date, subject,subjectGoal, subjectApprove)
                 }
                 "Work" -> {
                     addWorkGoal(title,description,isCompleted,release_date, actualJob,jobGoal)
@@ -210,7 +211,7 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
     }
 
     //Delete an specific goal from the database
-    fun deleteGoal(goal: Goals){
+    fun deleteGoal(goal: GoalsResponse){
         viewModelScope.launch {
             repository.deleteGoal(goal)
             val currentResource = _goalState.value
