@@ -79,7 +79,7 @@ fun HomeGoalList(navController: NavController,goalViewModel: GoalViewModel) {
                         }
                         else{
                             GoalsUI(
-                                filteredList
+                                filteredList,goalViewModel
                             )
                         }
                     }

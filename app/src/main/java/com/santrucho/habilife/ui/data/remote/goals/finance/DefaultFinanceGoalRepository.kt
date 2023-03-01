@@ -23,7 +23,7 @@ class DefaultFinanceGoalRepository @Inject constructor(private val firestore: Fi
         amountGoal : String
     ): Resource<FinanceGoal> {
         return try {
-            val storageRef = fireStorage.reference.child("chanchito.jpg")
+            val storageRef = fireStorage.reference.child("buenafoto.jpg")
             val downloadUrl = storageRef.downloadUrl.await()
             firebaseAuth.currentUser.let { userLogged ->
                 val docRef = firestore.collection("goals").document()
@@ -44,5 +44,9 @@ class DefaultFinanceGoalRepository @Inject constructor(private val firestore: Fi
         } catch (e: Exception) {
             return Resource.Failure(e)
         }
+    }
+
+    override suspend fun updateGoal(goalId:String,amount: Int?){
+        firestore.collection("goals").document(goalId).update("amount",amount).await()
     }
 }

@@ -35,7 +35,7 @@ fun GoalList(
                 }
             }
             is Resource.Success -> {
-                GoalsUI(goals = result.data)
+                GoalsUI(goals = result.data,goalsViewModel)
             }
             is Resource.Failure -> {
                 LaunchedEffect(goals.value){
@@ -49,10 +49,10 @@ fun GoalList(
 
 //Makes the LazyColumn or "RecyclerView" to show a list of each Goal created
 @Composable
-fun GoalsUI(goals:List<GoalsResponse>){
-    LazyColumn(modifier = Modifier.padding(8.dp)){
+fun GoalsUI(goals:List<GoalsResponse>,goalViewModel: GoalViewModel){
+    LazyColumn(modifier = Modifier.padding(4.dp)){
         items(goals) {
-            GoalCard(goal = it)
+            GoalCard(goal = it,goalViewModel)
         }
     }
 }

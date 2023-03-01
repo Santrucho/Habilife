@@ -12,4 +12,6 @@ interface FinanceGoalRepository {
                                amount : Int?,
                                amountGoal : String
     ) : Resource<FinanceGoal>
+
+    suspend fun updateGoal(goalId:String,amount:Int?)
 }

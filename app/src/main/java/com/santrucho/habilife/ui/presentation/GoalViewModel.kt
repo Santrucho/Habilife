@@ -105,7 +105,6 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
             _academicFlow.value = Resource.Loading()
             _academicFlow.value = academicRepo.addAcademicGoal(title,description,isCompleted,release_date,subject,subjectGoal,subjectApprove)
         }
-            getAllGoals()
     }
     private fun addFinanceGoal(
         title: String,
@@ -119,7 +118,6 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
             _financeFlow.value = Resource.Loading()
             _financeFlow.value = financeRepo.addFinanceGoal(title,description,isCompleted,release_date,amount,amountGoal)
         }
-        getAllGoals()
     }
 
     private fun addWorkGoal(title: String,
@@ -132,7 +130,6 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
             _workFlow.value = Resource.Loading()
             _workFlow.value = workRepo.addWorkGoal(title,description,isCompleted,release_date,actualJob,jobGoal)
         }
-        getAllGoals()
     }
 
     private fun addTrainingGoal(title: String,
@@ -145,7 +142,6 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
             _trainingFlow.value = Resource.Loading()
             _trainingFlow.value = trainingRepo.addTrainingGoal(title,description,isCompleted,release_date,kilometers,kilometersGoal)
         }
-        getAllGoals()
     }
 
     //Call to the repository and add a Goal into the database
@@ -184,7 +180,7 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
                     Unit
                 }
             }
-            getAllGoals()
+
         }
     }
     //Reset the result of each fields
@@ -207,6 +203,14 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
     fun getAllGoals(){
         viewModelScope.launch {
             _goalState.value = repository.getGoals()
+        }
+    }
+
+    fun updateGoal(goal:GoalsResponse,amount:Int?,newAmount:Int?){
+        viewModelScope.launch {
+            financeRepo.updateGoal(goal.id, (amount ?: 0) + (newAmount ?: 0))
+            getAllGoals()
+            amountValue.value = null
         }
     }
 

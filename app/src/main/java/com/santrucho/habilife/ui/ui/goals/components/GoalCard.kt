@@ -13,17 +13,23 @@ import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.santrucho.habilife.ui.data.model.goals.GoalsResponse
+import com.santrucho.habilife.ui.presentation.GoalViewModel
+import com.santrucho.habilife.ui.ui.goals.GoalDialog
 
 //Set the visualization and the way in which each Goal will be displayed
 @OptIn(ExperimentalMaterialApi::class, ExperimentalGlideComposeApi::class)
 @Composable
-fun GoalCard(goal: GoalsResponse) {
+fun GoalCard(goal: GoalsResponse,goalViewModel:GoalViewModel) {
+
+    var showCustomDialog by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentSize()
-            .clickable {}
+            .clickable {
+                showCustomDialog = !showCustomDialog
+            }
     ) {
         Card(
             modifier = Modifier
@@ -48,7 +54,7 @@ fun GoalCard(goal: GoalsResponse) {
                             .align(Alignment.BottomCenter)
                     ) {
                         Text(
-                            text = goal.title,
+                            text = goal.type,
                             modifier = Modifier
                                 .padding(8.dp)
                                 .wrapContentWidth(Alignment.CenterHorizontally),
@@ -68,39 +74,25 @@ fun GoalCard(goal: GoalsResponse) {
                             .wrapContentHeight()
                     ) {
                         Text(
+                            text = goal.title,
+                            modifier = Modifier
+                                .padding(8.dp),
+                            color = Color.Black,
+                            fontSize = 16.sp
+                        )
+                        Text(
                             text = goal.description,
                             modifier = Modifier
                                 .padding(8.dp),
                             color = Color.Black,
                             fontSize = 14.sp
                         )
-                        Row(
-                            modifier = Modifier
-                                .wrapContentWidth()
-                                .wrapContentHeight(),
-                            horizontalArrangement = Arrangement.SpaceEvenly,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = "Duracion:",
-                                modifier = Modifier
-                                    .padding(8.dp)
-                                    .wrapContentWidth(Alignment.Start),
-                                color = Color.Black,
-                                fontSize = 12.sp
-                            )
-                            Text(
-                                text = goal.release_date,
-                                modifier = Modifier
-                                    .padding(0.dp, 8.dp)
-                                    .wrapContentWidth(Alignment.Start),
-                                color = Color.Black,
-                                fontSize = 18.sp
-                            )
-                        }
                     }
                 }
             }
+        }
+        if (showCustomDialog) {
+            GoalDialog(onDismiss = { showCustomDialog = true }, onExit = {showCustomDialog = false},goal = goal, goalViewModel)
         }
     }
 }
