@@ -3,15 +3,13 @@ package com.santrucho.habilife.ui.ui.goals
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.Card
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -32,56 +30,46 @@ fun GoalDialog(onDismiss: () -> Unit,onExit:() -> Unit,goal:GoalsResponse,goalVi
         } ?: it
     } ?: 0*/
     Dialog(onDismissRequest = {onDismiss()},
-        properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false)){
-        Card(shape = RoundedCornerShape(10.dp), modifier = Modifier.fillMaxWidth().padding(6.dp), elevation = 8.dp){
+        properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true)){
+        Card(shape = RoundedCornerShape(8.dp), modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight(), elevation = 8.dp){
             Column(
                 Modifier
                     .fillMaxWidth()
                     .background(Color.White)
+                    .padding(8.dp)
             ) {
                 Box(modifier = Modifier.wrapContentHeight()) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center,
-                    ) {
                         GlideImage(
                             model = goal.image,
                             contentDescription = "background image",
-                            modifier = Modifier.fillMaxWidth().height(90.dp).padding(4.dp).clip(RoundedCornerShape(10.dp)),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentHeight()
+                                .padding(4.dp)
+                                .clip(RoundedCornerShape(10.dp)),
                         )
-                    }
+                        Surface(
+                            color = Color.White.copy(alpha = 0.6f),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .align(Alignment.BottomCenter)
+                        ) {
+                            Text(
+                                text = goal.type,
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .wrapContentWidth(Alignment.CenterHorizontally),
+                                color = Color.Black,
+                                fontSize = 18.sp
+                            )
+                        }
                 }
 
-                Text(
-                    text = goal.title,
-                    modifier = Modifier.padding(8.dp),
-                    fontSize = 24.sp,
-                    color = Color.Black
-                )
-
-                Text(
-                    text = goal.description,
-                    modifier = Modifier.padding(8.dp),
-                    fontSize = 16.sp,
-                    color = Color.Black
-                )
-                Row(verticalAlignment = Alignment.CenterVertically){
-                    Text(
-                        text = "Fecha limite:",
-                        modifier = Modifier
-                            .padding(8.dp),
-                        color = Color.Black,
-                        fontSize = 14.sp
-                    )
-                    Text(
-                        text = goal.release_date,
-                        modifier = Modifier
-                            .padding(8.dp),
-                        color = Color.Black,
-                        fontSize = 14.sp
-                    )
-                }
+                GoalField(text = "Objetivo: ", goalText = goal.title)
+                GoalField(text = "Descripcion: ", goalText = goal.description)
+                GoalField(text = "Fecha objetivo: ", goalText = goal.release_date )
 
                 CustomFieldDialog(goal, goalViewModel = goalViewModel)
 
@@ -110,5 +98,26 @@ fun GoalDialog(onDismiss: () -> Unit,onExit:() -> Unit,goal:GoalsResponse,goalVi
                 }
             }
         }
+    }
+}
+
+@Composable
+fun GoalField(text:String,goalText:String){
+    Row(verticalAlignment = Alignment.CenterVertically,modifier = Modifier.padding(8.dp)){
+        Text(
+            text = text,
+            modifier = Modifier,
+            color = Color.Black,
+            fontSize = 20.sp,
+            fontFamily = FontFamily.SansSerif
+        )
+        Text(
+            text = goalText,
+            modifier = Modifier.padding(2.dp),
+            color = Color.Black,
+            fontSize = 24.sp,
+            fontFamily = FontFamily.SansSerif
+
+        )
     }
 }

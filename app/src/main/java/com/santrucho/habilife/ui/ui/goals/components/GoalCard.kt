@@ -92,7 +92,7 @@ fun GoalCard(goal: GoalsResponse,goalViewModel:GoalViewModel) {
             }
         }
         if (showCustomDialog) {
-            GoalDialog(onDismiss = { showCustomDialog = true }, onExit = {showCustomDialog = false},goal = goal, goalViewModel)
+            GoalDialog(onDismiss = { showCustomDialog = false }, onExit = {showCustomDialog = false},goal = goal, goalViewModel)
         }
     }
 }
