@@ -15,6 +15,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
+import java.math.RoundingMode
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.text.NumberFormat
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,10 +38,10 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
     var isDescriptionValid: MutableState<Boolean> = mutableStateOf(false)
     var descriptionErrMsg: MutableState<String> = mutableStateOf("")
 
-    var subjectValue : MutableState<String> = mutableStateOf("")
-    var amountValue : MutableState<Int?> = mutableStateOf(null)
-    var workValue : MutableState<String> = mutableStateOf("")
+    var subjectValue : MutableState<String?> = mutableStateOf("")
+    var workValue : MutableState<String?> = mutableStateOf("")
     var trainingValue : MutableState<Int?> = mutableStateOf(null)
+    var amountValue : MutableState<Double?> = mutableStateOf(null)
 
     var isEnabledConfirmButton: MutableState<Boolean> = mutableStateOf(false)
 
@@ -97,7 +103,7 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
         description: String,
         isCompleted: Boolean,
         release_date: String,
-        subject: String,
+        subject: String?,
         subjectGoal: Int,
         subjectApprove : Int,
     ){
@@ -111,7 +117,7 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
         description: String,
         isCompleted: Boolean,
         release_date: String,
-        amount:Int?,
+        amount:Double?,
         amountGoal:String,
     ){
         viewModelScope.launch {
@@ -124,7 +130,7 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
                             description: String,
                             isCompleted: Boolean,
                             release_date: String,
-                            actualJob:String,
+                            actualJob:String?,
                             jobGoal:String){
         viewModelScope.launch {
             _workFlow.value = Resource.Loading()
@@ -151,12 +157,12 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
         isCompleted: Boolean,
         release_date: String,
         type:String,
-        amount: Int? = null,
+        amount: Double? = null,
         amountGoal: String = "",
-        subject: String = "",
+        subject: String? = "",
         subjectGoal: Int = 0,
         subjectApprove : Int = 0,
-        actualJob: String = "",
+        actualJob: String? = "",
         jobGoal: String = "",
         kilometers : Int? = null,
         kilometersGoal : Int? = null
@@ -180,7 +186,6 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
                     Unit
                 }
             }
-
         }
     }
     //Reset the result of each fields
@@ -188,6 +193,7 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
         _financeFlow.value = null
         _academicFlow.value = null
         _workFlow.value = null
+        _trainingFlow.value = null
         titleValue.value = ""
         descriptionValue.value = ""
         subjectValue.value = ""
@@ -206,9 +212,9 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
         }
     }
 
-    fun updateGoal(goal:GoalsResponse,amount:Int?,newAmount:Int?){
+    fun updateGoal(goal:GoalsResponse,amount:Double?,newAmount:Double?){
         viewModelScope.launch {
-            financeRepo.updateGoal(goal.id, (amount ?: 0) + (newAmount ?: 0))
+            financeRepo.updateGoal(goal.id, (amount ?: 0.0) + (newAmount ?: 0.0))
             getAllGoals()
             amountValue.value = null
         }

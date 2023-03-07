@@ -10,7 +10,7 @@ interface WorkGoalRepository {
                        description: String,
                        isCompleted: Boolean,
                        release_date: String,
-                       actualJob : String,
+                       actualJob : String?,
                        jobGoal : String) : Resource<WorkGoal>
 
 }

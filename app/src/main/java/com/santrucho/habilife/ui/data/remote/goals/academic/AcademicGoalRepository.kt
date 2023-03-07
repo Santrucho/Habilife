@@ -9,7 +9,7 @@ interface AcademicGoalRepository {
                                 description: String,
                                 isCompleted: Boolean,
                                 release_date: String,
-                                subject : String,
+                                subject : String?,
                                 subjectApprove : Int,
                                 subjectGoal : Int
     ) : Resource<AcademicGoal>

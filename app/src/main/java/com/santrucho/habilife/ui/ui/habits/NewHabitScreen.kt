@@ -14,14 +14,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.HabitViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
+import com.santrucho.habilife.ui.ui.goals.components.NewFields
 import com.santrucho.habilife.ui.ui.habits.components.Categories
 import com.santrucho.habilife.ui.ui.habits.components.FrequencyPicker
-import com.santrucho.habilife.ui.ui.habits.components.NewHabitFields
 import com.santrucho.habilife.ui.ui.habits.components.TimePicker
 import com.santrucho.habilife.ui.utils.BackPressHandler
 import com.santrucho.habilife.ui.utils.Resource
@@ -95,11 +96,40 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                 Categories(options = options!!, onTypeSelection = { newOption ->
                         selectedOption = newOption
                 })
-                Spacer(modifier = Modifier.padding(2.dp))
-                NewHabitFields(habitViewModel)
+                Spacer(modifier = Modifier.padding(4.dp))
+                Card(
+                    shape = MaterialTheme.shapes.medium,
+                    elevation = 3.dp,
+                    backgroundColor = MaterialTheme.colors.background,
+                    modifier = Modifier.padding(4.dp)
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .wrapContentHeight()
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                    ) {
+                        Text("Personalice su habito", fontSize = 20.sp, color = Color.Black)
+                        NewFields(text = "Habito",
+                            value = habitViewModel.titleValue,
+                            isError = habitViewModel.isTitleValid,
+                            error = habitViewModel.titleErrMsg,
+                            valueChange = { it },
+                            onValidate = { habitViewModel.validateTitle() })
+
+                        NewFields(text = "Descripcion",
+                            value = habitViewModel.descriptionValue,
+                            isError = habitViewModel.isDescriptionValid,
+                            error = habitViewModel.descriptionValue,
+                            valueChange = { it },
+                            onValidate = { habitViewModel.validateDescription() })
+                    }
+                }
+                Spacer(modifier = Modifier.padding(4.dp))
                 TimePicker(pickedTime, onTimePicked = { time ->
                     pickedTime = time
                 })
+                Spacer(modifier = Modifier.padding(4.dp))
                 FrequencyPicker(daysList!!) { days ->
                     selectedDays = days
                     areDaysSelected = days.isNotEmpty()
@@ -130,7 +160,7 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                 ) {
                     Text("Guardar habito",Modifier.padding(4.dp))
                 }
-                Spacer(modifier = Modifier.height(60.dp))
+                Spacer(modifier = Modifier.height(20.dp))
                 //In case the call is correct, navigate to Habit Screen and show the habit created, in case is Incorrect, show a error message
             }
             habitValue.value.let {

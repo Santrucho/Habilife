@@ -1,5 +1,12 @@
 package com.santrucho.habilife.ui.data.model.goals
 
+import android.os.Parcelable
+import androidx.versionedparcelable.VersionedParcelize
+import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
+
+@Serializable
+@Parcelize
 data class GoalsResponse(
     var id : String="",
     var userId : String="",
@@ -9,9 +16,9 @@ data class GoalsResponse(
     var release_date : String= "",
     var image : String = "",
     var type : String = "",
-    var amount : Int? = null,
-    val subject : String = "",
-    val actualJob : String = "",
-    val kilometers: Int? = null
-    ) {
+    var amount : Double? = null,
+    var subject : String = "",
+    var actualJob : String = "",
+    var kilometers: Int? = null
+    ) : Parcelable{
 }

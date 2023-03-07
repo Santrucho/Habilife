@@ -10,7 +10,7 @@ data class WorkGoal(
     var image : String = "",
     var type : String = "",
     //New parameters
-    var actualJob : String = "",
+    var actualJob : String? = "",
     var jobGoal : String = ""
 ) {
 }

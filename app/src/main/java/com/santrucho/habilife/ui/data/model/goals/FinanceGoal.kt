@@ -10,7 +10,7 @@ data class FinanceGoal(
     var image : String = "",
     var type : String = "Finance",
     //New parameters
-    var amount : Int? = null,
+    var amount : Double? = null,
     var amountGoal : String = ""
 ) {
 }

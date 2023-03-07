@@ -1,5 +1,6 @@
 package com.santrucho.habilife.ui.ui.goals.addgoal
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
@@ -12,9 +13,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.santrucho.habilife.ui.data.model.goals.GoalsOption
+import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.utils.CheckOptions
 
 @OptIn(ExperimentalGlideComposeApi::class)
@@ -24,7 +27,7 @@ fun GoalOptionCard(goalOption: GoalsOption, navController: NavController) {
         .fillMaxWidth()
         .wrapContentSize()
         .clickable {
-            navController.navigate("goal_detail_screen/${goalOption.type}")
+            navController.navigate("${Screen.AddGoal.route}/${goalOption.type}")
         }) {
         Card(
             modifier = Modifier
@@ -36,28 +39,10 @@ fun GoalOptionCard(goalOption: GoalsOption, navController: NavController) {
                     .fillMaxWidth()
                     .wrapContentHeight()
             ) {
-                Box(modifier = Modifier.wrapContentHeight()) {
-                    GlideImage(
-                        model = goalOption.image,
-                        contentDescription = "background image",
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    Surface(
-                        color = Color.White.copy(alpha = 0.6f),
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .align(Alignment.BottomCenter)
-                    ) {
-                        Text(
-                            text = goalOption.title,
-                            modifier = Modifier
-                                .padding(8.dp)
-                                .wrapContentWidth(Alignment.CenterHorizontally),
-                            color = Color.Black,
-                            fontSize = 18.sp
-                        )
-                    }
-                }
+                GoalImage(imageModel = goalOption.image,
+                    textType = goalOption.type,
+                    modifier = Modifier.fillMaxWidth())
+
                 Box(
                     modifier = Modifier
                         .wrapContentSize()
@@ -84,7 +69,7 @@ fun GoalOptionCard(goalOption: GoalsOption, navController: NavController) {
                         ) {
                             Text(
                                 text = "Duracion:",
-                                modifier = Modifier
+                               modifier = Modifier
                                     .padding(8.dp)
                                     .wrapContentWidth(Alignment.Start),
                                 color = Color.Black,
@@ -103,6 +88,32 @@ fun GoalOptionCard(goalOption: GoalsOption, navController: NavController) {
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun GoalImage(imageModel:String,textType:String,modifier: Modifier){
+    Box(modifier = Modifier.wrapContentHeight()) {
+        AsyncImage(
+            model = imageModel,
+            contentDescription = "background image",
+            modifier = modifier
+        )
+        Surface(
+            color = Color.White.copy(alpha = 0.6f),
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+        ) {
+            Text(
+                text = textType,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .wrapContentWidth(Alignment.CenterHorizontally),
+                color = Color.Black,
+                fontSize = 18.sp
+            )
         }
     }
 }

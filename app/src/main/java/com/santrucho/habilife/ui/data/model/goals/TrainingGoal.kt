@@ -8,7 +8,7 @@ data class TrainingGoal(
     var isCompleted : Boolean=false,
     var release_date : String= "",
     var image : String = "",
-    var type : String = "",
+    var type : String = "Training",
     //New parameters
     var kilometers : Int? = null,
     var addKilometers : Int? = null,

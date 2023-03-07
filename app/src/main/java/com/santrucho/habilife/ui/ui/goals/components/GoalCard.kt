@@ -1,34 +1,37 @@
 package com.santrucho.habilife.ui.ui.goals.components
 
-import androidx.compose.animation.core.animateFloatAsState
+import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
 import com.santrucho.habilife.ui.data.model.goals.GoalsResponse
+import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.GoalViewModel
-import com.santrucho.habilife.ui.ui.goals.GoalDialog
+import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
+import com.santrucho.habilife.ui.ui.goals.GoalDetail
+import com.santrucho.habilife.ui.ui.goals.addgoal.GoalImage
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.encodeToJsonElement
 
 //Set the visualization and the way in which each Goal will be displayed
 @OptIn(ExperimentalMaterialApi::class, ExperimentalGlideComposeApi::class)
 @Composable
-fun GoalCard(goal: GoalsResponse,goalViewModel:GoalViewModel) {
-
-    var showCustomDialog by remember { mutableStateOf(false) }
+fun GoalCard(goal: GoalsResponse,navController:NavController) {
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentSize()
             .clickable {
-                showCustomDialog = !showCustomDialog
+                navController.navigate("goal_detail_screen/${Uri.encode(Json.encodeToJsonElement(goal).toString())}")
             }
     ) {
         Card(
@@ -41,28 +44,7 @@ fun GoalCard(goal: GoalsResponse,goalViewModel:GoalViewModel) {
                     .fillMaxWidth()
                     .padding(all = 12.dp)
             ) {
-                Box(modifier = Modifier.wrapContentHeight()) {
-                    GlideImage(
-                        model = goal.image,
-                        contentDescription = "background image",
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    Surface(
-                        color = Color.White.copy(alpha = 0.6f),
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .align(Alignment.BottomCenter)
-                    ) {
-                        Text(
-                            text = goal.type,
-                            modifier = Modifier
-                                .padding(8.dp)
-                                .wrapContentWidth(Alignment.CenterHorizontally),
-                            color = Color.Black,
-                            fontSize = 18.sp
-                        )
-                    }
-                }
+                GoalImage(imageModel = goal.image, textType = goal.type,modifier = Modifier.fillMaxWidth())
                 Box(
                     modifier = Modifier
                         .wrapContentSize()
@@ -90,9 +72,6 @@ fun GoalCard(goal: GoalsResponse,goalViewModel:GoalViewModel) {
                     }
                 }
             }
-        }
-        if (showCustomDialog) {
-            GoalDialog(onDismiss = { showCustomDialog = false }, onExit = {showCustomDialog = false},goal = goal, goalViewModel)
         }
     }
 }

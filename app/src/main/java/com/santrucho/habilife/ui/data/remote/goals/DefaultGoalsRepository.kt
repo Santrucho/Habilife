@@ -62,7 +62,7 @@ class DefaultGoalsRepository @Inject constructor(private val firestore:FirebaseF
     //Call the options to select goals
     override suspend fun getGoalsOptions(): Resource<List<GoalsOption>> {
         return try {
-            val resultData = firestore.collection("goalsOptions")
+            val resultData = firestore.collection("goalsOption")
                 .get().await().toObjects(GoalsOption::class.java)
             Resource.Success(resultData)
         } catch (e:Exception) {

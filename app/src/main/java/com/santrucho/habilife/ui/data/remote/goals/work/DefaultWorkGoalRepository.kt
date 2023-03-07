@@ -19,7 +19,7 @@ class DefaultWorkGoalRepository @Inject constructor(private val firestore: Fireb
         description: String,
         isCompleted: Boolean,
         release_date: String,
-        actualJob : String,
+        actualJob : String?,
         jobGoal : String
     ): Resource<WorkGoal> {
         return try {

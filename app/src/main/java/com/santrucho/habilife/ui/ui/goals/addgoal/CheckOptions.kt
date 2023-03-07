@@ -13,7 +13,6 @@ import com.santrucho.habilife.ui.data.model.goals.GoalsOption
 
 @Composable
 fun CheckOptions(goalsOption: GoalsOption) {
-
     Row(
         modifier = Modifier
             .wrapContentWidth()
@@ -22,7 +21,7 @@ fun CheckOptions(goalsOption: GoalsOption) {
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        return when (goalsOption.type) {
+        when (goalsOption.type) {
             "Finance" -> {
                     Text(
                         text = "Monto conseguido:",
@@ -40,62 +39,34 @@ fun CheckOptions(goalsOption: GoalsOption) {
                     )
                 }
             "Work" -> {
-                    Text(
-                        text = "Puesto a ascender:",
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .wrapContentWidth(Alignment.Start),
-                        color = Color.Black,
-                        fontSize = 12.sp
-                    )
-                    Text(
-                        text = "Gerente",
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .wrapContentWidth(Alignment.Start),
-                        color = Color.Black,
-                        fontSize = 12.sp
-                    )
+                CheckOptionsFields(text = "Puesto a ascender: ", value = "Gerente")
                 }
             "Academic" -> {
-                Text(
-                    text = "Materias aprobadas:",
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .wrapContentWidth(Alignment.Start),
-                    color = Color.Black,
-                    fontSize = 12.sp
-                )
-                Text(
-                    text = "4/6",
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .wrapContentWidth(Alignment.Start),
-                    color = Color.Black,
-                    fontSize = 12.sp
-                )
+                CheckOptionsFields(text = "Materias aprobadas: ", value = "4/6")
             }
             "Training" -> {
-                Text(
-                    text = "Subir/bajar:",
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .wrapContentWidth(Alignment.Start),
-                    color = Color.Black,
-                    fontSize = 12.sp
-                )
-                Text(
-                    text = "4 kilos",
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .wrapContentWidth(Alignment.Start),
-                    color = Color.Black,
-                    fontSize = 12.sp
-                )
-            }
-            else -> {
-                Unit
+                CheckOptionsFields(text = "Subir/bajar", value = "25 kilometros")
             }
         }
     }
+}
+
+@Composable
+fun CheckOptionsFields(text:String,value:String){
+    Text(
+        text = text,
+        modifier = Modifier
+            .padding(8.dp)
+            .wrapContentWidth(Alignment.Start),
+        color = Color.Black,
+        fontSize = 12.sp
+    )
+    Text(
+        text = value,
+        modifier = Modifier
+            .padding(8.dp)
+            .wrapContentWidth(Alignment.Start),
+        color = Color.Black,
+        fontSize = 12.sp
+    )
 }

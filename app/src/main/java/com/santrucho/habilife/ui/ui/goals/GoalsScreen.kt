@@ -33,7 +33,7 @@ fun GoalsScreen(goalViewModel: GoalViewModel, navController: NavController) {
                 .background(colorResource(id = R.color.white)),
             horizontalAlignment = Alignment.Start
         ) {
-            GoalList(goalViewModel)
+            GoalList(goalViewModel,navController)
         }
         //Set FAB Button Row above BottomBar
         Spacer(modifier = Modifier.weight(1f))

@@ -10,7 +10,7 @@ data class AcademicGoal(
     var image : String = "",
     var type : String = "Academic",
     //New parameters
-    var subject : String = "",
+    var subject : String? = "",
     var subjectApprove : Int = 0,
     var subjectGoal : Int = 0
 ) {

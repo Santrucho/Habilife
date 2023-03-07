@@ -14,94 +14,46 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.santrucho.habilife.ui.presentation.GoalViewModel
 
 @Composable
-fun FieldsHelper(type: String, subject:MutableState<String> = mutableStateOf(""),
-                 amountValue:MutableState<Int?> = mutableStateOf(null),
-                actualJob:MutableState<String> = mutableStateOf(""),
-                kilometers:MutableState<Int?> = mutableStateOf(null)) {
+fun FieldsHelper(type: String, goalViewModel: GoalViewModel) {
 
     Box(modifier = Modifier.padding(4.dp)) {
-        return when (type) {
+       when (type) {
             "Finance" -> {
-                OutlinedTextField(
-                    value = amountValue.value?.toString() ?: "",
-                    onValueChange = { amountValue.value = it.toIntOrNull() },
-                    enabled = true,
-                    label = { Text(text = "Monto") },
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth(1f),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    shape = CircleShape,
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        textColor = Color.Black,
-                        focusedBorderColor = Color.Blue,
-                        unfocusedBorderColor = Color.Blue,
-                        focusedLabelColor = Color.Blue,
-                        unfocusedLabelColor = Color.Blue
-                    )
-                )
+                FieldsHelperType(text = "Monto", value = goalViewModel.amountValue) {it.toDoubleOrNull()}
             }
             "Academic" -> {
-                OutlinedTextField(
-                    value = subject.value,
-                    onValueChange = { subject.value = it },
-                    enabled = true,
-                    label = { Text(text = "Nombre de la materia") },
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth(1f),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                    shape = CircleShape,
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        textColor = Color.Black,
-                        focusedBorderColor = Color.Blue,
-                        unfocusedBorderColor = Color.Blue,
-                        focusedLabelColor = Color.Blue,
-                        unfocusedLabelColor = Color.Blue
-                    )
-                )
+                FieldsHelperType(text = "Nombre de la materia", value = goalViewModel.subjectValue) {it}
             }
             "Work" -> {
-                OutlinedTextField(
-                    value = actualJob.value,
-                    onValueChange = { actualJob.value = it },
-                    enabled = true,
-                    label = { Text(text = "Puesto actual") },
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth(1f),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                    shape = CircleShape,
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        textColor = Color.Black,
-                        focusedBorderColor = Color.Blue,
-                        unfocusedBorderColor = Color.Blue,
-                        focusedLabelColor = Color.Blue,
-                        unfocusedLabelColor = Color.Blue
-                    )
-                )
+                FieldsHelperType(text = "Puesto actual", value = goalViewModel.workValue) {it}
             }
             "Training" -> {
-                OutlinedTextField(
-                    value = kilometers.value?.toString() ?: "",
-                    onValueChange = { kilometers.value = it.toIntOrNull() },
-                    enabled = true,
-                    label = { Text(text = "Kilometros a recorrer") },
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth(1f),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                    shape = CircleShape,
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        textColor = Color.Black,
-                        focusedBorderColor = Color.Blue,
-                        unfocusedBorderColor = Color.Blue,
-                        focusedLabelColor = Color.Blue,
-                        unfocusedLabelColor = Color.Blue
-                    )
-                )
-            }
-            else -> {
-                Unit
+                FieldsHelperType(text = "Kilometros a recorrer: ", value = goalViewModel.trainingValue) {it.toIntOrNull()}
             }
         }
     }
+}
+
+@Composable
+fun <T> FieldsHelperType(text:String,value:MutableState<T>,valueChange:(String) -> T){
+    OutlinedTextField(
+        value = value.value?.toString() ?: "",
+        onValueChange = { value.value = valueChange(it) },
+        enabled = true,
+        label = { Text(text = text) },
+        singleLine = true,
+        modifier = Modifier.fillMaxWidth(1f),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+        shape = CircleShape,
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            textColor = Color.Black,
+            focusedBorderColor = Color.Blue,
+            unfocusedBorderColor = Color.Blue,
+            focusedLabelColor = Color.Blue,
+            unfocusedLabelColor = Color.Blue
+        )
+    )
 }

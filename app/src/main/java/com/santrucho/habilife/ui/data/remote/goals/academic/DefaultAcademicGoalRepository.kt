@@ -18,7 +18,7 @@ class DefaultAcademicGoalRepository @Inject constructor(private val firestore: F
         description: String,
         isCompleted: Boolean,
         release_date: String,
-        subject: String,
+        subject: String?,
         subjectApprove: Int,
         subjectGoal: Int
     ): Resource<AcademicGoal> {

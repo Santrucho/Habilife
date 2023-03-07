@@ -19,7 +19,7 @@ class DefaultFinanceGoalRepository @Inject constructor(private val firestore: Fi
         description: String,
         isCompleted: Boolean,
         release_date: String,
-        amount : Int?,
+        amount : Double?,
         amountGoal : String
     ): Resource<FinanceGoal> {
         return try {
@@ -46,7 +46,7 @@ class DefaultFinanceGoalRepository @Inject constructor(private val firestore: Fi
         }
     }
 
-    override suspend fun updateGoal(goalId:String,amount: Int?){
+    override suspend fun updateGoal(goalId:String,amount: Double?){
         firestore.collection("goals").document(goalId).update("amount",amount).await()
     }
 }
