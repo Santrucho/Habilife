@@ -1,5 +1,7 @@
 package com.santrucho.habilife.ui.presentation
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
@@ -14,9 +16,32 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(private val repository: LoginRepository) : ViewModel() {
 
+    var emailValue : MutableState<String> = mutableStateOf("")
+    var isEmailValid: MutableState<Boolean> = mutableStateOf(false)
+    var emailErrMsg: MutableState<String> = mutableStateOf("")
+
+    var passwordValue: MutableState<String> = mutableStateOf("")
+    var isPasswordValid : MutableState<Boolean> = mutableStateOf(false)
+    var passwordErrMsg : MutableState<String> = mutableStateOf("")
+    var passwordVisibility: MutableState<Boolean> = mutableStateOf(false)
+
+
+    private var isEnabledConfirmButton: MutableState<Boolean> = mutableStateOf(false)
+
     private val _loginFlow = MutableStateFlow<Resource<FirebaseUser>?>(null)
     val loginFlow : StateFlow<Resource<FirebaseUser>?> = _loginFlow
 
+    private fun shouldEnabledConfirmButton() {
+        isEnabledConfirmButton.value =
+            emailErrMsg.value.isEmpty()
+                    && emailValue.value.isNotBlank()
+                    && passwordValue.value.isNotBlank()
+    }
+    //Reset the fields values
+    fun resetValues(){
+        emailValue.value = ""
+        passwordValue.value = ""
+    }
     //If the user is register and its already login, initialize the app and go to the home screen directly
     init{
         if(repository.currentUser != null){

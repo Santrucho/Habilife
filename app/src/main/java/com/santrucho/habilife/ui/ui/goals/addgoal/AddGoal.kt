@@ -16,11 +16,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.GoalViewModel
+import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.goals.components.NewFields
 import com.santrucho.habilife.ui.ui.habits.DetailsAppBar
 import com.santrucho.habilife.ui.utils.BackPressHandler
 import com.santrucho.habilife.ui.utils.FieldsHelper
-import com.santrucho.habilife.ui.utils.HandleGoalFlow
+import com.santrucho.habilife.ui.utils.HandleState
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
 @Composable
@@ -30,11 +31,6 @@ fun AddGoal(goalViewModel: GoalViewModel, navController: NavController,type:Stri
     val academicValue = goalViewModel.academicFlow.collectAsState()
     val workValue = goalViewModel.workFlow.collectAsState()
     val trainingValue = goalViewModel.trainingFlow.collectAsState()
-
-    HandleGoalFlow(flow = financeValue, navController = navController )
-    HandleGoalFlow(flow = academicValue, navController = navController)
-    HandleGoalFlow(flow = workValue , navController = navController)
-    HandleGoalFlow(flow = trainingValue , navController = navController)
 
     // onBack can be passed down as composable param and hoisted
     val onBack = { navController.navigate(Screen.NewGoalScreen.route) }
@@ -129,6 +125,10 @@ fun AddGoal(goalViewModel: GoalViewModel, navController: NavController,type:Stri
                     Text("Guardar objetivo")
                 }
             }
+            HandleState(flow = financeValue, navController = navController, route = BottomNavScreen.Goals.screen_route, text= "Objetivo creado")
+            HandleState(flow = academicValue, navController = navController,route = BottomNavScreen.Goals.screen_route, text = "Objetivo creado")
+            HandleState(flow = workValue , navController = navController,route = BottomNavScreen.Goals.screen_route,text ="Objetivo creado")
+            HandleState(flow = trainingValue , navController = navController,route = BottomNavScreen.Goals.screen_route,text ="Objetivo creado")
         }
     }
 }
