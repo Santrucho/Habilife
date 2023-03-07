@@ -1,111 +1,73 @@
 package com.santrucho.habilife.ui.ui.goals.components
 
-import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
+import android.net.Uri
+import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.santrucho.habilife.ui.data.model.goals.Goals
-
+import androidx.navigation.NavController
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.santrucho.habilife.ui.data.model.goals.GoalsResponse
+import com.santrucho.habilife.ui.navigation.Screen
+import com.santrucho.habilife.ui.presentation.GoalViewModel
+import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
+import com.santrucho.habilife.ui.ui.goals.GoalDetail
+import com.santrucho.habilife.ui.ui.goals.addgoal.GoalImage
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.encodeToJsonElement
 
 //Set the visualization and the way in which each Goal will be displayed
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalGlideComposeApi::class)
 @Composable
-fun GoalCard(goal: Goals, onDelete:(Goals) -> Unit) {
+fun GoalCard(goal: GoalsResponse,navController:NavController) {
 
-    var expandedState by remember { mutableStateOf(false) }
-    val rotationState by animateFloatAsState(targetValue = if (expandedState) 180f else 0f)
-
-    Card(
-        shape = MaterialTheme.shapes.small,
+    Box(
         modifier = Modifier
-            .padding(
-                start = 8.dp,
-                end = 8.dp,
-                top = 2.dp,
-                bottom = 2.dp
-            )
             .fillMaxWidth()
-            .animateContentSize(
-                animationSpec = tween(
-                    durationMillis = 300,
-                    easing = LinearOutSlowInEasing
-                )
-            ),
-        elevation = 3.dp,
-        onClick = {expandedState = !expandedState},
-        backgroundColor = MaterialTheme.colors.secondary
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(all = 12.dp)
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-
-                Text(
-                    text = goal.title,
-                    modifier = Modifier
-                        .fillMaxWidth(0.85f)
-                        .wrapContentHeight(Alignment.Top),
-                    color = Color.White,
-                    fontSize = 25.sp
-                )
-                IconButton(
-                    modifier = Modifier
-                        .weight(1f)
-                        .alpha(ContentAlpha.medium)
-                        .rotate(rotationState),
-                    onClick = {
-                        expandedState = !expandedState
-                    }) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowDropDown,
-                        contentDescription = "Drop-Down Arrow"
-                    )
-                }
+            .wrapContentSize()
+            .clickable {
+                navController.navigate("goal_detail_screen/${Uri.encode(Json.encodeToJsonElement(goal).toString())}")
             }
-            if(expandedState) {
-                Text(
-                    text = goal.description,
+    ) {
+        Card(
+            modifier = Modifier
+                .wrapContentSize()
+                .padding(8.dp), elevation = 6.dp
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(all = 12.dp)
+            ) {
+                GoalImage(imageModel = goal.image, textType = goal.type,modifier = Modifier.fillMaxWidth())
+                Box(
                     modifier = Modifier
-                        .wrapContentHeight(Alignment.Top),
-                    color = Color.White,
-                    fontSize = 16.sp
-                )
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween,modifier=Modifier.fillMaxWidth()) {
-
-                    Text(
-                        text = goal.release_date,
+                        .wrapContentSize()
+                        .padding(0.dp, 8.dp)
+                ) {
+                    Column(
                         modifier = Modifier
-                            .wrapContentHeight(Alignment.Bottom)
-                            .wrapContentWidth(Alignment.Start),
-                        color = Color.White,
-                        fontSize = 12.sp
-                    )
-                    IconButton(
-                        modifier = Modifier
-                            .weight(1f)
-                            .alpha(ContentAlpha.medium)
-                            .wrapContentWidth(Alignment.End),
-                        onClick = {
-                            onDelete(goal)
-                        }) {
-                        Icon(
-                            imageVector = Icons.Filled.Delete,
-                            contentDescription = "Drop-Down Arrow"
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                    ) {
+                        Text(
+                            text = goal.title,
+                            modifier = Modifier
+                                .padding(8.dp),
+                            color = Color.Black,
+                            fontSize = 16.sp
+                        )
+                        Text(
+                            text = goal.description,
+                            modifier = Modifier
+                                .padding(8.dp),
+                            color = Color.Black,
+                            fontSize = 14.sp
                         )
                     }
                 }

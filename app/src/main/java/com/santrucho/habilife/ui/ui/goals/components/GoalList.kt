@@ -10,13 +10,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.santrucho.habilife.ui.data.model.goals.Goals
+import androidx.navigation.NavController
+import com.santrucho.habilife.ui.data.model.goals.GoalsResponse
 import com.santrucho.habilife.ui.presentation.GoalViewModel
 import com.santrucho.habilife.ui.utils.Resource
 
 @Composable
 fun GoalList(
-    goalsViewModel: GoalViewModel
+    goalsViewModel: GoalViewModel,navController: NavController
 ) {
 
     val goals = goalsViewModel.goalState.collectAsState()
@@ -35,7 +36,7 @@ fun GoalList(
                 }
             }
             is Resource.Success -> {
-                GoalsUI(goals = result.data,goalsViewModel::deleteGoal)
+                GoalsUI(goals = result.data,navController)
             }
             is Resource.Failure -> {
                 LaunchedEffect(goals.value){
@@ -49,10 +50,10 @@ fun GoalList(
 
 //Makes the LazyColumn or "RecyclerView" to show a list of each Goal created
 @Composable
-fun GoalsUI(goals:List<Goals>, onDelete:(Goals) -> Unit){
-    LazyColumn(modifier = Modifier.padding(8.dp)){
+fun GoalsUI(goals:List<GoalsResponse>,navController:NavController){
+    LazyColumn(modifier = Modifier.padding(4.dp)){
         items(goals) {
-            GoalCard(goal = it,onDelete)
+            GoalCard(goal = it, navController = navController)
         }
     }
 }

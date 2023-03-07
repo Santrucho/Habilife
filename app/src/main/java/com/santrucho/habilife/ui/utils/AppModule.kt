@@ -2,6 +2,8 @@ package com.santrucho.habilife.ui.utils
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import com.santrucho.habilife.ui.data.remote.goals.DefaultGoalsRepository
 import com.santrucho.habilife.ui.data.remote.goals.GoalsRepository
 import com.santrucho.habilife.ui.data.remote.goals.academic.AcademicGoalRepository
@@ -39,6 +41,9 @@ object AppModule {
 
     @Provides
     fun provideFirestore(): FirebaseFirestore = FirebaseFirestore.getInstance()
+
+    @Provides
+    fun provideFireStorage() : FirebaseStorage = FirebaseStorage.getInstance()
 
     @Provides
     fun provideSignUpRepository(implementation : DefaultSignUpRepository) : SignUpRepository = implementation

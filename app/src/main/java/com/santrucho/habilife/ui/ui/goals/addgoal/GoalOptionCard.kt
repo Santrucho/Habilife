@@ -1,5 +1,6 @@
 package com.santrucho.habilife.ui.ui.goals.addgoal
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
@@ -12,93 +13,107 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.santrucho.habilife.ui.data.model.goals.GoalsOption
+import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.utils.CheckOptions
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun GoalOptionCard(goalOption: GoalsOption, navController:NavController) {
-    Box(modifier = Modifier.fillMaxWidth().wrapContentSize()
+fun GoalOptionCard(goalOption: GoalsOption, navController: NavController) {
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .wrapContentSize()
         .clickable {
-            navController.navigate("goal_detail_screen/${goalOption.type}")}){
-    Card(
-        modifier = Modifier
-            .wrapContentSize()
-            .padding(8.dp), elevation = 6.dp
-    ) {
-        Column(
+            navController.navigate("${Screen.AddGoal.route}/${goalOption.type}")
+        }) {
+        Card(
             modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
+                .wrapContentSize()
+                .padding(8.dp), elevation = 6.dp
         ) {
-            Box(modifier = Modifier.wrapContentHeight()) {
-                GlideImage(
-                    model = goalOption.image,
-                    contentDescription = "background image",
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Surface(
-                    color = Color.White.copy(alpha = 0.6f),
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .align(Alignment.BottomCenter)
-                ) {
-                    Text(
-                        text = goalOption.title,
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .wrapContentWidth(Alignment.CenterHorizontally),
-                        color = Color.Black,
-                        fontSize = 18.sp
-                    )
-                }
-            }
-            Box(
+            Column(
                 modifier = Modifier
-                    .wrapContentSize()
-                    .padding(0.dp, 8.dp)
+                    .fillMaxWidth()
+                    .wrapContentHeight()
             ) {
-                Column(
+                GoalImage(imageModel = goalOption.image,
+                    textType = goalOption.type,
+                    modifier = Modifier.fillMaxWidth())
+
+                Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
+                        .wrapContentSize()
+                        .padding(0.dp, 8.dp)
                 ) {
-                    Text(
-                        text = goalOption.information,
+                    Column(
                         modifier = Modifier
-                            .padding(8.dp),
-                        color = Color.Black,
-                        fontSize = 14.sp
-                    )
-                    Row(modifier = Modifier
-                        .wrapContentWidth()
-                        .wrapContentHeight(),
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        verticalAlignment = Alignment.CenterVertically
+                            .fillMaxWidth()
+                            .wrapContentHeight()
                     ) {
                         Text(
-                            text = "Duracion:",
+                            text = goalOption.information,
                             modifier = Modifier
-                                .padding(8.dp)
-                                .wrapContentWidth(Alignment.Start),
+                                .padding(8.dp),
                             color = Color.Black,
-                            fontSize = 12.sp
+                            fontSize = 14.sp
                         )
-                        Text(
-                            text = goalOption.duration,
+                        Row(
                             modifier = Modifier
-                                .padding(0.dp, 8.dp)
-                                .wrapContentWidth(Alignment.Start),
-                            color = Color.Black,
-                            fontSize = 18.sp
-                        )
-                        CheckOptions(goalsOption = goalOption)
+                                .wrapContentWidth()
+                                .wrapContentHeight(),
+                            horizontalArrangement = Arrangement.SpaceEvenly,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "Duracion:",
+                               modifier = Modifier
+                                    .padding(8.dp)
+                                    .wrapContentWidth(Alignment.Start),
+                                color = Color.Black,
+                                fontSize = 12.sp
+                            )
+                            Text(
+                                text = goalOption.duration,
+                                modifier = Modifier
+                                    .padding(0.dp, 8.dp)
+                                    .wrapContentWidth(Alignment.Start),
+                                color = Color.Black,
+                                fontSize = 18.sp
+                            )
+                            CheckOptions(goalsOption = goalOption)
+                        }
                     }
                 }
             }
         }
     }
+}
+
+@Composable
+fun GoalImage(imageModel:String,textType:String,modifier: Modifier){
+    Box(modifier = Modifier.wrapContentHeight()) {
+        AsyncImage(
+            model = imageModel,
+            contentDescription = "background image",
+            modifier = modifier
+        )
+        Surface(
+            color = Color.White.copy(alpha = 0.6f),
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+        ) {
+            Text(
+                text = textType,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .wrapContentWidth(Alignment.CenterHorizontally),
+                color = Color.Black,
+                fontSize = 18.sp
+            )
+        }
     }
 }
