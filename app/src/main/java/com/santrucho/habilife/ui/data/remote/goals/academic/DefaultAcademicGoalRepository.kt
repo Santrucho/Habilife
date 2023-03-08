@@ -23,7 +23,7 @@ class DefaultAcademicGoalRepository @Inject constructor(private val firestore: F
         subjectGoal: Int
     ): Resource<AcademicGoal> {
         return try {
-            val storageRef = fireStorage.reference.child("Mi proyecto.jpg")
+            val storageRef = fireStorage.reference.child("books.png")
             val downloadUrl = storageRef.downloadUrl.await()
             firebaseAuth.currentUser.let { userLogged ->
 

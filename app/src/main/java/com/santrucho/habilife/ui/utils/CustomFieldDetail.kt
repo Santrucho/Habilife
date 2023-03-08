@@ -37,9 +37,9 @@ fun TypeFieldDetail(goal: GoalsResponse, goalViewModel: GoalViewModel) {
             GoalField(text = "Materias aprobadas: ", goalText = goal.subject ?: "")
             CustomField(text = "Agregar materia: ", value = goalViewModel.subjectValue) {it}
         }
-        "Work" -> {
-            GoalField(text = "Puesto actual: ", goalText = goal.subject ?: "")
-            CustomField(text = "Puesto a obtener: ", value = goalViewModel.workValue) {it}
+        "Learning" -> {
+            GoalField(text = "Veces a hacer en la semana: ", goalText = goal.timesAWeek.toString() ?: "")
+            CustomField(text = "Veces que cumplio en esta semana: ", value = goalViewModel.learningValue) {it.toIntOrNull()}
         }
     }
 }

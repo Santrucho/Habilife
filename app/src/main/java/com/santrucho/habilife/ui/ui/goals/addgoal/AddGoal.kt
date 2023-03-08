@@ -31,6 +31,7 @@ fun AddGoal(goalViewModel: GoalViewModel, navController: NavController,type:Stri
     val academicValue = goalViewModel.academicFlow.collectAsState()
     val workValue = goalViewModel.workFlow.collectAsState()
     val trainingValue = goalViewModel.trainingFlow.collectAsState()
+    val learningValue = goalViewModel.learningFlow.collectAsState()
 
     // onBack can be passed down as composable param and hoisted
     val onBack = { navController.navigate(Screen.NewGoalScreen.route) }
@@ -110,8 +111,8 @@ fun AddGoal(goalViewModel: GoalViewModel, navController: NavController,type:Stri
                             type = type,
                             amount = goalViewModel.amountValue.value,
                             subject = goalViewModel.subjectValue.value,
-                            actualJob = goalViewModel.workValue.value,
-                            kilometers = goalViewModel.trainingValue.value
+                            kilometers = goalViewModel.trainingValue.value,
+                            timesAWeek = 4
                         )
                     },
                     enabled = goalViewModel.isEnabledConfirmButton.value,
@@ -129,6 +130,7 @@ fun AddGoal(goalViewModel: GoalViewModel, navController: NavController,type:Stri
             HandleState(flow = academicValue, navController = navController,route = BottomNavScreen.Goals.screen_route, text = "Objetivo creado")
             HandleState(flow = workValue , navController = navController,route = BottomNavScreen.Goals.screen_route,text ="Objetivo creado")
             HandleState(flow = trainingValue , navController = navController,route = BottomNavScreen.Goals.screen_route,text ="Objetivo creado")
+            HandleState(flow = learningValue , navController = navController,route = BottomNavScreen.Goals.screen_route,text ="Objetivo creado")
         }
     }
 }
