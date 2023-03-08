@@ -27,8 +27,8 @@ fun FieldsHelper(type: String, goalViewModel: GoalViewModel) {
             "Academic" -> {
                 FieldsHelperType(text = "Nombre de la materia", value = goalViewModel.subjectValue) {it}
             }
-            "Work" -> {
-                FieldsHelperType(text = "Puesto actual", value = goalViewModel.workValue) {it}
+            "Learning" -> {
+                FieldsHelperType(text = "Veces a hacer en la semana", value = goalViewModel.learningValue) {it.toIntOrNull()}
             }
             "Training" -> {
                 FieldsHelperType(text = "Kilometros a recorrer: ", value = goalViewModel.trainingValue) {it.toIntOrNull()}

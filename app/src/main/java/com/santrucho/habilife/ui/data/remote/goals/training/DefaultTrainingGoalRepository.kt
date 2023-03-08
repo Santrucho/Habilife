@@ -23,7 +23,7 @@ class DefaultTrainingGoalRepository @Inject constructor(private val firestore: F
         kilometersGoal: Int?
     ): Resource<TrainingGoal> {
         return try {
-            val storageRef = fireStorage.reference.child("running.jpg")
+            val storageRef = fireStorage.reference.child("gymone.png")
             val downloadUrl = storageRef.downloadUrl.await()
             firebaseAuth.currentUser.let { userLogged ->
                 val docRef = firestore.collection("goals").document()

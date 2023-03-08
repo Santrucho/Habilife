@@ -3,9 +3,7 @@ package com.santrucho.habilife.ui.ui.goals.addgoal
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Card
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,53 +35,42 @@ fun GoalOptionCard(goalOption: GoalsOption, navController: NavController) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .wrapContentHeight()
+                    .padding()
             ) {
-                GoalImage(imageModel = goalOption.image,
-                    textType = goalOption.type,
-                    modifier = Modifier.fillMaxWidth())
-
-                Box(
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .padding(0.dp, 8.dp)
-                ) {
-                    Column(
+                Row(modifier = Modifier.fillMaxSize(), horizontalArrangement = Arrangement.Start) {
+                    GoalImage(
+                        imageModel = goalOption.image,
+                        textType = goalOption.type,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight()
+                    )
+                    Box(
+                        modifier = Modifier
+                            .wrapContentSize()
+
                     ) {
-                        Text(
-                            text = goalOption.information,
+                        Column(
                             modifier = Modifier
-                                .padding(8.dp),
-                            color = Color.Black,
-                            fontSize = 14.sp
-                        )
-                        Row(
-                            modifier = Modifier
-                                .wrapContentWidth()
-                                .wrapContentHeight(),
-                            horizontalArrangement = Arrangement.SpaceEvenly,
-                            verticalAlignment = Alignment.CenterVertically
+                                .fillMaxWidth()
+                                .wrapContentHeight().padding(horizontal = 8.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Top
                         ) {
                             Text(
-                                text = "Duracion:",
-                               modifier = Modifier
-                                    .padding(8.dp)
-                                    .wrapContentWidth(Alignment.Start),
+                                text = goalOption.title,
+                                modifier = Modifier.fillMaxWidth(),
                                 color = Color.Black,
-                                fontSize = 12.sp
+                                fontSize = 22.sp
                             )
+                            Divider(modifier = Modifier.padding(4.dp))
                             Text(
-                                text = goalOption.duration,
-                                modifier = Modifier
-                                    .padding(0.dp, 8.dp)
-                                    .wrapContentWidth(Alignment.Start),
+                                text = goalOption.information,
+                                modifier = Modifier.fillMaxWidth(),
                                 color = Color.Black,
-                                fontSize = 18.sp
+                                fontSize = 14.sp
                             )
-                            CheckOptions(goalsOption = goalOption)
+
+                            Spacer(modifier = Modifier.weight(1f))
+
                         }
                     }
                 }
@@ -98,21 +85,20 @@ fun GoalImage(imageModel:String,textType:String,modifier: Modifier){
         AsyncImage(
             model = imageModel,
             contentDescription = "background image",
-            modifier = modifier
+            modifier = modifier.width(124.dp).height(124.dp).padding(4.dp)
         )
         Surface(
             color = Color.White.copy(alpha = 0.6f),
             modifier = Modifier
-                .fillMaxWidth()
+                .width(124.dp).wrapContentHeight().padding(4.dp)
                 .align(Alignment.BottomCenter)
         ) {
             Text(
                 text = textType,
                 modifier = Modifier
-                    .padding(8.dp)
                     .wrapContentWidth(Alignment.CenterHorizontally),
                 color = Color.Black,
-                fontSize = 18.sp
+                fontSize = 16.sp
             )
         }
     }

@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.data.model.goals.GoalsOption
@@ -38,7 +39,7 @@ fun NewGoalScreen(goalViewModel: GoalViewModel,navController:NavController){
     BackPressHandler(onBackPressed = onBack)
 
     Scaffold(
-        topBar = { DetailsAppBar(onBack,"Objetivos recomendados") }
+        topBar = { DetailsAppBar(onBack,"Objetivos") }
     ) {
         Box(
             contentAlignment = Alignment.Center,
@@ -47,14 +48,14 @@ fun NewGoalScreen(goalViewModel: GoalViewModel,navController:NavController){
         ) {
             Column(Modifier.fillMaxSize()) {
                 Text(
-                    text = "Objetivos recomendados",
+                    text = "Seleccione un objetivo",
                     modifier = Modifier.padding(8.dp),
-                    color = Color.Black
+                    color = Color.Black,
+                    fontSize = 22.sp
                 )
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
+                        .fillMaxSize()
                         .background(colorResource(id = R.color.white)),
                     horizontalAlignment = Alignment.Start
                 ) {
