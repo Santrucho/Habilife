@@ -87,15 +87,15 @@ fun GoalImage(imageModel: String, textType: String, modifier: Modifier, showText
             model = imageModel,
             contentDescription = "background image",
             modifier = modifier
-                .width(124.dp)
-                .height(124.dp)
+                .width(132.dp)
+                .height(132.dp)
                 .padding(4.dp)
         )
         if (showText) {
             Surface(
                 color = Color.White.copy(alpha = 0.6f),
                 modifier = Modifier
-                    .width(124.dp)
+                    .width(132.dp)
                     .wrapContentHeight()
                     .padding(4.dp)
                     .align(Alignment.BottomCenter)

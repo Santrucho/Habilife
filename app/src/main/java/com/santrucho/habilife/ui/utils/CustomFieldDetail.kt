@@ -28,13 +28,13 @@ fun TypeFieldDetail(goal: GoalsResponse, goalViewModel: GoalViewModel) {
         "Finance" -> {
             GoalField(text = "Monto objetivo", goalText = "${goal.amountGoal.toString() ?: ""} $")
             Divider(modifier = Modifier.padding(4.dp))
-            GoalField(text = "Monto actual", goalText = "${goal.amount.toString() ?: ""} $")
+            GoalField(text = "Monto actual", goalText = "${goal.amount ?: 0} $")
             Divider(modifier = Modifier.padding(4.dp))
             CustomField(
                 text = "Agregar monto:",
                 value = goalViewModel.amountValue,
                 valueChange = { it.toIntOrNull() },
-                isEnabled = goal.amount!! <= goal.amountGoal!!
+                isEnabled = (goal.amount ?: 0) <= (goal.amountGoal ?: 0)
             )
 
             Divider(modifier = Modifier.padding(4.dp))
@@ -42,20 +42,41 @@ fun TypeFieldDetail(goal: GoalsResponse, goalViewModel: GoalViewModel) {
             Text("Progreso", fontSize = 20.sp, color = Color.Blue)
             Spacer(modifier = Modifier.padding(4.dp))
             CustomLinearProgress(
-                goal.amountGoal!!.toFloat(),
-                goal.amount!!.toFloat(),
+                goal.amountGoal?.toFloat(),
+                goal.amount?.toFloat(),
                 valueType = "$",
-                colorBar = Color.Yellow,
+                colorBar = Color.Green,
                 colorBackground = Color.LightGray,
                 showValues = true
             )
         }
         "Training" -> {
-            GoalField(text = "Kilometros recorridos: ", goalText = goal.kilometers.toString() ?: "")
+            GoalField(
+                text = "Kilometros a correr",
+                goalText = goal.kilometersGoal.toString() ?: ""
+            )
+            Divider(modifier = Modifier.padding(4.dp))
+            GoalField(
+                text = "Kilometros recorridos",
+                goalText = "${goal.kilometers ?: 0} Km"
+            )
+            Divider(modifier = Modifier.padding(4.dp))
             CustomField(
                 text = "Agregar kilometros: ",
                 value = goalViewModel.trainingValue,
-                valueChange = { it.toIntOrNull() }
+                valueChange = { it.toIntOrNull() },
+                isEnabled = (goal.kilometers ?: 0) <= (goal.kilometersGoal ?: 0)
+            )
+            Divider(modifier = Modifier.padding(4.dp))
+            Text("Progreso", fontSize = 20.sp, color = Color.Blue)
+            Spacer(modifier = Modifier.padding(4.dp))
+            CustomLinearProgress(
+                goal.kilometersGoal?.toFloat(),
+                goal.kilometers?.toFloat(),
+                valueType = "Km",
+                colorBar = Color.Blue,
+                colorBackground = Color.LightGray,
+                showValues = true
             )
         }
         "Academic" -> {
@@ -119,14 +140,11 @@ fun CustomLinearProgress(
     maxProgress: Float?,
     currentProgress: Float?,
     valueType: String = "",
-    colorBar : Color,
-    colorBackground : Color,
-    showValues : Boolean = false
+    colorBar: Color,
+    colorBackground: Color,
+    showValues: Boolean = false
 ) {
-    requireNotNull(maxProgress)
-    requireNotNull(currentProgress)
-
-    if(showValues) {
+    if (showValues) {
         Row(
             modifier = Modifier
                 .widthIn(min = 30.dp)
@@ -135,14 +153,13 @@ fun CustomLinearProgress(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "${currentProgress.toInt()} $valueType",
+                text = "${currentProgress?.toInt() ?: 0} $valueType",
                 color = Color.Black,
                 fontSize = 16.sp
             )
-            Text(text = "${maxProgress.toInt()} $valueType", color = Color.Black, fontSize = 16.sp)
+            Text(text = "${maxProgress?.toInt()} $valueType", color = Color.Black, fontSize = 16.sp)
         }
-    }
-    else {
+    } else {
         Row(
             modifier = Modifier
                 .widthIn(min = 30.dp)
@@ -150,27 +167,32 @@ fun CustomLinearProgress(
                 .padding(vertical = 4.dp),
             horizontalArrangement = Arrangement.End
         ) {
-            Text(text = "${((currentProgress * 100) / maxProgress).toInt()} $valueType", color = Color.Black, fontSize = 16.sp)
+            Text(
+                text = "${(((currentProgress?.toInt() ?: 0) * 100) / (maxProgress ?: 1).toInt()) ?: 0} $valueType",
+                color = Color.Black,
+                fontSize = 16.sp
+            )
+
         }
     }
-    // Progress Bar
+    //Progress Bar
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(17.dp)
+            .height(12.dp)
     ) {
         // for the background of the ProgressBar
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .clip(RoundedCornerShape(9.dp))
+                .clip(RoundedCornerShape(10.dp))
                 .background(colorBackground)
         )
         // for the progress of the ProgressBar
 
         Box(
             modifier = Modifier
-                .fillMaxWidth(currentProgress / maxProgress)
+                .fillMaxWidth((currentProgress?.toInt() ?: 0) / (maxProgress ?: 1).toFloat())
                 .fillMaxHeight()
                 .clip(RoundedCornerShape(9.dp))
                 .background(colorBar)

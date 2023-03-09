@@ -11,7 +11,6 @@ data class TrainingGoal(
     var type : String = "Training",
     //New parameters
     var kilometers : Int? = null,
-    var addKilometers : Int? = null,
     var kilometersGoal : Int? = null
 ) {
 }

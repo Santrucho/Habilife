@@ -21,5 +21,6 @@ data class GoalsResponse(
     var subject : String = "",
     var timesAWeek : Int? = null,
     var kilometers: Int? = null,
+    var kilometersGoal : Int? = null
     ) : Parcelable{
 }

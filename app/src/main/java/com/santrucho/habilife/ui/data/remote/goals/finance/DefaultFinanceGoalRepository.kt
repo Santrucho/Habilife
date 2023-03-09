@@ -23,7 +23,7 @@ class DefaultFinanceGoalRepository @Inject constructor(private val firestore: Fi
         amountGoal : Int?
     ): Resource<FinanceGoal> {
         return try {
-            val storageRef = fireStorage.reference.child("money.png")
+            val storageRef = fireStorage.reference.child("moneygreen.png")
             val downloadUrl = storageRef.downloadUrl.await()
             firebaseAuth.currentUser.let { userLogged ->
                 val docRef = firestore.collection("goals").document()
