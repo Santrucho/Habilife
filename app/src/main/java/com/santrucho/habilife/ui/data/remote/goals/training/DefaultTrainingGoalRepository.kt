@@ -14,7 +14,7 @@ class DefaultTrainingGoalRepository @Inject constructor(private val firestore: F
                                                         private val fireStorage: FirebaseStorage
 ) : TrainingGoalRepository {
 
-    override suspend fun addTrainingGoal(
+    override suspend fun addRunningGoal(
         title: String,
         description: String,
         isCompleted: Boolean,
@@ -44,5 +44,9 @@ class DefaultTrainingGoalRepository @Inject constructor(private val firestore: F
         } catch (e: Exception) {
             return Resource.Failure(e)
         }
+    }
+
+    override suspend fun updateGoal(goalId:String,kilometers: Int?){
+        firestore.collection("goals").document(goalId).update("kilometers",kilometers).await()
     }
 }

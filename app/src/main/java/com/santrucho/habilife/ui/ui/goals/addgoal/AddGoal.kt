@@ -112,7 +112,7 @@ fun AddGoal(goalViewModel: GoalViewModel, navController: NavController,type:Stri
                             type = type,
                             amountGoal = goalViewModel.amountValue.value,
                             subject = goalViewModel.subjectValue.value,
-                            kilometers = goalViewModel.trainingValue.value,
+                            kilometersGoal = goalViewModel.trainingValue.value,
                             timesAWeek = 4
                         )
                     },

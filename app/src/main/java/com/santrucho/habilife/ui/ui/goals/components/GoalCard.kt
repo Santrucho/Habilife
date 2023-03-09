@@ -56,7 +56,7 @@ fun GoalCard(goal: GoalsResponse, navController: NavController) {
                     GoalImage(
                         imageModel = goal.image,
                         textType = goal.type,
-                        modifier = Modifier.width(144.dp).height(144.dp)
+                        modifier = Modifier
                     )
                     Box(
                         modifier = Modifier
@@ -77,12 +77,22 @@ fun GoalCard(goal: GoalsResponse, navController: NavController) {
                                 color = Color.Black,
                                 fontSize = 22.sp
                             )
-                            Text(
-                                text = goal.release_date,
-                                modifier = Modifier.fillMaxWidth(),
-                                color = Color.Black,
-                                fontSize = 14.sp
-                            )
+                            Divider(modifier = Modifier.padding(4.dp))
+                            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start){
+                                Text(
+                                    text = "Fecha objetivo: ",
+                                    modifier = Modifier.wrapContentWidth(),
+                                    color = Color.Black,
+                                    fontSize = 14.sp
+                                )
+                                Text(
+                                    text = goal.release_date,
+                                    modifier = Modifier.wrapContentWidth(),
+                                    color = Color.Black,
+                                    fontSize = 14.sp
+                                )
+                            }
+
 
                             Spacer(modifier = Modifier.padding(8.dp))
                             ProgressBarHelper(goal = goal)

@@ -2,6 +2,7 @@ package com.santrucho.habilife.ui.ui.goals
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,121 +32,126 @@ fun GoalDetail(goal: GoalsResponse, goalViewModel: GoalViewModel, navController:
     Scaffold(
         topBar = { DetailsAppBar(onBack, "Mi objetivo") }
     ) {
-        Box(
-            contentAlignment = Alignment.Center,
+        Column(
             modifier = Modifier
-                .wrapContentSize()
+                .fillMaxSize(1f)
         ) {
 
-            Column(
+            LazyColumn(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth().fillMaxHeight(0.90f)
                     .padding(8.dp)
             ) {
-                Card(
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .padding(8.dp), elevation = 6.dp
-                ) {
-                    Column(
+                item {
+                    Card(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
+                            .wrapContentSize()
+                            .padding(8.dp), elevation = 6.dp
                     ) {
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.Start
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
                         ) {
-                            GoalImage(
-                                imageModel = goal.image,
-                                textType = goal.type,
-                                modifier = Modifier
-                                    .width(160.dp)
-                                    .height(160.dp),
-                                showText = false
-                            )
-                            Box(
-                                modifier = Modifier
-                                    .wrapContentSize()
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Start
                             ) {
-                                Column(
+                                GoalImage(
+                                    imageModel = goal.image,
+                                    textType = goal.type,
                                     modifier = Modifier
-                                        .fillMaxWidth()
-                                        .wrapContentHeight()
-                                        .padding(horizontal = 8.dp),
-                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                    verticalArrangement = Arrangement.Top
+                                        .width(160.dp)
+                                        .height(160.dp),
+                                    showText = false
+                                )
+                                Box(
+                                    modifier = Modifier
+                                        .wrapContentSize()
                                 ) {
-                                    GoalField(
-                                        text = "Objetivo",
-                                        goalText = goal.title,
-                                        modifier = Modifier.fillMaxWidth()
-                                    )
-                                    Divider(modifier = Modifier.padding(4.dp))
-                                    GoalField(
-                                        text = "Fecha objetivo",
-                                        goalText = goal.release_date,
-                                        modifier = Modifier.fillMaxWidth()
-                                    )
+                                    Column(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .wrapContentHeight()
+                                            .padding(horizontal = 8.dp),
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                        verticalArrangement = Arrangement.Top
+                                    ) {
+                                        GoalField(
+                                            text = "Objetivo",
+                                            goalText = goal.title,
+                                            modifier = Modifier.fillMaxWidth()
+                                        )
+                                        Divider(modifier = Modifier.padding(4.dp))
+                                        GoalField(
+                                            text = "Fecha objetivo",
+                                            goalText = goal.release_date,
+                                            modifier = Modifier.fillMaxWidth()
+                                        )
+                                    }
                                 }
                             }
-                        }
-                        Divider(modifier = Modifier.padding(4.dp))
-                        GoalField(
-                            text = "Descripcion",
-                            goalText = goal.description,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
-                }
-                Card(
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .padding(8.dp), elevation = 6.dp
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                    ) {
-                        TypeFieldDetail(goal, goalViewModel = goalViewModel)
-                    }
-                }
-
-                Row(Modifier.padding(top = 10.dp)) {
-                    OutlinedButton(
-                        onClick = { navController.navigate(BottomNavScreen.Goals.screen_route) },
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                            .weight(1F)
-                    ) {
-                        Text(text = "Cancel")
-                    }
-
-                    Button(
-                        onClick = {
-                            goalViewModel.updateGoal(
-                                goal,
-                                goal.amount,
-                                goalViewModel.amountValue.value
+                            Divider(modifier = Modifier.padding(4.dp))
+                            GoalField(
+                                text = "Descripcion",
+                                goalText = goal.description,
+                                modifier = Modifier.fillMaxWidth()
                             )
-                            navController.navigate(BottomNavScreen.Goals.screen_route)
-                        },
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                            .weight(1F)
+                        }
+                    }
+                    Card(
+                        modifier = Modifier
+                            .wrapContentSize()
+                            .padding(8.dp), elevation = 6.dp
                     ) {
-                        Text(text = "Confirm")
-
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
+                        ) {
+                            TypeFieldDetail(goal, goalViewModel = goalViewModel)
+                        }
                     }
                 }
             }
+
+            Row(modifier = Modifier.padding(8.dp).fillMaxWidth(),
+                verticalAlignment = Alignment.Bottom,
+                horizontalArrangement = Arrangement.SpaceBetween) {
+                OutlinedButton(
+                    onClick = { navController.navigate(BottomNavScreen.Goals.screen_route) },
+                    Modifier
+                        .weight(1f)
+                        .padding(8.dp)
+                        .height(48.dp)
+                ) {
+                    Text(text = "Cancel")
+                }
+                Button(
+                    onClick = {
+                        goalViewModel.updateGoal(
+                            goal,
+                            goal.amount,
+                            goalViewModel.amountValue.value,
+                            goal.kilometers,
+                            goalViewModel.trainingValue.value
+                        )
+                        navController.navigate(BottomNavScreen.Goals.screen_route)
+                    },
+                    Modifier
+                        .weight(1f)
+                        .padding(8.dp)
+                        .height(48.dp)
+                ) {
+                    Text(text = "Confirm")
+                }
+            }
+            Spacer(modifier = Modifier.padding(56.dp))
         }
     }
 }
+
 
 @Composable
 fun GoalField(text: String, goalText: String, modifier: Modifier = Modifier) {
@@ -168,7 +174,7 @@ fun GoalField(text: String, goalText: String, modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .padding(horizontal = 8.dp),
                 color = Color.Black,
-                fontSize = 22.sp,
+                fontSize = 20.sp,
                 fontFamily = FontFamily.SansSerif
             )
         }

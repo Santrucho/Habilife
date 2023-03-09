@@ -5,11 +5,13 @@ import com.santrucho.habilife.ui.utils.Resource
 
 interface TrainingGoalRepository {
 
-    suspend fun addTrainingGoal(title: String,
-                       description: String,
-                       isCompleted: Boolean,
-                       release_date: String,
-                       kilometers:Int?,
-                       kilometersGoal : Int?
+    suspend fun addRunningGoal(title: String,
+                               description: String,
+                               isCompleted: Boolean,
+                               release_date: String,
+                               kilometers:Int?,
+                               kilometersGoal : Int?
     ) : Resource<TrainingGoal>
+
+    suspend fun updateGoal(goalId:String,kilometers: Int?)
 }

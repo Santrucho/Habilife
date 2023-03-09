@@ -78,7 +78,7 @@ fun ProgressBarHelper(goal: GoalsResponse) {
                     CustomLinearProgress(
                         maxProgress = goal.amountGoal?.toFloat(),
                         currentProgress = goal.amount?.toFloat(),
-                        colorBar = Color.Yellow,
+                        colorBar = Color.Green,
                         valueType = "%",
                         colorBackground = Color.LightGray,
                         showValues = false
@@ -86,9 +86,10 @@ fun ProgressBarHelper(goal: GoalsResponse) {
                 }
         "Training" -> {
             CustomLinearProgress(
-                maxProgress = goal.kilometers?.toFloat(),
+                maxProgress = goal.kilometersGoal?.toFloat(),
                 currentProgress = goal.kilometers?.toFloat(),
-                colorBar = Color.Yellow,
+                colorBar = Color.Blue,
+                valueType = "%",
                 colorBackground = Color.LightGray,
                 showValues = false
             )

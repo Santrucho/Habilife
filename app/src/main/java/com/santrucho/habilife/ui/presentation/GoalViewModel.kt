@@ -16,12 +16,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.math.BigDecimal
-import java.math.RoundingMode
-import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
-import java.text.NumberFormat
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -82,12 +76,12 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
 
     fun validateTitle() {
         val textRegex = Regex("^[A-Z][a-zA-Z0-9 ]*$")
-        if (textRegex.matches(titleValue.value) && textRegex.matches(descriptionValue.value)) {
-            isTitleValid.value = true
-            titleValue.value = "No se pueden utilizar simbolos"
-        } else {
+        if (textRegex.matches(titleValue.value)) {
             isTitleValid.value = false
             titleErrMsg.value = ""
+        } else {
+            isTitleValid.value = true
+            titleErrMsg.value = "No se pueden utilizar simbolos"
         }
         shouldEnabledConfirmButton()
     }
@@ -95,11 +89,11 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
     fun validateDescription(){
         val textRegex = Regex("^[A-Z][a-zA-Z0-9 ]*$")
         if (textRegex.matches(descriptionValue.value)) {
-            isDescriptionValid.value = true
-            descriptionValue.value = "No se pueden utilizar simbolos"
-        } else {
             isDescriptionValid.value = false
             descriptionErrMsg.value = ""
+        } else {
+            isDescriptionValid.value = true
+            descriptionErrMsg.value = "No se pueden utilizar simbolos"
         }
         shouldEnabledConfirmButton()
     }
@@ -158,7 +152,7 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
         }
     } */
 
-    private fun addTrainingGoal(title: String,
+    private fun addRunningGoal(title: String,
                             description: String,
                             isCompleted: Boolean,
                             release_date: String,
@@ -166,7 +160,7 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
                             kilometersGoal:Int?){
         viewModelScope.launch {
             _trainingFlow.value = Resource.Loading()
-            _trainingFlow.value = trainingRepo.addTrainingGoal(title,description,isCompleted,release_date,kilometers,kilometersGoal)
+            _trainingFlow.value = trainingRepo.addRunningGoal(title,description,isCompleted,release_date,kilometers,kilometersGoal)
         }
     }
 
@@ -199,7 +193,7 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
                     addLearningGoal(title,description,isCompleted,release_date, timesAWeek)
                 }
                 "Training" -> {
-                    addTrainingGoal(title,description,isCompleted,release_date, kilometers, kilometersGoal)
+                    addRunningGoal(title,description,isCompleted,release_date, kilometers, kilometersGoal)
                 }
                 else -> {
                     Unit
@@ -231,11 +225,13 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
         }
     }
 
-    fun updateGoal(goal:GoalsResponse,amount:Int?,newAmount:Int?){
+    fun updateGoal(goal:GoalsResponse,amount:Int?,newAmount:Int?,kilometers: Int?,addKilometers: Int?){
         viewModelScope.launch {
             financeRepo.updateGoal(goal.id, (amount ?: 0) + (newAmount ?: 0))
+            trainingRepo.updateGoal(goal.id,(kilometers ?: 0) + (addKilometers ?: 0))
             getAllGoals()
             amountValue.value = null
+            trainingValue.value = null
         }
     }
 
