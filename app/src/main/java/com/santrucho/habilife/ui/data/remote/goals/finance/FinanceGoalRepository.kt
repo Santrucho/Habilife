@@ -9,9 +9,9 @@ interface FinanceGoalRepository {
                                description: String,
                                isCompleted: Boolean,
                                release_date: String,
-                               amount : Double?,
-                               amountGoal : String
+                               amount : Int?,
+                               amountGoal : Int?
     ) : Resource<FinanceGoal>
 
-    suspend fun updateGoal(goalId:String,amount:Double?)
+    suspend fun updateGoal(goalId:String,amount:Int?)
 }
