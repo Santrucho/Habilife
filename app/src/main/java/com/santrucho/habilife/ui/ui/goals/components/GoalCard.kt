@@ -14,6 +14,8 @@ import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.santrucho.habilife.ui.data.model.goals.GoalsResponse
 import com.santrucho.habilife.ui.ui.goals.addgoal.GoalImage
+import com.santrucho.habilife.ui.utils.CustomLinearProgress
+import com.santrucho.habilife.ui.utils.ProgressBarHelper
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToJsonElement
 
@@ -54,7 +56,7 @@ fun GoalCard(goal: GoalsResponse, navController: NavController) {
                     GoalImage(
                         imageModel = goal.image,
                         textType = goal.type,
-                        modifier = Modifier
+                        modifier = Modifier.width(144.dp).height(144.dp)
                     )
                     Box(
                         modifier = Modifier
@@ -64,7 +66,8 @@ fun GoalCard(goal: GoalsResponse, navController: NavController) {
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .wrapContentHeight().padding(8.dp),
+                                .wrapContentHeight()
+                                .padding(8.dp),
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Top
                         ) {
@@ -82,13 +85,7 @@ fun GoalCard(goal: GoalsResponse, navController: NavController) {
                             )
 
                             Spacer(modifier = Modifier.padding(8.dp))
-
-                            LinearProgressIndicator(
-                                progress = 0.6f, // Ajusta este valor para reflejar el monto conseguido
-                                modifier = Modifier
-                                    .height(16.dp)
-                                    .fillMaxWidth()
-                            )
+                            ProgressBarHelper(goal = goal)
                         }
                     }
                 }

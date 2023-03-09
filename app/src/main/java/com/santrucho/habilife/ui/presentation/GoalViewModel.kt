@@ -33,17 +33,17 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
                                         private val learningRepo:LearningRepository) : ViewModel() {
 
     var titleValue : MutableState<String> = mutableStateOf("")
-    var isTitleValid: MutableState<Boolean> = mutableStateOf(false)
-    var titleErrMsg: MutableState<String> = mutableStateOf("")
+    var isTitleValid : MutableState<Boolean> = mutableStateOf(false)
+    var titleErrMsg : MutableState<String> = mutableStateOf("")
 
     var descriptionValue: MutableState<String> = mutableStateOf("")
-    var isDescriptionValid: MutableState<Boolean> = mutableStateOf(false)
-    var descriptionErrMsg: MutableState<String> = mutableStateOf("")
+    var isDescriptionValid : MutableState<Boolean> = mutableStateOf(false)
+    var descriptionErrMsg : MutableState<String> = mutableStateOf("")
 
     var subjectValue : MutableState<String?> = mutableStateOf("")
     var learningValue : MutableState<Int?> = mutableStateOf(null)
     var trainingValue : MutableState<Int?> = mutableStateOf(null)
-    var amountValue : MutableState<Double?> = mutableStateOf(null)
+    var amountValue : MutableState<Int?> = mutableStateOf(null)
 
     var isEnabledConfirmButton: MutableState<Boolean> = mutableStateOf(false)
 
@@ -56,8 +56,8 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
     private val _learningFlow = MutableStateFlow<Resource<LearningGoal>?>(null)
     val learningFlow : StateFlow<Resource<LearningGoal>?> = _learningFlow
 
-    private val _workFlow = MutableStateFlow<Resource<WorkGoal>?>(null)
-    val workFlow : StateFlow<Resource<WorkGoal>?> = _workFlow
+    //private val _workFlow = MutableStateFlow<Resource<WorkGoal>?>(null)
+    //val workFlow : StateFlow<Resource<WorkGoal>?> = _workFlow
 
     private val _trainingFlow = MutableStateFlow<Resource<TrainingGoal>?>(null)
     val trainingFlow : StateFlow<Resource<TrainingGoal>?> = _trainingFlow
@@ -75,33 +75,35 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
     //Check if the confirm button can be activated, when the validations are correct
     private fun shouldEnabledConfirmButton() {
         isEnabledConfirmButton.value =
-            titleErrMsg.value.isEmpty()
-                    && descriptionErrMsg.value.isEmpty()
-                    && !titleValue.value.isNullOrBlank()
-                    && !descriptionValue.value.isNullOrBlank()
+            titleErrMsg.value.isEmpty() && descriptionErrMsg.value.isEmpty() &&
+                    titleValue.value.isNotBlank()
+                    && descriptionValue.value.isNotBlank()
     }
-    //Check if the title is valid
+
     fun validateTitle() {
-        if (titleValue.value.length >= 10) {
+        val textRegex = Regex("^[A-Z][a-zA-Z0-9 ]*$")
+        if (textRegex.matches(titleValue.value) && textRegex.matches(descriptionValue.value)) {
             isTitleValid.value = true
-            titleErrMsg.value = "Title should be less than 10 chars"
+            titleValue.value = "No se pueden utilizar simbolos"
         } else {
             isTitleValid.value = false
             titleErrMsg.value = ""
         }
         shouldEnabledConfirmButton()
     }
-    //Check if the description is valid
-    fun validateDescription() {
-        if (descriptionValue.value.length <= 5) {
+
+    fun validateDescription(){
+        val textRegex = Regex("^[A-Z][a-zA-Z0-9 ]*$")
+        if (textRegex.matches(descriptionValue.value)) {
             isDescriptionValid.value = true
-            descriptionErrMsg.value = "Description should be long than 5 chars"
+            descriptionValue.value = "No se pueden utilizar simbolos"
         } else {
             isDescriptionValid.value = false
             descriptionErrMsg.value = ""
         }
         shouldEnabledConfirmButton()
     }
+
     //Call academic Repository and add goal into the database
     private fun addAcademicGoal(
         title: String,
@@ -135,8 +137,8 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
         description: String,
         isCompleted: Boolean,
         release_date: String,
-        amount:Double?,
-        amountGoal:String,
+        amount:Int?,
+        amountGoal:Int?,
     ){
         viewModelScope.launch {
             _financeFlow.value = Resource.Loading()
@@ -144,7 +146,7 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
         }
     }
 
-    private fun addWorkGoal(title: String,
+    /*private fun addWorkGoal(title: String,
                             description: String,
                             isCompleted: Boolean,
                             release_date: String,
@@ -154,7 +156,7 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
             _workFlow.value = Resource.Loading()
             _workFlow.value = workRepo.addWorkGoal(title,description,isCompleted,release_date,actualJob,jobGoal)
         }
-    }
+    } */
 
     private fun addTrainingGoal(title: String,
                             description: String,
@@ -175,8 +177,8 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
         isCompleted: Boolean,
         release_date: String,
         type:String,
-        amount: Double? = null,
-        amountGoal: String = "",
+        amount: Int? = null,
+        amountGoal: Int? = null,
         subject: String? = "",
         subjectGoal: Int = 0,
         subjectApprove : Int = 0,
@@ -209,7 +211,7 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
     fun resetResult(){
         _financeFlow.value = null
         _academicFlow.value = null
-        _workFlow.value = null
+        //_workFlow.value = null
         _trainingFlow.value = null
         titleValue.value = ""
         descriptionValue.value = ""
@@ -229,9 +231,9 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
         }
     }
 
-    fun updateGoal(goal:GoalsResponse,amount:Double?,newAmount:Double?){
+    fun updateGoal(goal:GoalsResponse,amount:Int?,newAmount:Int?){
         viewModelScope.launch {
-            financeRepo.updateGoal(goal.id, (amount ?: 0.0) + (newAmount ?: 0.0))
+            financeRepo.updateGoal(goal.id, (amount ?: 0) + (newAmount ?: 0))
             getAllGoals()
             amountValue.value = null
         }

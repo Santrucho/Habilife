@@ -2,13 +2,10 @@ package com.santrucho.habilife.ui.ui.goals
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
@@ -37,33 +34,84 @@ fun GoalDetail(goal: GoalsResponse, goalViewModel: GoalViewModel, navController:
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
-                .fillMaxSize()
+                .wrapContentSize()
         ) {
+
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxWidth()
                     .padding(8.dp)
             ) {
-                GoalImage(
-                    imageModel = goal.image,
-                    textType = goal.type,
+                Card(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                        .padding(4.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                )
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceAround,
-                    modifier = Modifier.fillMaxWidth()
+                        .wrapContentSize()
+                        .padding(8.dp), elevation = 6.dp
                 ) {
-                    GoalField(text = "objetivo", goalText = goal.title, modifier = Modifier.weight(1f))
-                    GoalField(text = "fecha objetivo", goalText = goal.release_date,modifier = Modifier.weight(1f))
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                    ) {
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Start
+                        ) {
+                            GoalImage(
+                                imageModel = goal.image,
+                                textType = goal.type,
+                                modifier = Modifier
+                                    .width(160.dp)
+                                    .height(160.dp),
+                                showText = false
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .wrapContentSize()
+                            ) {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .wrapContentHeight()
+                                        .padding(horizontal = 8.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Top
+                                ) {
+                                    GoalField(
+                                        text = "Objetivo",
+                                        goalText = goal.title,
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
+                                    Divider(modifier = Modifier.padding(4.dp))
+                                    GoalField(
+                                        text = "Fecha objetivo",
+                                        goalText = goal.release_date,
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
+                                }
+                            }
+                        }
+                        Divider(modifier = Modifier.padding(4.dp))
+                        GoalField(
+                            text = "Descripcion",
+                            goalText = goal.description,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
                 }
-                GoalField(text = "descripcion", goalText = goal.description,modifier = Modifier.fillMaxWidth())
-                TypeFieldDetail(goal, goalViewModel = goalViewModel)
+                Card(
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .padding(8.dp), elevation = 6.dp
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                    ) {
+                        TypeFieldDetail(goal, goalViewModel = goalViewModel)
+                    }
+                }
 
                 Row(Modifier.padding(top = 10.dp)) {
                     OutlinedButton(
@@ -100,34 +148,29 @@ fun GoalDetail(goal: GoalsResponse, goalViewModel: GoalViewModel, navController:
 }
 
 @Composable
-fun GoalField(text: String, goalText: String, modifier : Modifier = Modifier) {
+fun GoalField(text: String, goalText: String, modifier: Modifier = Modifier) {
 
     Box(modifier = modifier) {
-        Card(elevation = 8.dp,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)) {
-            Column(
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.Start,
-            ) {
-                Text(
-                    text = text,
-                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
-                    color = Color.Blue,
-                    fontSize = 16.sp,
-                    fontFamily = FontFamily.SansSerif
-                )
-                Text(
-                    text = goalText,
-                    modifier = Modifier
-                        .padding(horizontal = 8.dp)
-                        .align(CenterHorizontally),
-                    color = Color.Black,
-                    fontSize = 22.sp,
-                    fontFamily = FontFamily.SansSerif
-                )
-            }
+
+        Column(
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.Start,
+        ) {
+            Text(
+                text = text,
+                modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
+                color = Color.Blue,
+                fontSize = 16.sp,
+                fontFamily = FontFamily.SansSerif
+            )
+            Text(
+                text = goalText,
+                modifier = Modifier
+                    .padding(horizontal = 8.dp),
+                color = Color.Black,
+                fontSize = 22.sp,
+                fontFamily = FontFamily.SansSerif
+            )
         }
     }
 }

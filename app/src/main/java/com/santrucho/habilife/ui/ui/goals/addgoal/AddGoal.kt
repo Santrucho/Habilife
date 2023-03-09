@@ -1,6 +1,7 @@
 package com.santrucho.habilife.ui.ui.goals.addgoal
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -29,7 +30,7 @@ fun AddGoal(goalViewModel: GoalViewModel, navController: NavController,type:Stri
 
     val financeValue = goalViewModel.financeFlow.collectAsState()
     val academicValue = goalViewModel.academicFlow.collectAsState()
-    val workValue = goalViewModel.workFlow.collectAsState()
+    //val workValue = goalViewModel.workFlow.collectAsState()
     val trainingValue = goalViewModel.trainingFlow.collectAsState()
     val learningValue = goalViewModel.learningFlow.collectAsState()
 
@@ -109,7 +110,7 @@ fun AddGoal(goalViewModel: GoalViewModel, navController: NavController,type:Stri
                             isCompleted = false,
                             release_date = "25/02",
                             type = type,
-                            amount = goalViewModel.amountValue.value,
+                            amountGoal = goalViewModel.amountValue.value,
                             subject = goalViewModel.subjectValue.value,
                             kilometers = goalViewModel.trainingValue.value,
                             timesAWeek = 4
@@ -128,7 +129,7 @@ fun AddGoal(goalViewModel: GoalViewModel, navController: NavController,type:Stri
             }
             HandleState(flow = financeValue, navController = navController, route = BottomNavScreen.Goals.screen_route, text= "Objetivo creado")
             HandleState(flow = academicValue, navController = navController,route = BottomNavScreen.Goals.screen_route, text = "Objetivo creado")
-            HandleState(flow = workValue , navController = navController,route = BottomNavScreen.Goals.screen_route,text ="Objetivo creado")
+            //HandleState(flow = workValue , navController = navController,route = BottomNavScreen.Goals.screen_route,text ="Objetivo creado")
             HandleState(flow = trainingValue , navController = navController,route = BottomNavScreen.Goals.screen_route,text ="Objetivo creado")
             HandleState(flow = learningValue , navController = navController,route = BottomNavScreen.Goals.screen_route,text ="Objetivo creado")
         }
