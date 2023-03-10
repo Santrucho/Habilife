@@ -64,7 +64,7 @@ fun NavigationHost(navController:NavController) {
             { backStackEntry ->
                 val type = backStackEntry.arguments?.getString("type")
                 requireNotNull(type)
-                AddGoal(goalViewModel = goalViewModel,navController,type)
+                AddGoal(goalViewModel = goalViewModel, navController = navController, type = type)
             }
 
         composable(

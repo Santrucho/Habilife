@@ -1,56 +1,78 @@
 package com.santrucho.habilife.ui.utils
 
+import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Checkbox
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.santrucho.habilife.ui.data.model.goals.GoalsResponse
 import com.santrucho.habilife.ui.presentation.GoalViewModel
 import com.santrucho.habilife.ui.ui.goals.GoalField
+import com.santrucho.habilife.ui.ui.goals.components.NewFields
+import kotlinx.coroutines.flow.MutableStateFlow
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun TypeFieldDetail(goal: GoalsResponse, goalViewModel: GoalViewModel) {
     when (goal.type) {
         "Finance" -> {
-            GoalField(text = "Monto objetivo", goalText = "${goal.amountGoal.toString() ?: ""} $")
+
+            var moneyCount by remember { mutableStateOf(goal.amount?.toFloat() ?: 0f) }
+
+            // Actualizar el valor de kilometersCount cada vez que el valor de trainingValue cambia
+            LaunchedEffect(goalViewModel.amountValue.value) {
+                moneyCount = (goalViewModel.amountValue.value ?: 0) + (goal.amount ?: 0).toFloat()
+            }
+            GoalField(text = "Monto objetivo", goalText = "${goal.amountGoal.toString()} $")
+
             Divider(modifier = Modifier.padding(4.dp))
             GoalField(text = "Monto actual", goalText = "${goal.amount ?: 0} $")
-            Divider(modifier = Modifier.padding(4.dp))
-            CustomField(
-                text = "Agregar monto:",
-                value = goalViewModel.amountValue,
-                valueChange = { it.toIntOrNull() },
-                isEnabled = (goal.amount ?: 0) <= (goal.amountGoal ?: 0)
-            )
 
             Divider(modifier = Modifier.padding(4.dp))
-
             Text("Progreso", fontSize = 20.sp, color = Color.Blue)
-            Spacer(modifier = Modifier.padding(4.dp))
+
             CustomLinearProgress(
                 goal.amountGoal?.toFloat(),
-                goal.amount?.toFloat(),
+                moneyCount,
                 valueType = "$",
                 colorBar = Color.Green,
                 colorBackground = Color.LightGray,
                 showValues = true
             )
+            Divider(modifier = Modifier.padding(4.dp))
+            Spacer(modifier = Modifier.padding(4.dp))
+            NewFields(
+                text = "Agregar monto:",
+                value = goalViewModel.amountValue.value?.toString() ?: "",
+                valueChange = { goalViewModel.amountValue.value = it.toIntOrNull() },
+                onValidate = {},
+                isEnabled = (goal.amount ?: 0) >= (goal.amountGoal ?: 0)
+            )
         }
         "Training" -> {
+            var kilometersCount by remember { mutableStateOf(goal.kilometers?.toFloat() ?: 0f) }
+
+            // Actualizar el valor de kilometersCount cada vez que el valor de trainingValue cambia
+            LaunchedEffect(goalViewModel.trainingValue.value) {
+                kilometersCount = (goalViewModel.trainingValue.value ?: 0) + (goal.kilometers ?: 0).toFloat()
+            }
+
             GoalField(
                 text = "Kilometros a correr",
                 goalText = goal.kilometersGoal.toString() ?: ""
@@ -61,77 +83,101 @@ fun TypeFieldDetail(goal: GoalsResponse, goalViewModel: GoalViewModel) {
                 goalText = "${goal.kilometers ?: 0} Km"
             )
             Divider(modifier = Modifier.padding(4.dp))
-            CustomField(
-                text = "Agregar kilometros: ",
-                value = goalViewModel.trainingValue,
-                valueChange = { it.toIntOrNull() },
-                isEnabled = (goal.kilometers ?: 0) <= (goal.kilometersGoal ?: 0)
-            )
-            Divider(modifier = Modifier.padding(4.dp))
             Text("Progreso", fontSize = 20.sp, color = Color.Blue)
             Spacer(modifier = Modifier.padding(4.dp))
             CustomLinearProgress(
                 goal.kilometersGoal?.toFloat(),
-                goal.kilometers?.toFloat(),
+                kilometersCount,
                 valueType = "Km",
                 colorBar = Color.Blue,
                 colorBackground = Color.LightGray,
                 showValues = true
             )
+            Divider(modifier = Modifier.padding(4.dp))
+            Spacer(modifier = Modifier.padding(4.dp))
+            NewFields(
+                text = "Agregar kilometros: ",
+                value = goalViewModel.trainingValue.value?.toString() ?: "",
+                valueChange = { goalViewModel.trainingValue.value = it.toIntOrNull()
+                              kilometersCount = goalViewModel.trainingValue.value?.toFloat() ?: 0f},
+                onValidate = {},
+                isEnabled = (goal.kilometers ?: 0) >= (goal.kilometersGoal ?: 0)
+            )
         }
         "Academic" -> {
-            GoalField(text = "Materias aprobadas: ", goalText = goal.subject ?: "")
-            CustomField(
-                text = "Agregar materia: ",
-                value = goalViewModel.subjectValue,
-                valueChange = { it })
+
+            val subjectApprove = goalViewModel.subjectApproved.collectAsState()
+
+            val listSum = subjectApprove.value.union(goal.subjectApproved).toMutableList()
+            var subjectApprovedCount by remember { mutableStateOf(goal.subjectApproved.size.toFloat()) }
+            GoalField(
+                text = "Materias a aprobar: ",
+                goalText = goal.subjectList?.size.toString() ?: ""
+            )
+            Divider(modifier = Modifier.padding(4.dp))
+
+            Text(
+                modifier = Modifier.padding(horizontal = 8.dp),
+                text = "Materias:",
+                fontWeight = FontWeight.Medium,
+                color = Color.Black,
+                fontSize = 20.sp
+            )
+            LazyColumn(modifier = Modifier
+                .fillMaxWidth()
+                .height(180.dp)) {
+                itemsIndexed(goal.subjectList.orEmpty()) { _, subject ->
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp),
+                            text = "- $subject",
+                            color = if (listSum.contains(subject)) Color.Gray else Color.Black,
+                            fontSize = 16.sp,
+                            textDecoration = if (listSum.contains(subject)) TextDecoration.LineThrough else TextDecoration.None,
+                        )
+
+                        Checkbox(checked = listSum.contains(subject),
+                            onCheckedChange = {
+                            if(it){
+                                goalViewModel.subjectApproved(subject)
+                                listSum.add(subject)
+                                subjectApprovedCount++
+                            }
+                            else{
+                                goalViewModel.deleteSubject(subject)
+                                listSum.remove(subject)
+                                subjectApprovedCount--
+                            }
+                        } )
+                    }
+                    Divider(modifier = Modifier.padding(4.dp))
+                }
+                goal.subjectApproved = listSum
+            }
+            CustomLinearProgress(
+                maxProgress = goal.subjectList?.size?.toFloat(),
+                currentProgress = subjectApprovedCount,
+                colorBar = Color.Cyan,
+                colorBackground = Color.LightGray
+            )
         }
         "Learning" -> {
             GoalField(
                 text = "Veces a hacer en la semana: ",
                 goalText = goal.timesAWeek.toString() ?: ""
             )
-            CustomField(
+            NewFields(
                 text = "Veces que cumplio en esta semana: ",
-                value = goalViewModel.learningValue,
-                valueChange = { it.toIntOrNull() },
+                value = goalViewModel.learningValue.value?.toString() ?: "",
+                valueChange = { goalViewModel.learningValue.value = it.toIntOrNull() },
+                onValidate = {}
             )
         }
-    }
-}
-
-@Composable
-fun <T> CustomField(
-    text: String,
-    value: MutableState<T?>,
-    valueChange: (String) -> T,
-    isEnabled: Boolean = true,
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(8.dp)
-    ) {
-        Text(
-            text,
-            fontSize = 14.sp,
-            color = Color.Blue
-        )
-        TextField(
-            value = value.value?.toString() ?: "",
-            onValueChange = {
-                value.value = valueChange(it)
-            },
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
-            singleLine = true,
-            enabled = isEnabled,
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                textColor = Color.Black,
-                focusedBorderColor = Color.Blue,
-                unfocusedBorderColor = Color.Blue,
-                focusedLabelColor = Color.Blue,
-                unfocusedLabelColor = Color.Blue
-            )
-        )
     }
 }
 
@@ -144,6 +190,7 @@ fun CustomLinearProgress(
     colorBackground: Color,
     showValues: Boolean = false
 ) {
+    val currentProgressState = remember { mutableStateOf(currentProgress ?: 0f) }
     if (showValues) {
         Row(
             modifier = Modifier

@@ -110,17 +110,17 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                     ) {
                         Text("Personalice su habito", fontSize = 20.sp, color = Color.Black)
                         NewFields(text = "Habito",
-                            value = habitViewModel.titleValue,
-                            isError = habitViewModel.isTitleValid,
-                            error = habitViewModel.titleErrMsg,
-                            valueChange = { it },
+                            value = habitViewModel.titleValue.value.toString() ?: "",
+                            isError = habitViewModel.isTitleValid.value,
+                            error = habitViewModel.titleErrMsg.value,
+                            valueChange = {habitViewModel.titleValue.value = it },
                             onValidate = { habitViewModel.validateTitle() })
 
                         NewFields(text = "Descripcion",
-                            value = habitViewModel.descriptionValue,
-                            isError = habitViewModel.isDescriptionValid,
-                            error = habitViewModel.descriptionErrMsg,
-                            valueChange = { it },
+                            value = habitViewModel.descriptionValue.value.toString() ?: "",
+                            isError = habitViewModel.isDescriptionValid.value,
+                            error = habitViewModel.descriptionErrMsg.value,
+                            valueChange = { habitViewModel.descriptionValue.value = it },
                             onValidate = { habitViewModel.validateDescription() })
                     }
                 }

@@ -18,8 +18,8 @@ class DefaultAcademicGoalRepository @Inject constructor(private val firestore: F
         isCompleted: Boolean,
         release_date: String,
         subject: String?,
-        subjectApprove: Int,
-        subjectGoal: Int
+        subjectList:List<String>?,
+        subjectApproved:List<String>?
     ): Resource<AcademicGoal> {
         return try {
             val storageRef = fireStorage.reference.child("books.png")
@@ -36,8 +36,8 @@ class DefaultAcademicGoalRepository @Inject constructor(private val firestore: F
                     release_date = release_date,
                     image = downloadUrl.toString(),
                     subject = subject,
-                    subjectApprove = subjectApprove,
-                    subjectGoal = subjectGoal
+                    subjectList = subjectList,
+                    subjectApproved = subjectApproved
                 )
                 docRef.set(goalToSave).await()
                 Resource.Success(goalToSave)
@@ -46,5 +46,9 @@ class DefaultAcademicGoalRepository @Inject constructor(private val firestore: F
         } catch (e: Exception) {
             return Resource.Failure(e)
         }
+    }
+
+    override suspend fun updateGoal(goalId: String, subjectApproved: List<String>?) {
+        firestore.collection("goals").document(goalId).update("subjectApproved",subjectApproved)
     }
 }

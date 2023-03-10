@@ -135,7 +135,8 @@ fun GoalDetail(goal: GoalsResponse, goalViewModel: GoalViewModel, navController:
                             goal.amount,
                             goalViewModel.amountValue.value,
                             goal.kilometers,
-                            goalViewModel.trainingValue.value
+                            goalViewModel.trainingValue.value,
+                            goal.subjectApproved
                         )
                         navController.navigate(BottomNavScreen.Goals.screen_route)
                     },
