@@ -10,7 +10,10 @@ interface AcademicGoalRepository {
                                 isCompleted: Boolean,
                                 release_date: String,
                                 subject : String?,
-                                subjectApprove : Int,
-                                subjectGoal : Int
+                                subjectList : List<String>?,
+                                subjectApproved:List<String>?
+
     ) : Resource<AcademicGoal>
+
+    suspend fun updateGoal(goalId:String,subjectApproved: List<String>?)
 }

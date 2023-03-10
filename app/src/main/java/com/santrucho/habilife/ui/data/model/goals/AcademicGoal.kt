@@ -11,7 +11,7 @@ data class AcademicGoal(
     var type : String = "Academic",
     //New parameters
     var subject : String? = "",
-    var subjectApprove : Int = 0,
-    var subjectGoal : Int = 0
+    var subjectList : List<String>? = emptyList(),
+    var subjectApproved : List<String>? = emptyList()
 ) {
 }

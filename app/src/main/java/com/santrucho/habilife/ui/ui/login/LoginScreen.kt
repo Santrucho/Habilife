@@ -60,10 +60,10 @@ fun LoginScreen(viewModel: LoginViewModel, navController: NavController) {
                     Spacer(modifier = Modifier.padding(8.dp))
                     Text(text = "Email", fontSize = 18.sp, color = Color.Black,modifier = Modifier.padding(4.dp))
                     NewFields(text = "Email",
-                        value = viewModel.emailValue,
-                        isError = viewModel.isEmailValid,
-                        error = viewModel.emailErrMsg,
-                        valueChange = { it }, onValidate = { })
+                        value = viewModel.emailValue.value.toString() ?: "",
+                        isError = viewModel.isEmailValid.value,
+                        error = viewModel.emailErrMsg.value,
+                        valueChange = { viewModel.emailValue.value = it }, onValidate = { })
 
                     Text(text = "Contrasena", fontSize = 18.sp, color = Color.Black,modifier = Modifier.padding(4.dp))
                     PasswordFields(

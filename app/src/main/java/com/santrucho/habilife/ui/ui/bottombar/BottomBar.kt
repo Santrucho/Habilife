@@ -36,7 +36,7 @@ fun BottomBar(
                         fontSize = 10.sp
                     )
                 },
-                selectedContentColor = Color.Black,
+                selectedContentColor = Color.Blue,
                 unselectedContentColor = Color.Black.copy(0.4f),
                 alwaysShowLabel = true,
                 selected = currentRoute == item.screen_route,

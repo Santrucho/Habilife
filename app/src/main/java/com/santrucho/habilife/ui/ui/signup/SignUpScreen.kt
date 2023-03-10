@@ -59,16 +59,16 @@ fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel) {
                 ) {
                     Spacer(modifier = Modifier.padding(12.dp))
                     NewFields(text = "Username",
-                        value = viewModel.usernameValue,
-                        isError = viewModel.isUsernameValid,
-                        error = viewModel.usernameErrMsg,
-                        valueChange = { it }, onValidate = { viewModel.validateUsername() })
+                        value = viewModel.usernameValue.value.toString() ?: "",
+                        isError = viewModel.isUsernameValid.value,
+                        error = viewModel.usernameErrMsg.value,
+                        valueChange = { viewModel.usernameValue.value = it }, onValidate = { viewModel.validateUsername() })
 
                     NewFields(text = "Email",
-                        value = viewModel.emailValue,
-                        isError = viewModel.isEmailValid,
-                        error = viewModel.emailErrMsg,
-                        valueChange = { it }, onValidate = { viewModel.validateEmail() })
+                        value = viewModel.emailValue.value.toString() ?: "",
+                        isError = viewModel.isEmailValid.value,
+                        error = viewModel.emailErrMsg.value,
+                        valueChange = { viewModel.emailValue.value = it }, onValidate = { viewModel.validateEmail() })
 
                     PasswordFields(
                         text = "Password",
