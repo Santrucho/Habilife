@@ -78,7 +78,7 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
     BackPressHandler(onBackPressed = onBack)
 
     Scaffold(
-        topBar = { DetailsAppBar(onBack,"Crear nuevo habito") }
+        topBar = { DetailsAppBar(onBack) }
     ) {
         Box(
             contentAlignment = Alignment.Center,
@@ -169,15 +169,17 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
 
 //Makes the app bar go to the last screen
 @Composable
-fun DetailsAppBar(onBack: () -> Unit,title:String) {
+fun DetailsAppBar(onBack: () -> Unit) {
     TopAppBar(
-        title = { Text(text = title) },
-        backgroundColor = Color.Blue,
+        title = { },
+        backgroundColor = MaterialTheme.colors.background,
         navigationIcon = {
             IconButton(onClick = onBack) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
+                    modifier = Modifier.width(48.dp),
                     contentDescription = stringResource(id = R.string.app_name),
+                    tint = MaterialTheme.colors.primaryVariant,
                 )
             }
         }

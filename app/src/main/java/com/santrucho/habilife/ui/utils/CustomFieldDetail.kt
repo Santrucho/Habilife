@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Checkbox
 import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -25,6 +26,7 @@ import com.santrucho.habilife.ui.data.model.goals.GoalsResponse
 import com.santrucho.habilife.ui.presentation.GoalViewModel
 import com.santrucho.habilife.ui.ui.goals.GoalField
 import com.santrucho.habilife.ui.ui.goals.components.NewFields
+import com.santrucho.habilife.ui.utils.helper.CustomLinearProgress
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @SuppressLint("StateFlowValueCalledInComposition")
@@ -45,16 +47,17 @@ fun TypeFieldDetail(goal: GoalsResponse, goalViewModel: GoalViewModel) {
             GoalField(text = "Monto actual", goalText = "${goal.amount ?: 0} $")
 
             Divider(modifier = Modifier.padding(4.dp))
-            Text("Progreso", fontSize = 20.sp, color = Color.Blue)
+            Column(modifier = Modifier.padding(4.dp)){
+                Text("Progreso", fontSize = 20.sp, color = Color.Blue)
 
-            CustomLinearProgress(
-                goal.amountGoal?.toFloat(),
-                moneyCount,
-                valueType = "$",
-                colorBar = Color.Green,
-                colorBackground = Color.LightGray,
-                showValues = true
-            )
+                CustomLinearProgress(
+                    goal.amountGoal?.toFloat(),
+                    moneyCount,
+                    valueType = "$",
+                    showValues = true
+                )
+            }
+
             Divider(modifier = Modifier.padding(4.dp))
             Spacer(modifier = Modifier.padding(4.dp))
             NewFields(
@@ -83,16 +86,16 @@ fun TypeFieldDetail(goal: GoalsResponse, goalViewModel: GoalViewModel) {
                 goalText = "${goal.kilometers ?: 0} Km"
             )
             Divider(modifier = Modifier.padding(4.dp))
-            Text("Progreso", fontSize = 20.sp, color = Color.Blue)
-            Spacer(modifier = Modifier.padding(4.dp))
-            CustomLinearProgress(
-                goal.kilometersGoal?.toFloat(),
-                kilometersCount,
-                valueType = "Km",
-                colorBar = Color.Blue,
-                colorBackground = Color.LightGray,
-                showValues = true
-            )
+            Column(modifier = Modifier.padding(4.dp)) {
+                Text("Progreso", fontSize = 20.sp, color = Color.Blue)
+                Spacer(modifier = Modifier.padding(4.dp))
+                CustomLinearProgress(
+                    goal.kilometersGoal?.toFloat(),
+                    kilometersCount,
+                    valueType = "Km",
+                    showValues = true
+                )
+            }
             Divider(modifier = Modifier.padding(4.dp))
             Spacer(modifier = Modifier.padding(4.dp))
             NewFields(
@@ -120,7 +123,6 @@ fun TypeFieldDetail(goal: GoalsResponse, goalViewModel: GoalViewModel) {
                 modifier = Modifier.padding(horizontal = 8.dp),
                 text = "Materias:",
                 fontWeight = FontWeight.Medium,
-                color = Color.Black,
                 fontSize = 20.sp
             )
             LazyColumn(modifier = Modifier
@@ -159,12 +161,13 @@ fun TypeFieldDetail(goal: GoalsResponse, goalViewModel: GoalViewModel) {
                 }
                 goal.subjectApproved = listSum
             }
-            CustomLinearProgress(
-                maxProgress = goal.subjectList?.size?.toFloat(),
-                currentProgress = subjectApprovedCount,
-                colorBar = Color.Cyan,
-                colorBackground = Color.LightGray
-            )
+            Column(modifier = Modifier.padding(4.dp)) {
+                Text("Progreso", fontSize = 20.sp, color = Color.Blue)
+                CustomLinearProgress(
+                    maxProgress = goal.subjectList?.size?.toFloat(),
+                    currentProgress = subjectApprovedCount,
+                )
+            }
         }
         "Learning" -> {
             GoalField(
@@ -181,69 +184,3 @@ fun TypeFieldDetail(goal: GoalsResponse, goalViewModel: GoalViewModel) {
     }
 }
 
-@Composable
-fun CustomLinearProgress(
-    maxProgress: Float?,
-    currentProgress: Float?,
-    valueType: String = "",
-    colorBar: Color,
-    colorBackground: Color,
-    showValues: Boolean = false
-) {
-    val currentProgressState = remember { mutableStateOf(currentProgress ?: 0f) }
-    if (showValues) {
-        Row(
-            modifier = Modifier
-                .widthIn(min = 30.dp)
-                .fillMaxWidth()
-                .padding(vertical = 4.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = "${currentProgress?.toInt() ?: 0} $valueType",
-                color = Color.Black,
-                fontSize = 16.sp
-            )
-            Text(text = "${maxProgress?.toInt()} $valueType", color = Color.Black, fontSize = 16.sp)
-        }
-    } else {
-        Row(
-            modifier = Modifier
-                .widthIn(min = 30.dp)
-                .fillMaxWidth()
-                .padding(vertical = 4.dp),
-            horizontalArrangement = Arrangement.End
-        ) {
-            Text(
-                text = "${(((currentProgress?.toInt() ?: 0) * 100) / (maxProgress ?: 1).toInt()) ?: 0} $valueType",
-                color = Color.Black,
-                fontSize = 16.sp
-            )
-
-        }
-    }
-    //Progress Bar
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(12.dp)
-    ) {
-        // for the background of the ProgressBar
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .clip(RoundedCornerShape(10.dp))
-                .background(colorBackground)
-        )
-        // for the progress of the ProgressBar
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth((currentProgress?.toInt() ?: 0) / (maxProgress ?: 1).toFloat())
-                .fillMaxHeight()
-                .clip(RoundedCornerShape(9.dp))
-                .background(colorBar)
-                .animateContentSize()
-        )
-    }
-}

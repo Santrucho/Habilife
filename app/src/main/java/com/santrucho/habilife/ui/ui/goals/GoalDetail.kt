@@ -21,16 +21,16 @@ import com.santrucho.habilife.ui.ui.habits.DetailsAppBar
 import com.santrucho.habilife.ui.utils.BackPressHandler
 import com.santrucho.habilife.ui.utils.TypeFieldDetail
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
-@OptIn(ExperimentalGlideComposeApi::class)
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun GoalDetail(goal: GoalsResponse, goalViewModel: GoalViewModel, navController: NavController) {
 
     val onBack = { navController.navigate(BottomNavScreen.Goals.screen_route) }
     BackPressHandler(onBackPressed = onBack)
+
     Scaffold(
-        topBar = { DetailsAppBar(onBack, "Mi objetivo") }
+        topBar = { DetailsAppBar(onBack) }
     ) {
         Column(
             modifier = Modifier
@@ -60,11 +60,9 @@ fun GoalDetail(goal: GoalsResponse, goalViewModel: GoalViewModel, navController:
                             ) {
                                 GoalImage(
                                     imageModel = goal.image,
-                                    textType = goal.type,
                                     modifier = Modifier
                                         .width(160.dp)
                                         .height(160.dp),
-                                    showText = false
                                 )
                                 Box(
                                     modifier = Modifier
@@ -174,7 +172,6 @@ fun GoalField(text: String, goalText: String, modifier: Modifier = Modifier) {
                 text = goalText,
                 modifier = Modifier
                     .padding(horizontal = 8.dp),
-                color = Color.Black,
                 fontSize = 20.sp,
                 fontFamily = FontFamily.SansSerif
             )

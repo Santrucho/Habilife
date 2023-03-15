@@ -16,17 +16,12 @@ import com.santrucho.habilife.ui.presentation.GoalViewModel
 import com.santrucho.habilife.ui.utils.Resource
 
 @Composable
-fun GoalList(
-    goalsViewModel: GoalViewModel,navController: NavController
-) {
+fun FilterGoals(title: String, goalViewModel: GoalViewModel,navController:NavController) {
 
-    val goals = goalsViewModel.goalState.collectAsState()
+    val goalState = goalViewModel.goalState.collectAsState()
 
-    //Makes the logic to collect and show the list of habits created by the user,
-    //in case is correct show the list and in case is incorrect show an error
-
-    goals.value.let { result ->
-        when(result){
+    goalState.value.let { result ->
+        when (result) {
             is Resource.Loading -> {
                 Box(
                     contentAlignment = Alignment.Center,
@@ -36,14 +31,31 @@ fun GoalList(
                 }
             }
             is Resource.Success -> {
-                GoalsUI(goals = result.data,navController)
+                val filterByMonth = result.data.filter { goal ->
+                    goal.release_date == "25/02"
+                }
+                val filterByYear = result.data.filter { goal ->
+                    goal.release_date == "25/03"
+                }
+                when (title) {
+                    "Mes" -> {
+                        GoalsUI(goals = filterByMonth, navController = navController)
+                    }
+                    "Año" -> {
+                        GoalsUI(goals = filterByYear, navController = navController)
+                    }
+                    else -> GoalsUI(goals = result.data, navController = navController)
+                }
+
             }
             is Resource.Failure -> {
-                LaunchedEffect(goals.value){
+                LaunchedEffect(goalState.value) {
                     result.exception.message.toString()
                 }
             }
-            else -> {IllegalAccessException()}
+            else -> {
+                IllegalAccessException()
+            }
         }
     }
 }

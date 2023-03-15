@@ -68,7 +68,7 @@ fun ReleaseDatePicker(pickDate:LocalDate,onDatePicked:(LocalDate)->Unit){
                 .wrapContentHeight()
                 .padding(8.dp)
         ) {
-            Text("Fecha para realizar el objetivo:", color = Color.Black, fontSize = 20.sp)
+            Text("Fecha para realizar el objetivo:", fontSize = 20.sp)
             Button(
                 onClick = { dialogState.show() },
                 colors = ButtonDefaults.buttonColors(

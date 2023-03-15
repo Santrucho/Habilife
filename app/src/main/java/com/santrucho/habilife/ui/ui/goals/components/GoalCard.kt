@@ -14,15 +14,15 @@ import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.santrucho.habilife.ui.data.model.goals.GoalsResponse
 import com.santrucho.habilife.ui.ui.goals.addgoal.GoalImage
-import com.santrucho.habilife.ui.utils.CustomLinearProgress
-import com.santrucho.habilife.ui.utils.ProgressBarHelper
+import com.santrucho.habilife.ui.utils.helper.ProgressBarHelper
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToJsonElement
 
 //Set the visualization and the way in which each Goal will be displayed
-@OptIn(ExperimentalMaterialApi::class, ExperimentalGlideComposeApi::class)
+
 @Composable
 fun GoalCard(goal: GoalsResponse, navController: NavController) {
+
 
     Box(
         modifier = Modifier
@@ -45,17 +45,20 @@ fun GoalCard(goal: GoalsResponse, navController: NavController) {
         Card(
             modifier = Modifier
                 .wrapContentSize()
-                .padding(8.dp), elevation = 6.dp
+                .padding(8.dp),
+            elevation = 6.dp,
+            backgroundColor = MaterialTheme.colors.secondary
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding()
             ) {
-                Row(modifier = Modifier.fillMaxSize(), horizontalArrangement = Arrangement.Start) {
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalArrangement = Arrangement.Start
+                ) {
                     GoalImage(
                         imageModel = goal.image,
-                        textType = goal.type,
                         modifier = Modifier
                     )
                     Box(
@@ -74,29 +77,40 @@ fun GoalCard(goal: GoalsResponse, navController: NavController) {
                             Text(
                                 text = goal.title,
                                 modifier = Modifier.fillMaxWidth(),
-                                color = Color.Black,
+                                color = Color.White,
                                 fontSize = 22.sp
                             )
                             Divider(modifier = Modifier.padding(4.dp))
-                            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start){
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Start
+                            ) {
                                 Text(
                                     text = "Fecha objetivo: ",
                                     modifier = Modifier.wrapContentWidth(),
-                                    color = Color.Black,
+                                    color = Color.White,
                                     fontSize = 14.sp
                                 )
                                 Text(
                                     text = goal.release_date,
                                     modifier = Modifier.wrapContentWidth(),
-                                    color = Color.Black,
+                                    color = Color.White,
                                     fontSize = 14.sp
                                 )
                             }
-
-
-                            Spacer(modifier = Modifier.padding(8.dp))
-                            ProgressBarHelper(goal = goal)
                         }
+                    }
+                }
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 8.dp, start = 8.dp, end = 8.dp)
+                    ) {
+                        ProgressBarHelper(goal = goal)
                     }
                 }
             }

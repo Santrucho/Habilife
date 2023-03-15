@@ -45,7 +45,6 @@ fun HomeGoalList(navController: NavController,goalViewModel: GoalViewModel) {
                 Text(
                     text = "Proximo objetivo",
                     fontWeight = FontWeight.Medium,
-                    color = Color.Black,
                     modifier = Modifier.wrapContentWidth(Alignment.Start),
                     textAlign = TextAlign.Start,
                     fontSize = 20.sp
@@ -54,7 +53,6 @@ fun HomeGoalList(navController: NavController,goalViewModel: GoalViewModel) {
                     Text(
                         text = "Ver todos",
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black,
                         modifier = Modifier.wrapContentWidth(Alignment.End),
                         textAlign = TextAlign.End,
                         fontSize = 12.sp
