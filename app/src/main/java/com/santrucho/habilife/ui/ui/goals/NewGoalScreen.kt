@@ -34,12 +34,12 @@ fun NewGoalScreen(goalViewModel: GoalViewModel,navController:NavController){
     //Makes the logic to collect and show the list of habits created by the user,
     //in case is correct show the list and in case is incorrect show an error
     goalViewModel.getOptionsGoals()
-    val onBack = { navController.navigate(BottomNavScreen.Goals.screen_route) }
 
+    val onBack = { navController.navigate(BottomNavScreen.Goals.screen_route) }
     BackPressHandler(onBackPressed = onBack)
 
     Scaffold(
-        topBar = { DetailsAppBar(onBack,"Objetivos") }
+        topBar = { DetailsAppBar(onBack) }
     ) {
         Box(
             contentAlignment = Alignment.Center,
@@ -50,7 +50,6 @@ fun NewGoalScreen(goalViewModel: GoalViewModel,navController:NavController){
                 Text(
                     text = "Seleccione un objetivo",
                     modifier = Modifier.padding(8.dp),
-                    color = Color.Black,
                     fontSize = 22.sp
                 )
                 Column(

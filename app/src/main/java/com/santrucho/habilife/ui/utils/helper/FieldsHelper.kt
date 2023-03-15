@@ -121,38 +121,3 @@ fun FieldsHelper(type: String, goalViewModel: GoalViewModel) {
         }
     }
 }
-
-@Composable
-fun ProgressBarHelper(goal: GoalsResponse) {
-    when (goal.type) {
-        "Finance" -> {
-            CustomLinearProgress(
-                maxProgress = goal.amountGoal?.toFloat(),
-                currentProgress = goal.amount?.toFloat(),
-                colorBar = Color.Green,
-                valueType = "%",
-                colorBackground = Color.LightGray,
-                showValues = false
-            )
-        }
-        "Training" -> {
-            CustomLinearProgress(
-                maxProgress = goal.kilometersGoal?.toFloat(),
-                currentProgress = goal.kilometers?.toFloat(),
-                colorBar = Color.Blue,
-                valueType = "%",
-                colorBackground = Color.LightGray,
-                showValues = false
-            )
-        }
-        "Academic" -> {
-            CustomLinearProgress(
-                maxProgress = goal.subjectList?.size?.toFloat(),
-                currentProgress = goal.subjectApproved.size.toFloat(),
-                colorBar = Color.Cyan,
-                colorBackground = Color.LightGray,
-                showValues = false
-            )
-        }
-    }
-}

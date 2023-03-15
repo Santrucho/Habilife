@@ -26,9 +26,7 @@ fun HandleState(flow: State<Resource<Any>?>, navController: NavController,route:
         when (it) {
             is Resource.Success -> {
                 LaunchedEffect(Unit) {
-                    navController.navigate(route) {
-                        popUpTo(route) { inclusive = true }
-                    }
+                    navController.navigate(route)
                     Toast.makeText(
                         context,
                         "$text correctamente!",

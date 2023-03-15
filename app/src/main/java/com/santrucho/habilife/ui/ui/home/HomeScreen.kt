@@ -15,9 +15,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.presentation.*
+import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.habits.components.CalendarView
 import com.santrucho.habilife.ui.ui.home.components.HomeGoalList
 import com.santrucho.habilife.ui.ui.home.components.HomeHabitList
+import com.santrucho.habilife.ui.utils.BackPressHandler
 
 
 @Composable
@@ -25,6 +27,9 @@ fun HomeScreen(navController: NavController,userViewModel: SignUpViewModel,goalV
 
     goalViewModel.getAllGoals()
     habitViewModel.getAllHabits()
+
+    val onBack = {}
+    BackPressHandler(onBackPressed = onBack)
 
     Column(
         modifier = Modifier

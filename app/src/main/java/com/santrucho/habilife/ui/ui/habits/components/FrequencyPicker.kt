@@ -109,7 +109,7 @@ fun MyChip(
     onSelected: (Boolean) -> Unit,
 ) {
 
-    val background = if (selected) Color.Blue else Color.LightGray
+    val background = if (selected) MaterialTheme.colors.primary else MaterialTheme.colors.secondaryVariant
     val contentColor = if (selected) Color.White else Color.Black
 
     Box(

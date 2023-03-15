@@ -40,7 +40,7 @@ fun AddGoal(goalViewModel: GoalViewModel, navController: NavController,type:Stri
     BackPressHandler(onBackPressed = onBack)
 
     Scaffold(
-        topBar = { DetailsAppBar(onBack,"Crear objetivo") }
+        topBar = { DetailsAppBar(onBack) }
     ) {
         Box(
             contentAlignment = Alignment.Center,
@@ -66,7 +66,7 @@ fun AddGoal(goalViewModel: GoalViewModel, navController: NavController,type:Stri
                             .fillMaxWidth()
                             .padding(8.dp)
                     ) {
-                        Text("Personalice su objetivo", fontSize = 20.sp, color = Color.Black)
+                        Text("Personalice su objetivo", fontSize = 20.sp)
                         NewFields(text = "Nombre del objetivo",
                             value = goalViewModel.titleValue.value ?: "",
                             isError = goalViewModel.isTitleValid.value,

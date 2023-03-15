@@ -22,7 +22,7 @@ data class GoalsResponse(
     var subjectList : List<String>? = emptyList(),
     var subjectApproved : List<String> = emptyList(),
     var timesAWeek : Int? = 0,
-    var kilometers: Int? = null,
+    var kilometers: Int? = 0,
     var kilometersGoal : Int? = 0
     ) : Parcelable{
 }
