@@ -16,7 +16,7 @@ import androidx.navigation.NavController
 import com.santrucho.habilife.ui.presentation.GoalViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.goals.components.GoalsUI
-import com.santrucho.habilife.ui.utils.Resource
+import com.santrucho.habilife.ui.util.Resource
 
 @Composable
 fun HomeGoalList(navController: NavController,goalViewModel: GoalViewModel) {
@@ -26,7 +26,7 @@ fun HomeGoalList(navController: NavController,goalViewModel: GoalViewModel) {
     Card(
         shape = MaterialTheme.shapes.medium,
         elevation = 3.dp,
-        backgroundColor = MaterialTheme.colors.background,
+        backgroundColor = MaterialTheme.colors.secondaryVariant,
         modifier = Modifier.padding(8.dp)
     ) {
         Column(

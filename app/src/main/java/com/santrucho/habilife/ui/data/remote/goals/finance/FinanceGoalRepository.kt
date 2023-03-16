@@ -1,7 +1,7 @@
 package com.santrucho.habilife.ui.data.remote.goals.finance
 
 import com.santrucho.habilife.ui.data.model.goals.FinanceGoal
-import com.santrucho.habilife.ui.utils.Resource
+import com.santrucho.habilife.ui.util.Resource
 
 interface FinanceGoalRepository {
 

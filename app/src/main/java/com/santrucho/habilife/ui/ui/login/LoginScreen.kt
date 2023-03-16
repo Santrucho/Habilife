@@ -13,18 +13,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.LoginViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.goals.components.NewFields
 import com.santrucho.habilife.ui.ui.goals.components.PasswordFields
-import com.santrucho.habilife.ui.utils.HandleState
+import com.santrucho.habilife.ui.util.HandleState
 
 
 @Composable
@@ -36,7 +34,7 @@ fun LoginScreen(viewModel: LoginViewModel, navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.white))
+            .background(MaterialTheme.colors.background)
             .fillMaxSize()
             .padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -46,7 +44,7 @@ fun LoginScreen(viewModel: LoginViewModel, navController: NavController) {
             Card(
                 shape = MaterialTheme.shapes.medium,
                 elevation = 8.dp,
-                backgroundColor = MaterialTheme.colors.background,
+                backgroundColor = MaterialTheme.colors.secondaryVariant,
                 modifier = Modifier.padding(16.dp)
             ) {
 

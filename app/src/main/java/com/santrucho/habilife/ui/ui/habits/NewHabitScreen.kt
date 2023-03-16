@@ -10,7 +10,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -22,9 +21,9 @@ import com.santrucho.habilife.ui.ui.goals.components.NewFields
 import com.santrucho.habilife.ui.ui.habits.components.Categories
 import com.santrucho.habilife.ui.ui.habits.components.FrequencyPicker
 import com.santrucho.habilife.ui.ui.habits.components.TimePicker
-import com.santrucho.habilife.ui.utils.BackPressHandler
-import com.santrucho.habilife.ui.utils.HandleState
-import com.santrucho.habilife.ui.utils.Resource
+import com.santrucho.habilife.ui.util.BackPressHandler
+import com.santrucho.habilife.ui.util.HandleState
+import com.santrucho.habilife.ui.util.Resource
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
@@ -34,8 +33,6 @@ import java.time.format.DateTimeFormatter
 fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController) {
 
     val habitValue = habitViewModel.habitFlow.collectAsState()
-
-    val context = LocalContext.current
 
     //Create the options to choose a type for any Habits
     val optionsState = habitViewModel.options.collectAsState()
@@ -99,7 +96,7 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                 Card(
                     shape = MaterialTheme.shapes.medium,
                     elevation = 3.dp,
-                    backgroundColor = MaterialTheme.colors.background,
+                    backgroundColor = MaterialTheme.colors.secondaryVariant,
                     modifier = Modifier.padding(4.dp)
                 ) {
                     Column(
@@ -172,14 +169,14 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
 fun DetailsAppBar(onBack: () -> Unit) {
     TopAppBar(
         title = { },
-        backgroundColor = MaterialTheme.colors.background,
+        backgroundColor = MaterialTheme.colors.secondary,
         navigationIcon = {
             IconButton(onClick = onBack) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
                     modifier = Modifier.width(48.dp),
                     contentDescription = stringResource(id = R.string.app_name),
-                    tint = MaterialTheme.colors.primaryVariant,
+                    tint = MaterialTheme.colors.primary,
                 )
             }
         }

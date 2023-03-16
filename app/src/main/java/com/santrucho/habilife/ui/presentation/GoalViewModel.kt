@@ -11,11 +11,10 @@ import com.santrucho.habilife.ui.data.remote.goals.finance.FinanceGoalRepository
 import com.santrucho.habilife.ui.data.remote.goals.learning.LearningRepository
 import com.santrucho.habilife.ui.data.remote.goals.training.TrainingGoalRepository
 import com.santrucho.habilife.ui.data.remote.goals.work.WorkGoalRepository
-import com.santrucho.habilife.ui.utils.Resource
+import com.santrucho.habilife.ui.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -40,6 +39,8 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
     var trainingValue : MutableState<Int?> = mutableStateOf(null)
     var amountValue : MutableState<Int?> = mutableStateOf(null)
 
+    var confirmSubject : MutableState<Boolean> = mutableStateOf(false)
+
     var isEnabledConfirmButton: MutableState<Boolean> = mutableStateOf(false)
 
     private val _financeFlow = MutableStateFlow<Resource<FinanceGoal>?>(null)
@@ -53,6 +54,8 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
 
     private val _subjectApproved = MutableStateFlow<List<String>>(emptyList())
     val subjectApproved : StateFlow<List<String>> = _subjectApproved
+
+
 
     private val _learningFlow = MutableStateFlow<Resource<LearningGoal>?>(null)
     val learningFlow : StateFlow<Resource<LearningGoal>?> = _learningFlow
@@ -209,6 +212,7 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
         amountValue.value = null
         learningValue.value = null
         trainingValue.value = null
+        confirmSubject.value = false
     }
     //Reset the response for each call to get the goals in the database
     fun resetValue(){
@@ -258,6 +262,11 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
         currentList.add(subjectValue.value ?: "")
         _subjectList.value = currentList
     }
+    fun deleteSubject(subject:String?){
+        val currentList = _subjectList.value.toMutableList()
+        currentList.remove(subject ?: "")
+        _subjectList.value = currentList
+    }
 
     fun subjectApproved(subjectValue: String?){
         val approvedList = _subjectApproved.value.toMutableList()
@@ -265,7 +274,7 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
         _subjectApproved.value = approvedList
     }
 
-    fun deleteSubject(subjectValue: String?){
+    fun updateSubjectApproved(subjectValue: String?){
         val approvedList = _subjectApproved.value.toMutableList()
         approvedList.remove(subjectValue ?: "")
         _subjectApproved.value = approvedList

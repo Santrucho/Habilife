@@ -4,17 +4,17 @@ import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArrowForward
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.santrucho.habilife.ui.data.model.goals.GoalsResponse
 import com.santrucho.habilife.ui.ui.goals.addgoal.GoalImage
-import com.santrucho.habilife.ui.utils.helper.ProgressBarHelper
+import com.santrucho.habilife.ui.util.helper.ProgressBarHelper
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToJsonElement
 
@@ -47,11 +47,11 @@ fun GoalCard(goal: GoalsResponse, navController: NavController) {
                 .wrapContentSize()
                 .padding(8.dp),
             elevation = 6.dp,
-            backgroundColor = MaterialTheme.colors.secondary
+            backgroundColor = MaterialTheme.colors.secondaryVariant
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth().padding(4.dp)
             ) {
                 Row(
                     modifier = Modifier.fillMaxSize(),
@@ -74,12 +74,21 @@ fun GoalCard(goal: GoalsResponse, navController: NavController) {
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Top
                         ) {
-                            Text(
-                                text = goal.title,
-                                modifier = Modifier.fillMaxWidth(),
-                                color = Color.White,
-                                fontSize = 22.sp
-                            )
+                            Row(modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically) {
+                                Text(
+                                    text = goal.title,
+                                    modifier = Modifier.wrapContentWidth(),
+                                    fontSize = 22.sp
+                                )
+                                Icon(
+                                    imageVector = Icons.Outlined.ArrowForward,
+                                    modifier = Modifier.width(28.dp),
+                                    contentDescription = "arrow forward",
+                                    tint = MaterialTheme.colors.primary,
+                                )
+                            }
                             Divider(modifier = Modifier.padding(4.dp))
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
@@ -88,13 +97,11 @@ fun GoalCard(goal: GoalsResponse, navController: NavController) {
                                 Text(
                                     text = "Fecha objetivo: ",
                                     modifier = Modifier.wrapContentWidth(),
-                                    color = Color.White,
                                     fontSize = 14.sp
                                 )
                                 Text(
                                     text = goal.release_date,
                                     modifier = Modifier.wrapContentWidth(),
-                                    color = Color.White,
                                     fontSize = 14.sp
                                 )
                             }

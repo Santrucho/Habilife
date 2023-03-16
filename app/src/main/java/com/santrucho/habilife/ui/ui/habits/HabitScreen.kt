@@ -4,8 +4,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,16 +14,19 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.HabitViewModel
+import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.habits.components.CalendarView
 import com.santrucho.habilife.ui.ui.habits.components.HabitList
-import com.santrucho.habilife.ui.ui.habits.components.HabitUI
-import com.santrucho.habilife.ui.utils.Resource
+import com.santrucho.habilife.ui.util.BackPressHandler
 
 @Composable
 fun HabitScreen(
     habitViewModel: HabitViewModel,
     navController: NavController,
 ) {
+
+    val onBack = { navController.navigate(BottomNavScreen.Home.screen_route) }
+    BackPressHandler(onBackPressed = onBack)
 
     habitViewModel.resetResult()
     //Set the screen in habits
@@ -61,8 +62,8 @@ fun FABButton(navController: NavController) {
     Spacer(modifier = Modifier.height(60.dp))
 }
 
-//Set and display the currents habits create for the user
-//Calling the list of habits in HabitList
+/*Set and display the currents habits create for the user
+    Calling the list of habits in HabitList */
 @Composable
 fun MyHabitsSection(habitViewModel: HabitViewModel) {
 
@@ -86,7 +87,7 @@ fun MyHabitsSection(habitViewModel: HabitViewModel) {
     Card(
         shape = MaterialTheme.shapes.medium,
         elevation = 3.dp,
-        backgroundColor = MaterialTheme.colors.background,
+        backgroundColor = MaterialTheme.colors.secondaryVariant,
         modifier = Modifier.padding(8.dp)
     ) {
         Column(

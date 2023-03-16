@@ -2,7 +2,7 @@ package com.santrucho.habilife.ui.data.remote.habits
 
 
 import com.santrucho.habilife.ui.data.model.Habit
-import com.santrucho.habilife.ui.utils.Resource
+import com.santrucho.habilife.ui.util.Resource
 
 
 interface HabitsRepository {

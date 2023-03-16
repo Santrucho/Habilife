@@ -1,7 +1,7 @@
 package com.santrucho.habilife.ui.data.remote.goals.training
 
 import com.santrucho.habilife.ui.data.model.goals.TrainingGoal
-import com.santrucho.habilife.ui.utils.Resource
+import com.santrucho.habilife.ui.util.Resource
 
 interface TrainingGoalRepository {
 

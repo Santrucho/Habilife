@@ -1,4 +1,4 @@
-package com.santrucho.habilife.ui.utils.helper
+package com.santrucho.habilife.ui.util.helper
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
@@ -77,7 +77,7 @@ fun CustomLinearProgress(
         ) {
             Text(
                 text = "${(((currentProgress?.toInt() ?: 0) * 100) / (maxProgress ?: 1).toInt()) ?: 0} $valueType",
-                color = Color.White,
+                color = MaterialTheme.colors.secondary,
                 fontSize = 16.sp
             )
 
@@ -94,7 +94,7 @@ fun CustomLinearProgress(
             modifier = Modifier
                 .fillMaxSize()
                 .clip(RoundedCornerShape(10.dp))
-                .background(MaterialTheme.colors.secondaryVariant)
+                .background(MaterialTheme.colors.background)
         )
         // for the progress of the ProgressBar
 
@@ -103,7 +103,7 @@ fun CustomLinearProgress(
                 .fillMaxWidth((currentProgress?.toInt() ?: 0) / (maxProgress ?: 1).toFloat())
                 .fillMaxHeight()
                 .clip(RoundedCornerShape(9.dp))
-                .background(MaterialTheme.colors.primary)
+                .background(MaterialTheme.colors.secondary)
                 .animateContentSize()
         )
     }

@@ -1,6 +1,5 @@
 package com.santrucho.habilife.ui.ui.home.components
 
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -17,7 +16,7 @@ import androidx.navigation.NavController
 import com.santrucho.habilife.ui.presentation.HabitViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.habits.components.HabitUI
-import com.santrucho.habilife.ui.utils.Resource
+import com.santrucho.habilife.ui.util.Resource
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.*
@@ -31,7 +30,7 @@ fun HomeHabitList(navController: NavController, habitViewModel: HabitViewModel) 
     Card(
         shape = MaterialTheme.shapes.medium,
         elevation = 3.dp,
-        backgroundColor = MaterialTheme.colors.background,
+        backgroundColor = MaterialTheme.colors.secondaryVariant,
         modifier = Modifier.padding(8.dp)
     ) {
         Column(

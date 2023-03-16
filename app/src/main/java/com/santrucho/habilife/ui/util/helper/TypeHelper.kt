@@ -1,9 +1,7 @@
-package com.santrucho.habilife.ui.utils
+package com.santrucho.habilife.ui.util
 
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import com.santrucho.habilife.ui.data.model.Habit
 
 val MustardYellow = Color(0xFFE6B800)
 val Green = Color(0xFF005C1B)

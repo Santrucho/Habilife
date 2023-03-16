@@ -18,10 +18,9 @@ import com.santrucho.habilife.ui.presentation.GoalViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.goals.components.FilterGoals
 import com.santrucho.habilife.ui.ui.habits.components.MyChip
-import com.santrucho.habilife.ui.utils.BackPressHandler
-import com.santrucho.habilife.ui.utils.Resource
+import com.santrucho.habilife.ui.util.BackPressHandler
+import com.santrucho.habilife.ui.util.Resource
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun GoalsScreen(goalViewModel: GoalViewModel, navController: NavController) {
 
@@ -84,7 +83,6 @@ fun GoalsScreen(goalViewModel: GoalViewModel, navController: NavController) {
                 )
             }
         }
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -124,12 +122,11 @@ fun GoalsScreen(goalViewModel: GoalViewModel, navController: NavController) {
                     }
                 }
             )
-
         }
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.8f),
+                .fillMaxHeight(0.75f),
             horizontalAlignment = Alignment.Start
         ) {
             FilterGoals(
@@ -141,7 +138,7 @@ fun GoalsScreen(goalViewModel: GoalViewModel, navController: NavController) {
         //Set FAB Button Row above BottomBar
         Spacer(modifier = Modifier.weight(1f))
         FabButton(navController)
-        Spacer(modifier = Modifier.height(60.dp))
+
     }
 }
 
@@ -151,16 +148,17 @@ fun FabButton(navController: NavController) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(4.dp), horizontalArrangement = Arrangement.Center
+            .padding(8.dp), horizontalArrangement = Arrangement.Center
     ) {
         Button(
             onClick = { navController.navigate(Screen.NewGoalScreen.route) },
             modifier = Modifier
-                .defaultMinSize(256.dp, 56.dp),
+                .defaultMinSize(240.dp, 56.dp),
             shape = CircleShape
 
         ) {
             Text("Crear nuevo objetivo")
         }
     }
+    Spacer(modifier = Modifier.height(60.dp))
 }

@@ -3,19 +3,21 @@ package com.santrucho.habilife.ui.ui.habits.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.DateRange
+import androidx.compose.material.icons.outlined.LocationOn
+import androidx.compose.material.icons.outlined.MoreVert
+import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
-import com.santrucho.habilife.ui.presentation.HabitViewModel
-import com.santrucho.habilife.ui.utils.typeHelper
+import com.santrucho.habilife.ui.util.typeHelper
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.time.TimePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
@@ -26,7 +28,7 @@ import java.time.format.DateTimeFormatter
 //Show an Spinner or ExposedDropMenu to deploy a list with all the options for choose a type for each habit
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun Categories(options: List<String>,onTypeSelection:(String) -> Unit) {
+fun Categories(options: List<String>, onTypeSelection: (String) -> Unit) {
 
     var selectedOption by remember { mutableStateOf(options[0]) }
     var expanded by remember { mutableStateOf(false) }
@@ -35,7 +37,7 @@ fun Categories(options: List<String>,onTypeSelection:(String) -> Unit) {
     Card(
         shape = MaterialTheme.shapes.medium,
         elevation = 3.dp,
-        backgroundColor = MaterialTheme.colors.background,
+        backgroundColor = MaterialTheme.colors.secondaryVariant,
         modifier = Modifier.padding(4.dp)
     ) {
         Column(
@@ -116,7 +118,7 @@ fun Categories(options: List<String>,onTypeSelection:(String) -> Unit) {
 
 //Set an action button to select a Time to make the habit created
 @Composable
-fun TimePicker(pickTime:LocalTime,onTimePicked:(LocalTime)->Unit) {
+fun TimePicker(pickTime: LocalTime, onTimePicked: (LocalTime) -> Unit) {
 
     var pickedTime by remember {
         mutableStateOf(pickTime)
@@ -141,17 +143,17 @@ fun TimePicker(pickTime:LocalTime,onTimePicked:(LocalTime)->Unit) {
     ) {
         timepicker(
             initialTime = LocalTime.now(),
-            is24HourClock = true,
+            is24HourClock = false,
             title = "Elija un horario para comenzar el habito:",
             colors = TimePickerDefaults.colors(
-                activeTextColor = Color.Black,
-                inactiveTextColor = Color.Black,
-                inactivePeriodBackground = Color.Black,
-                headerTextColor = Color.Black ,
-                activeBackgroundColor = Color.White,
-                selectorColor = Color.Blue,
-                selectorTextColor = Color.White,
-                inactiveBackgroundColor = Color.White
+                activeTextColor = MaterialTheme.colors.secondaryVariant,
+                inactiveTextColor = MaterialTheme.colors.secondaryVariant,
+                inactivePeriodBackground = MaterialTheme.colors.secondary,
+                headerTextColor = MaterialTheme.colors.primaryVariant,
+                activeBackgroundColor = MaterialTheme.colors.primary,
+                inactiveBackgroundColor = MaterialTheme.colors.secondary,
+                selectorColor = MaterialTheme.colors.primary,
+                selectorTextColor = MaterialTheme.colors.primary,
             ),
         ) { time ->
             pickedTime = time
@@ -166,7 +168,7 @@ fun TimePicker(pickTime:LocalTime,onTimePicked:(LocalTime)->Unit) {
     Card(
         shape = MaterialTheme.shapes.medium,
         elevation = 3.dp,
-        backgroundColor = MaterialTheme.colors.background,
+        backgroundColor = MaterialTheme.colors.secondaryVariant,
         modifier = Modifier.padding(4.dp)
     ) {
         Column(
@@ -175,23 +177,42 @@ fun TimePicker(pickTime:LocalTime,onTimePicked:(LocalTime)->Unit) {
                 .wrapContentHeight()
                 .padding(8.dp)
         ) {
-            Text("Hora para realizar el habito:", color = Color.Black, fontSize = 20.sp)
+            Text(
+                "Hora para realizar el habito",
+                color = MaterialTheme.colors.primaryVariant,
+                fontSize = 20.sp
+            )
             Button(
                 onClick = { dialogState.show() },
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color.Blue,
-                    contentColor = MaterialTheme.colors.background
+                    backgroundColor = MaterialTheme.colors.secondary,
+                    contentColor = MaterialTheme.colors.primary
                 ),
                 shape = CircleShape,
                 modifier = Modifier
                     .wrapContentSize()
                     .padding(4.dp)
             ) {
-                Text(
-                    "$formattedTime $timeSystem",
-                    fontSize = 20.sp,
-                    modifier = Modifier.padding(8.dp)
-                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.LocationOn,
+                        modifier = Modifier.width(28.dp),
+                        contentDescription = "arrow forward",
+                        tint = MaterialTheme.colors.primary,
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    Text(
+                        "$formattedTime $timeSystem",
+                        fontSize = 20.sp,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                }
             }
         }
     }

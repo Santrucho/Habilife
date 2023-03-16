@@ -2,9 +2,7 @@ package com.santrucho.habilife.ui.data.remote.login
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.UserProfileChangeRequest
-import com.santrucho.habilife.ui.utils.Resource
-import dagger.hilt.android.scopes.ActivityScoped
+import com.santrucho.habilife.ui.util.Resource
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 

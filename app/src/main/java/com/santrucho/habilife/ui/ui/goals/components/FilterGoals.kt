@@ -13,7 +13,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.santrucho.habilife.ui.data.model.goals.GoalsResponse
 import com.santrucho.habilife.ui.presentation.GoalViewModel
-import com.santrucho.habilife.ui.utils.Resource
+import com.santrucho.habilife.ui.util.Resource
+import java.time.LocalDate
+import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun FilterGoals(title: String, goalViewModel: GoalViewModel,navController:NavController) {
@@ -31,11 +34,14 @@ fun FilterGoals(title: String, goalViewModel: GoalViewModel,navController:NavCon
                 }
             }
             is Resource.Success -> {
+                val formatter = DateTimeFormatter.ofPattern("dd MM yyyy")
                 val filterByMonth = result.data.filter { goal ->
-                    goal.release_date == "25/02"
+                    val releaseDate = LocalDate.parse(goal.release_date,formatter)
+                    releaseDate.year == YearMonth.now().year && releaseDate.month == YearMonth.now().month
                 }
                 val filterByYear = result.data.filter { goal ->
-                    goal.release_date == "25/03"
+                    val releaseDate = LocalDate.parse(goal.release_date,formatter)
+                    releaseDate.year == YearMonth.now().year
                 }
                 when (title) {
                     "Mes" -> {

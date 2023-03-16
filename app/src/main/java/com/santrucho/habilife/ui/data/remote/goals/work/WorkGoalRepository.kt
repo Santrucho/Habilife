@@ -1,8 +1,7 @@
 package com.santrucho.habilife.ui.data.remote.goals.work
 
-import com.santrucho.habilife.ui.data.model.goals.FinanceGoal
 import com.santrucho.habilife.ui.data.model.goals.WorkGoal
-import com.santrucho.habilife.ui.utils.Resource
+import com.santrucho.habilife.ui.util.Resource
 
 interface WorkGoalRepository {
 
