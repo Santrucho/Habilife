@@ -6,20 +6,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.presentation.*
-import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
-import com.santrucho.habilife.ui.ui.habits.components.CalendarView
 import com.santrucho.habilife.ui.ui.home.components.HomeGoalList
 import com.santrucho.habilife.ui.ui.home.components.HomeHabitList
-import com.santrucho.habilife.ui.utils.BackPressHandler
+import com.santrucho.habilife.ui.util.BackPressHandler
 
 
 @Composable
@@ -34,7 +31,7 @@ fun HomeScreen(navController: NavController,userViewModel: SignUpViewModel,goalV
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(colorResource(id = R.color.white))
+            .background(MaterialTheme.colors.background)
             .wrapContentSize(Alignment.Center)
     ) {
         //Welcomes the user to the main screen

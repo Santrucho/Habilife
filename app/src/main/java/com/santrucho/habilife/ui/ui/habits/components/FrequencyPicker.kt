@@ -31,7 +31,7 @@ fun FrequencyPicker(itemList: List<String>, onDaySelected:(List<String>) -> Unit
     Card(
         shape = MaterialTheme.shapes.medium,
         elevation = 3.dp,
-        backgroundColor = MaterialTheme.colors.background,
+        backgroundColor = MaterialTheme.colors.secondaryVariant,
         modifier = Modifier.padding(4.dp)
     ) {
         Column(

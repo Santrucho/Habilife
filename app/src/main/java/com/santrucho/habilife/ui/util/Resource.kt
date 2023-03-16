@@ -1,4 +1,4 @@
-package com.santrucho.habilife.ui.utils
+package com.santrucho.habilife.ui.util
 
 sealed class Resource<out T> {
     class Loading<out T>: Resource<T>()

@@ -3,20 +3,18 @@ package com.santrucho.habilife.ui.ui.goals.addgoal
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Card
-import androidx.compose.material.Divider
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.outlined.ArrowForward
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.santrucho.habilife.ui.data.model.goals.GoalsOption
 import com.santrucho.habilife.ui.navigation.Screen
@@ -38,7 +36,7 @@ fun GoalOptionCard(goalOption: GoalsOption, navController: NavController) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding()
+                    .padding(4.dp)
             ) {
                 Row(modifier = Modifier.fillMaxSize(), horizontalArrangement = Arrangement.Start) {
                     GoalImage(
@@ -58,11 +56,24 @@ fun GoalOptionCard(goalOption: GoalsOption, navController: NavController) {
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Top
                         ) {
-                            Text(
-                                text = goalOption.title,
+                            Row(
                                 modifier = Modifier.fillMaxWidth(),
-                                fontSize = 22.sp
-                            )
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = goalOption.title,
+                                    modifier = Modifier.wrapContentWidth(),
+                                    fontSize = 22.sp
+                                )
+                                Icon(
+                                        imageVector = Icons.Outlined.ArrowForward,
+                                        modifier = Modifier.width(28.dp),
+                                        contentDescription = "arrow forward",
+                                        tint = MaterialTheme.colors.primary,
+                                )
+                            }
+
                             Divider(modifier = Modifier.padding(4.dp))
                             Text(
                                 text = goalOption.information,

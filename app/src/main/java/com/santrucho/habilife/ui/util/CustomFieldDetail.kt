@@ -1,13 +1,9 @@
-package com.santrucho.habilife.ui.utils
+package com.santrucho.habilife.ui.util
 
 import android.annotation.SuppressLint
-import android.util.Log
-import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Checkbox
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
@@ -15,9 +11,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -26,8 +20,7 @@ import com.santrucho.habilife.ui.data.model.goals.GoalsResponse
 import com.santrucho.habilife.ui.presentation.GoalViewModel
 import com.santrucho.habilife.ui.ui.goals.GoalField
 import com.santrucho.habilife.ui.ui.goals.components.NewFields
-import com.santrucho.habilife.ui.utils.helper.CustomLinearProgress
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.santrucho.habilife.ui.util.helper.CustomLinearProgress
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
@@ -47,8 +40,9 @@ fun TypeFieldDetail(goal: GoalsResponse, goalViewModel: GoalViewModel) {
             GoalField(text = "Monto actual", goalText = "${goal.amount ?: 0} $")
 
             Divider(modifier = Modifier.padding(4.dp))
-            Column(modifier = Modifier.padding(4.dp)){
-                Text("Progreso", fontSize = 20.sp, color = Color.Blue)
+
+            Column(modifier = Modifier.padding(4.dp)) {
+                Text("Progreso", fontSize = 20.sp, color = MaterialTheme.colors.secondary)
 
                 CustomLinearProgress(
                     goal.amountGoal?.toFloat(),
@@ -73,7 +67,8 @@ fun TypeFieldDetail(goal: GoalsResponse, goalViewModel: GoalViewModel) {
 
             // Actualizar el valor de kilometersCount cada vez que el valor de trainingValue cambia
             LaunchedEffect(goalViewModel.trainingValue.value) {
-                kilometersCount = (goalViewModel.trainingValue.value ?: 0) + (goal.kilometers ?: 0).toFloat()
+                kilometersCount =
+                    (goalViewModel.trainingValue.value ?: 0) + (goal.kilometers ?: 0).toFloat()
             }
 
             GoalField(
@@ -87,7 +82,7 @@ fun TypeFieldDetail(goal: GoalsResponse, goalViewModel: GoalViewModel) {
             )
             Divider(modifier = Modifier.padding(4.dp))
             Column(modifier = Modifier.padding(4.dp)) {
-                Text("Progreso", fontSize = 20.sp, color = Color.Blue)
+                Text("Progreso", fontSize = 20.sp, color = MaterialTheme.colors.secondary)
                 Spacer(modifier = Modifier.padding(4.dp))
                 CustomLinearProgress(
                     goal.kilometersGoal?.toFloat(),
@@ -101,18 +96,35 @@ fun TypeFieldDetail(goal: GoalsResponse, goalViewModel: GoalViewModel) {
             NewFields(
                 text = "Agregar kilometros: ",
                 value = goalViewModel.trainingValue.value?.toString() ?: "",
-                valueChange = { goalViewModel.trainingValue.value = it.toIntOrNull()
-                              kilometersCount = goalViewModel.trainingValue.value?.toFloat() ?: 0f},
+                valueChange = {
+                    goalViewModel.trainingValue.value = it.toIntOrNull()
+                    kilometersCount = goalViewModel.trainingValue.value?.toFloat() ?: 0f
+                },
                 onValidate = {},
                 isEnabled = (goal.kilometers ?: 0) >= (goal.kilometersGoal ?: 0)
             )
         }
         "Academic" -> {
-
             val subjectApprove = goalViewModel.subjectApproved.collectAsState()
 
-            val listSum = subjectApprove.value.union(goal.subjectApproved).toMutableList()
+            val listSum = if (goalViewModel.confirmSubject.value) {
+                subjectApprove.value.union(goal.subjectApproved).toMutableList()
+            } else {
+                goal.subjectApproved.toMutableList()
+            }
             var subjectApprovedCount by remember { mutableStateOf(goal.subjectApproved.size.toFloat()) }
+
+            Column(modifier = Modifier.padding(4.dp)) {
+                Text("Progreso", fontSize = 20.sp, color = MaterialTheme.colors.secondary)
+                CustomLinearProgress(
+                    maxProgress = goal.subjectList?.size?.toFloat(),
+                    currentProgress = subjectApprovedCount,
+                )
+            }
+
+            Spacer(modifier = Modifier.padding(4.dp))
+            Divider(modifier = Modifier.padding(4.dp))
+
             GoalField(
                 text = "Materias a aprobar: ",
                 goalText = goal.subjectList?.size.toString() ?: ""
@@ -121,13 +133,15 @@ fun TypeFieldDetail(goal: GoalsResponse, goalViewModel: GoalViewModel) {
 
             Text(
                 modifier = Modifier.padding(horizontal = 8.dp),
-                text = "Materias:",
+                text = "Materias",
                 fontWeight = FontWeight.Medium,
                 fontSize = 20.sp
             )
-            LazyColumn(modifier = Modifier
-                .fillMaxWidth()
-                .height(180.dp)) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(180.dp)
+            ) {
                 itemsIndexed(goal.subjectList.orEmpty()) { _, subject ->
 
                     Row(
@@ -145,28 +159,22 @@ fun TypeFieldDetail(goal: GoalsResponse, goalViewModel: GoalViewModel) {
 
                         Checkbox(checked = listSum.contains(subject),
                             onCheckedChange = {
-                            if(it){
-                                goalViewModel.subjectApproved(subject)
-                                listSum.add(subject)
-                                subjectApprovedCount++
-                            }
-                            else{
-                                goalViewModel.deleteSubject(subject)
-                                listSum.remove(subject)
-                                subjectApprovedCount--
-                            }
-                        } )
+
+                                    if (it) {
+                                        goalViewModel.subjectApproved(subject)
+                                        listSum.add(subject)
+                                        subjectApprovedCount++
+                                    } else {
+                                        goalViewModel.updateSubjectApproved(subject)
+                                        listSum.remove(subject)
+                                        subjectApprovedCount--
+                                    }
+
+                            })
                     }
                     Divider(modifier = Modifier.padding(4.dp))
                 }
                 goal.subjectApproved = listSum
-            }
-            Column(modifier = Modifier.padding(4.dp)) {
-                Text("Progreso", fontSize = 20.sp, color = Color.Blue)
-                CustomLinearProgress(
-                    maxProgress = goal.subjectList?.size?.toFloat(),
-                    currentProgress = subjectApprovedCount,
-                )
             }
         }
         "Learning" -> {

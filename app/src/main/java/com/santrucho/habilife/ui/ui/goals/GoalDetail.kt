@@ -12,14 +12,13 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.santrucho.habilife.ui.data.model.goals.GoalsResponse
 import com.santrucho.habilife.ui.presentation.GoalViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.goals.addgoal.GoalImage
 import com.santrucho.habilife.ui.ui.habits.DetailsAppBar
-import com.santrucho.habilife.ui.utils.BackPressHandler
-import com.santrucho.habilife.ui.utils.TypeFieldDetail
+import com.santrucho.habilife.ui.util.BackPressHandler
+import com.santrucho.habilife.ui.util.TypeFieldDetail
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -128,6 +127,7 @@ fun GoalDetail(goal: GoalsResponse, goalViewModel: GoalViewModel, navController:
                 }
                 Button(
                     onClick = {
+                        goalViewModel.confirmSubject.value = true
                         goalViewModel.updateGoal(
                             goal,
                             goal.amount,
@@ -164,7 +164,7 @@ fun GoalField(text: String, goalText: String, modifier: Modifier = Modifier) {
             Text(
                 text = text,
                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
-                color = Color.Blue,
+                color = MaterialTheme.colors.secondary,
                 fontSize = 16.sp,
                 fontFamily = FontFamily.SansSerif
             )

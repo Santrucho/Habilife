@@ -1,7 +1,7 @@
 package com.santrucho.habilife.ui.data.remote.goals.academic
 
 import com.santrucho.habilife.ui.data.model.goals.AcademicGoal
-import com.santrucho.habilife.ui.utils.Resource
+import com.santrucho.habilife.ui.util.Resource
 
 interface AcademicGoalRepository {
 

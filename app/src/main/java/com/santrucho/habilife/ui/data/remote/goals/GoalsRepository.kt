@@ -3,7 +3,7 @@ package com.santrucho.habilife.ui.data.remote.goals
 
 import com.santrucho.habilife.ui.data.model.goals.GoalsOption
 import com.santrucho.habilife.ui.data.model.goals.GoalsResponse
-import com.santrucho.habilife.ui.utils.Resource
+import com.santrucho.habilife.ui.util.Resource
 
 interface GoalsRepository {
 
