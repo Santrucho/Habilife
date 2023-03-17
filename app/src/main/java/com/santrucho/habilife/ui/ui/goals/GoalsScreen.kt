@@ -18,6 +18,7 @@ import com.santrucho.habilife.ui.presentation.GoalViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.goals.components.FilterGoals
 import com.santrucho.habilife.ui.ui.habits.components.MyChip
+import com.santrucho.habilife.ui.ui.home.components.HandleFilterState
 import com.santrucho.habilife.ui.util.BackPressHandler
 import com.santrucho.habilife.ui.util.Resource
 
@@ -129,6 +130,7 @@ fun GoalsScreen(goalViewModel: GoalViewModel, navController: NavController) {
                 .fillMaxHeight(0.75f),
             horizontalAlignment = Alignment.Start
         ) {
+
             FilterGoals(
                 title = selectedChip,
                 goalViewModel = goalViewModel,

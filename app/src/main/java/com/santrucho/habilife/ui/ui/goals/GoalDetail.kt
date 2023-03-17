@@ -35,7 +35,6 @@ fun GoalDetail(goal: GoalsResponse, goalViewModel: GoalViewModel, navController:
             modifier = Modifier
                 .fillMaxSize(1f)
         ) {
-
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth().fillMaxHeight(0.90f)
