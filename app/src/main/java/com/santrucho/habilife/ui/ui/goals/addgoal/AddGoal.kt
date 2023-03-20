@@ -61,7 +61,7 @@ fun AddGoal(goalViewModel: GoalViewModel, navController: NavController, type: St
                 Card(
                     shape = MaterialTheme.shapes.medium,
                     elevation = 3.dp,
-                    backgroundColor = MaterialTheme.colors.secondaryVariant,
+                    backgroundColor = MaterialTheme.colors.background,
                     modifier = Modifier
                         .padding(4.dp)
                         .wrapContentHeight()
@@ -92,7 +92,7 @@ fun AddGoal(goalViewModel: GoalViewModel, navController: NavController, type: St
                 Card(
                     shape = MaterialTheme.shapes.medium,
                     elevation = 3.dp,
-                    backgroundColor = MaterialTheme.colors.secondaryVariant,
+                    backgroundColor = MaterialTheme.colors.background,
                     modifier = Modifier
                         .padding(4.dp)
                         .wrapContentHeight()

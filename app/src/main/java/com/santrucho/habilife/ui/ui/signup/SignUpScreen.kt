@@ -45,7 +45,7 @@ fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel) {
             Card(
                 shape = MaterialTheme.shapes.medium,
                 elevation = 8.dp,
-                backgroundColor = MaterialTheme.colors.secondaryVariant,
+                backgroundColor = MaterialTheme.colors.background,
                 modifier = Modifier.padding(16.dp)
             ) {
                 Column(

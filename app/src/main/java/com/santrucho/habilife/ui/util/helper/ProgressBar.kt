@@ -94,7 +94,7 @@ fun CustomLinearProgress(
             modifier = Modifier
                 .fillMaxSize()
                 .clip(RoundedCornerShape(10.dp))
-                .background(MaterialTheme.colors.background)
+                .background(MaterialTheme.colors.secondaryVariant)
         )
         // for the progress of the ProgressBar
 
