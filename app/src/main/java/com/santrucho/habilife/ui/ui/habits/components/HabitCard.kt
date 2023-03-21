@@ -4,9 +4,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -23,11 +21,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.santrucho.habilife.ui.data.model.Habit
 import com.santrucho.habilife.ui.presentation.HabitViewModel
-import com.santrucho.habilife.ui.utils.Resource
-import com.santrucho.habilife.ui.utils.iconHelper
-import com.santrucho.habilife.ui.utils.typeHelper
+import com.santrucho.habilife.ui.util.iconHelper
+import com.santrucho.habilife.ui.util.typeHelper
 import java.time.LocalDate
-import java.time.LocalTime
 import java.time.format.TextStyle
 import java.util.*
 

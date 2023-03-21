@@ -1,9 +1,6 @@
 package com.santrucho.habilife.ui.ui.bottombar
 
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
@@ -22,8 +19,8 @@ fun BottomBar(
     onClick:(BottomNavScreen) -> Unit) {
 
     BottomNavigation(
-        backgroundColor = colorResource(id = R.color.white),
-        contentColor = Color.Black
+        backgroundColor = MaterialTheme.colors.background,
+        contentColor = MaterialTheme.colors.primaryVariant
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
@@ -36,8 +33,8 @@ fun BottomBar(
                         fontSize = 10.sp
                     )
                 },
-                selectedContentColor = Color.Black,
-                unselectedContentColor = Color.Black.copy(0.4f),
+                selectedContentColor = MaterialTheme.colors.primary,
+                unselectedContentColor = MaterialTheme.colors.primaryVariant,
                 alwaysShowLabel = true,
                 selected = currentRoute == item.screen_route,
                 onClick = {

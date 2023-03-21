@@ -1,24 +1,23 @@
 package com.santrucho.habilife.ui.ui.goals.addgoal
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Card
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.outlined.ArrowForward
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
 import com.santrucho.habilife.ui.data.model.goals.GoalsOption
 import com.santrucho.habilife.ui.navigation.Screen
-import com.santrucho.habilife.ui.utils.CheckOptions
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
@@ -37,53 +36,53 @@ fun GoalOptionCard(goalOption: GoalsOption, navController: NavController) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .wrapContentHeight()
+                    .padding(4.dp)
             ) {
-                GoalImage(imageModel = goalOption.image,
-                    textType = goalOption.type,
-                    modifier = Modifier.fillMaxWidth())
-
-                Box(
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .padding(0.dp, 8.dp)
-                ) {
-                    Column(
+                Row(modifier = Modifier.fillMaxSize(), horizontalArrangement = Arrangement.Start) {
+                    GoalImage(
+                        imageModel = goalOption.image,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight()
+                    )
+                    Box(
+                        modifier = Modifier
+                            .wrapContentSize()
+
                     ) {
-                        Text(
-                            text = goalOption.information,
+                        Column(
                             modifier = Modifier
-                                .padding(8.dp),
-                            color = Color.Black,
-                            fontSize = 14.sp
-                        )
-                        Row(
-                            modifier = Modifier
-                                .wrapContentWidth()
-                                .wrapContentHeight(),
-                            horizontalArrangement = Arrangement.SpaceEvenly,
-                            verticalAlignment = Alignment.CenterVertically
+                                .fillMaxWidth()
+                                .wrapContentHeight()
+                                .padding(horizontal = 8.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Top
                         ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = goalOption.title,
+                                    modifier = Modifier.wrapContentWidth(),
+                                    fontSize = 22.sp
+                                )
+                                Icon(
+                                        imageVector = Icons.Outlined.ArrowForward,
+                                        modifier = Modifier.width(28.dp),
+                                        contentDescription = "arrow forward",
+                                        tint = MaterialTheme.colors.primary,
+                                )
+                            }
+
+                            Divider(modifier = Modifier.padding(4.dp))
                             Text(
-                                text = "Duracion:",
-                               modifier = Modifier
-                                    .padding(8.dp)
-                                    .wrapContentWidth(Alignment.Start),
-                                color = Color.Black,
-                                fontSize = 12.sp
+                                text = goalOption.information,
+                                modifier = Modifier.fillMaxWidth(),
+                                fontSize = 14.sp
                             )
-                            Text(
-                                text = goalOption.duration,
-                                modifier = Modifier
-                                    .padding(0.dp, 8.dp)
-                                    .wrapContentWidth(Alignment.Start),
-                                color = Color.Black,
-                                fontSize = 18.sp
-                            )
-                            CheckOptions(goalsOption = goalOption)
+
+                            Spacer(modifier = Modifier.weight(1f))
+
                         }
                     }
                 }
@@ -93,27 +92,16 @@ fun GoalOptionCard(goalOption: GoalsOption, navController: NavController) {
 }
 
 @Composable
-fun GoalImage(imageModel:String,textType:String,modifier: Modifier){
+fun GoalImage(imageModel: String, modifier: Modifier) {
     Box(modifier = Modifier.wrapContentHeight()) {
         AsyncImage(
             model = imageModel,
             contentDescription = "background image",
             modifier = modifier
+                .width(106.dp)
+                .height(106.dp)
+                .padding(4.dp)
+                .clip(CircleShape)
         )
-        Surface(
-            color = Color.White.copy(alpha = 0.6f),
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-        ) {
-            Text(
-                text = textType,
-                modifier = Modifier
-                    .padding(8.dp)
-                    .wrapContentWidth(Alignment.CenterHorizontally),
-                color = Color.Black,
-                fontSize = 18.sp
-            )
-        }
     }
 }

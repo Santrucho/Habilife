@@ -1,6 +1,6 @@
 package com.santrucho.habilife.ui.data.model.goals
 
-data class AcademicGoal(
+data class LearningGoal (
     var id : String="",
     var userId : String="",
     var title : String="",
@@ -8,10 +8,7 @@ data class AcademicGoal(
     var isCompleted : Boolean=false,
     var release_date : String= "",
     var image : String = "",
-    var type : String = "Academic",
+    var type : String = "Learning",
     //New parameters
-    var subject : String? = "",
-    var subjectList : List<String>? = emptyList(),
-    var subjectApproved : List<String>? = emptyList()
-) {
-}
+    var timesAWeek : Int? = null,
+){}

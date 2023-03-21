@@ -1,4 +1,4 @@
-package com.santrucho.habilife.ui.utils
+package com.santrucho.habilife.ui.util
 
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher

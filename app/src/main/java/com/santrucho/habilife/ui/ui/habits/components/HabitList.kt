@@ -13,8 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.santrucho.habilife.ui.data.model.Habit
 import com.santrucho.habilife.ui.presentation.HabitViewModel
-import com.santrucho.habilife.ui.utils.Resource
-import kotlin.reflect.KFunction2
+import com.santrucho.habilife.ui.util.Resource
 
 @Composable
 fun HabitList(habitViewModel: HabitViewModel){

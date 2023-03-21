@@ -13,30 +13,31 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.LoginViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.goals.components.NewFields
 import com.santrucho.habilife.ui.ui.goals.components.PasswordFields
-import com.santrucho.habilife.ui.utils.HandleState
+import com.santrucho.habilife.ui.util.BackPressHandler
+import com.santrucho.habilife.ui.util.HandleState
 
 
 @Composable
 fun LoginScreen(viewModel: LoginViewModel, navController: NavController) {
 
+    val onBack = {}
+    BackPressHandler(onBackPressed = onBack)
     viewModel.resetValues()
     val loginFlow = viewModel.loginFlow.collectAsState()
     //Set the fields in Login to fill
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.white))
+            .background(MaterialTheme.colors.background)
             .fillMaxSize()
             .padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -60,10 +61,10 @@ fun LoginScreen(viewModel: LoginViewModel, navController: NavController) {
                     Spacer(modifier = Modifier.padding(8.dp))
                     Text(text = "Email", fontSize = 18.sp, color = Color.Black,modifier = Modifier.padding(4.dp))
                     NewFields(text = "Email",
-                        value = viewModel.emailValue,
-                        isError = viewModel.isEmailValid,
-                        error = viewModel.emailErrMsg,
-                        valueChange = { it }, onValidate = { })
+                        value = viewModel.emailValue.value.toString() ?: "",
+                        isError = viewModel.isEmailValid.value,
+                        error = viewModel.emailErrMsg.value,
+                        valueChange = { viewModel.emailValue.value = it }, onValidate = { })
 
                     Text(text = "Contrasena", fontSize = 18.sp, color = Color.Black,modifier = Modifier.padding(4.dp))
                     PasswordFields(

@@ -16,9 +16,13 @@ data class GoalsResponse(
     var release_date : String= "",
     var image : String = "",
     var type : String = "",
-    var amount : Double? = null,
+    var amount : Int? = 0,
+    var amountGoal : Int? = 0,
     var subject : String = "",
-    var actualJob : String = "",
-    var kilometers: Int? = null
+    var subjectList : List<String>? = emptyList(),
+    var subjectApproved : List<String> = emptyList(),
+    var timesAWeek : Int? = 0,
+    var kilometers: Int? = 0,
+    var kilometersGoal : Int? = 0
     ) : Parcelable{
 }

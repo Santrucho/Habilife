@@ -19,39 +19,43 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun <T> NewFields(
+fun NewFields(
+    modifier : Modifier = Modifier,
     text: String,
-    value: MutableState<T>,
-    isError: MutableState<Boolean>,
-    error: MutableState<T>,
-    valueChange: (String) -> T, onValidate: () -> Unit
+    value: String,
+    isError: Boolean = false,
+    error: String = "",
+    isEnabled : Boolean = false,
+    showErrorText :Boolean = false,
+    valueChange: (String) -> Unit, onValidate: () -> Unit
 ) {
 
 //Set the fields to show and fill for create a new habit}
-
     OutlinedTextField(
-        value = value.value.toString() ?: "",
+        value = value,
         onValueChange = {
-            value.value = valueChange(it)
+            valueChange(it)
             onValidate()
         },
         label = { Text(text = text) },
-        isError = isError.value,
+        isError = isError,
         singleLine = true,
-        modifier = Modifier.fillMaxWidth(1f),
+        modifier = modifier.fillMaxWidth(1f),
+        enabled = !isEnabled,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
         shape = CircleShape,
         colors = TextFieldDefaults.outlinedTextFieldColors(
             textColor = Color.Black,
-            focusedBorderColor = Color.Blue,
-            unfocusedBorderColor = Color.Blue,
-            focusedLabelColor = Color.Blue,
-            unfocusedLabelColor = Color.Blue
+            focusedBorderColor = Color.Black,
+            unfocusedBorderColor = Color.Gray,
+            focusedLabelColor = Color.Black,
+            unfocusedLabelColor = Color.Gray
         )
     )
+    if(!showErrorText)
     Text(
         modifier = Modifier.padding(start = 8.dp),
-        text = error.value.toString(),
+        text = error,
         fontSize = 14.sp,
         color = Color.Red
     )
@@ -84,11 +88,11 @@ fun <T> PasswordFields(
         shape = CircleShape,
         colors = TextFieldDefaults.outlinedTextFieldColors(
             textColor = Color.Black,
+            focusedBorderColor = Color.Black,
             errorCursorColor = Color.Red,
-            focusedBorderColor = Color.Blue,
-            unfocusedBorderColor = Color.Blue,
-            focusedLabelColor = Color.Blue,
-            unfocusedLabelColor = Color.Blue
+            unfocusedBorderColor = Color.Gray,
+            focusedLabelColor = Color.Black,
+            unfocusedLabelColor = Color.Gray
         )
     )
     Text(

@@ -1,7 +1,7 @@
 package com.santrucho.habilife.ui.data.remote.goals.academic
 
 import com.santrucho.habilife.ui.data.model.goals.AcademicGoal
-import com.santrucho.habilife.ui.utils.Resource
+import com.santrucho.habilife.ui.util.Resource
 
 interface AcademicGoalRepository {
 
@@ -10,7 +10,10 @@ interface AcademicGoalRepository {
                                 isCompleted: Boolean,
                                 release_date: String,
                                 subject : String?,
-                                subjectApprove : Int,
-                                subjectGoal : Int
+                                subjectList : List<String>?,
+                                subjectApproved:List<String>?
+
     ) : Resource<AcademicGoal>
+
+    suspend fun updateGoal(goalId:String,subjectApproved: List<String>?)
 }

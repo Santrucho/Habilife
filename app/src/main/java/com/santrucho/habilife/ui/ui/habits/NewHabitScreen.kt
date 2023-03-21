@@ -10,7 +10,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -22,9 +21,9 @@ import com.santrucho.habilife.ui.ui.goals.components.NewFields
 import com.santrucho.habilife.ui.ui.habits.components.Categories
 import com.santrucho.habilife.ui.ui.habits.components.FrequencyPicker
 import com.santrucho.habilife.ui.ui.habits.components.TimePicker
-import com.santrucho.habilife.ui.utils.BackPressHandler
-import com.santrucho.habilife.ui.utils.HandleState
-import com.santrucho.habilife.ui.utils.Resource
+import com.santrucho.habilife.ui.util.BackPressHandler
+import com.santrucho.habilife.ui.util.HandleState
+import com.santrucho.habilife.ui.util.Resource
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
@@ -34,8 +33,6 @@ import java.time.format.DateTimeFormatter
 fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController) {
 
     val habitValue = habitViewModel.habitFlow.collectAsState()
-
-    val context = LocalContext.current
 
     //Create the options to choose a type for any Habits
     val optionsState = habitViewModel.options.collectAsState()
@@ -78,7 +75,7 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
     BackPressHandler(onBackPressed = onBack)
 
     Scaffold(
-        topBar = { DetailsAppBar(onBack,"Crear nuevo habito") }
+        topBar = { DetailsAppBar(onBack) }
     ) {
         Box(
             contentAlignment = Alignment.Center,
@@ -110,17 +107,17 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                     ) {
                         Text("Personalice su habito", fontSize = 20.sp, color = Color.Black)
                         NewFields(text = "Habito",
-                            value = habitViewModel.titleValue,
-                            isError = habitViewModel.isTitleValid,
-                            error = habitViewModel.titleErrMsg,
-                            valueChange = { it },
+                            value = habitViewModel.titleValue.value.toString() ?: "",
+                            isError = habitViewModel.isTitleValid.value,
+                            error = habitViewModel.titleErrMsg.value,
+                            valueChange = {habitViewModel.titleValue.value = it },
                             onValidate = { habitViewModel.validateTitle() })
 
                         NewFields(text = "Descripcion",
-                            value = habitViewModel.descriptionValue,
-                            isError = habitViewModel.isDescriptionValid,
-                            error = habitViewModel.descriptionErrMsg,
-                            valueChange = { it },
+                            value = habitViewModel.descriptionValue.value.toString() ?: "",
+                            isError = habitViewModel.isDescriptionValid.value,
+                            error = habitViewModel.descriptionErrMsg.value,
+                            valueChange = { habitViewModel.descriptionValue.value = it },
                             onValidate = { habitViewModel.validateDescription() })
                     }
                 }
@@ -169,15 +166,17 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
 
 //Makes the app bar go to the last screen
 @Composable
-fun DetailsAppBar(onBack: () -> Unit,title:String) {
+fun DetailsAppBar(onBack: () -> Unit) {
     TopAppBar(
-        title = { Text(text = title) },
-        backgroundColor = Color.Blue,
+        title = { },
+        backgroundColor = MaterialTheme.colors.secondary,
         navigationIcon = {
             IconButton(onClick = onBack) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
+                    modifier = Modifier.width(48.dp),
                     contentDescription = stringResource(id = R.string.app_name),
+                    tint = MaterialTheme.colors.primary,
                 )
             }
         }

@@ -3,9 +3,8 @@ package com.santrucho.habilife.ui.data.remote.habits
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.santrucho.habilife.ui.data.model.Habit
-import com.santrucho.habilife.ui.utils.Resource
+import com.santrucho.habilife.ui.util.Resource
 import kotlinx.coroutines.tasks.await
-import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 class DefaultHabitsRepository @Inject constructor(private val firestore: FirebaseFirestore

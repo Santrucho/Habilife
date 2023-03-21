@@ -62,7 +62,7 @@ fun NavigationHost(navController:NavController) {
             { backStackEntry ->
                 val type = backStackEntry.arguments?.getString("type")
                 requireNotNull(type)
-                AddGoal(goalViewModel = goalViewModel,navController,type)
+                AddGoal(goalViewModel = goalViewModel, navController = navController, type = type)
             }
 
         composable(
@@ -76,7 +76,7 @@ fun NavigationHost(navController:NavController) {
 
         composable(
             route = BottomNavScreen.Home.screen_route,
-            content = { HomeScreen(navController,signUpViewModel,goalViewModel,habitViewModel) })
+            content = { HomeScreen(navController,signUpViewModel,loginViewModel,goalViewModel,habitViewModel) })
         composable(
             route = BottomNavScreen.Habit.screen_route,
             content = { HabitScreen(habitViewModel,navController) })

@@ -1,8 +1,6 @@
 package com.santrucho.habilife.ui.ui.goals.addgoal
 
 import android.annotation.SuppressLint
-import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -14,17 +12,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.data.model.goals.GoalsOption
 import com.santrucho.habilife.ui.presentation.GoalViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.habits.DetailsAppBar
-import com.santrucho.habilife.ui.utils.BackPressHandler
-import com.santrucho.habilife.ui.utils.Resource
+import com.santrucho.habilife.ui.util.BackPressHandler
+import com.santrucho.habilife.ui.util.Resource
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -33,12 +29,13 @@ fun NewGoalScreen(goalViewModel: GoalViewModel,navController:NavController){
     //Makes the logic to collect and show the list of habits created by the user,
     //in case is correct show the list and in case is incorrect show an error
     goalViewModel.getOptionsGoals()
-    val onBack = { navController.navigate(BottomNavScreen.Goals.screen_route) }
+    goalViewModel.resetResult()
 
+    val onBack = { navController.navigate(BottomNavScreen.Goals.screen_route) }
     BackPressHandler(onBackPressed = onBack)
 
     Scaffold(
-        topBar = { DetailsAppBar(onBack,"Objetivos recomendados") }
+        topBar = { DetailsAppBar(onBack) }
     ) {
         Box(
             contentAlignment = Alignment.Center,
@@ -47,15 +44,13 @@ fun NewGoalScreen(goalViewModel: GoalViewModel,navController:NavController){
         ) {
             Column(Modifier.fillMaxSize()) {
                 Text(
-                    text = "Objetivos recomendados",
+                    text = "Seleccione un objetivo",
                     modifier = Modifier.padding(8.dp),
-                    color = Color.Black
+                    fontSize = 22.sp
                 )
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                        .background(colorResource(id = R.color.white)),
+                        .fillMaxSize(),
                     horizontalAlignment = Alignment.Start
                 ) {
                     GoalsOptionList(goalViewModel,navController)

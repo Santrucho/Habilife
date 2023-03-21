@@ -3,9 +3,8 @@ package com.santrucho.habilife.ui.data.remote.goals.training
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import com.santrucho.habilife.ui.data.model.goals.FinanceGoal
 import com.santrucho.habilife.ui.data.model.goals.TrainingGoal
-import com.santrucho.habilife.ui.utils.Resource
+import com.santrucho.habilife.ui.util.Resource
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -14,7 +13,7 @@ class DefaultTrainingGoalRepository @Inject constructor(private val firestore: F
                                                         private val fireStorage: FirebaseStorage
 ) : TrainingGoalRepository {
 
-    override suspend fun addTrainingGoal(
+    override suspend fun addRunningGoal(
         title: String,
         description: String,
         isCompleted: Boolean,
@@ -23,7 +22,7 @@ class DefaultTrainingGoalRepository @Inject constructor(private val firestore: F
         kilometersGoal: Int?
     ): Resource<TrainingGoal> {
         return try {
-            val storageRef = fireStorage.reference.child("running.jpg")
+            val storageRef = fireStorage.reference.child("gymone.png")
             val downloadUrl = storageRef.downloadUrl.await()
             firebaseAuth.currentUser.let { userLogged ->
                 val docRef = firestore.collection("goals").document()
@@ -44,5 +43,9 @@ class DefaultTrainingGoalRepository @Inject constructor(private val firestore: F
         } catch (e: Exception) {
             return Resource.Failure(e)
         }
+    }
+
+    override suspend fun updateGoal(goalId:String,kilometers: Int?){
+        firestore.collection("goals").document(goalId).update("kilometers",kilometers).await()
     }
 }

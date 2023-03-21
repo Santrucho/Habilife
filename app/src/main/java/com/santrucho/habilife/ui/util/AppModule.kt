@@ -1,8 +1,7 @@
-package com.santrucho.habilife.ui.utils
+package com.santrucho.habilife.ui.util
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.santrucho.habilife.ui.data.remote.goals.DefaultGoalsRepository
 import com.santrucho.habilife.ui.data.remote.goals.GoalsRepository
@@ -10,6 +9,8 @@ import com.santrucho.habilife.ui.data.remote.goals.academic.AcademicGoalReposito
 import com.santrucho.habilife.ui.data.remote.goals.academic.DefaultAcademicGoalRepository
 import com.santrucho.habilife.ui.data.remote.goals.finance.DefaultFinanceGoalRepository
 import com.santrucho.habilife.ui.data.remote.goals.finance.FinanceGoalRepository
+import com.santrucho.habilife.ui.data.remote.goals.learning.LearningDefaultRepository
+import com.santrucho.habilife.ui.data.remote.goals.learning.LearningRepository
 import com.santrucho.habilife.ui.data.remote.goals.training.DefaultTrainingGoalRepository
 import com.santrucho.habilife.ui.data.remote.goals.training.TrainingGoalRepository
 import com.santrucho.habilife.ui.data.remote.goals.work.DefaultWorkGoalRepository
@@ -21,7 +22,6 @@ import com.santrucho.habilife.ui.data.remote.signup.SignUpRepository
 import com.santrucho.habilife.ui.data.remote.login.DefaultLoginRepository
 import com.santrucho.habilife.ui.data.remote.login.LoginRepository
 import com.santrucho.habilife.ui.presentation.GoalViewModel
-import com.santrucho.habilife.ui.presentation.HabitViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,8 +32,8 @@ import dagger.hilt.components.SingletonComponent
 object AppModule {
 
     @Provides
-    fun provideGoalViewModel(implementation: GoalsRepository,finance:FinanceGoalRepository,academic:AcademicGoalRepository,work:WorkGoalRepository,training:TrainingGoalRepository) : GoalViewModel{
-        return GoalViewModel(implementation,academic,finance,work,training)
+    fun provideGoalViewModel(implementation: GoalsRepository,finance:FinanceGoalRepository,academic:AcademicGoalRepository,work:WorkGoalRepository,training:TrainingGoalRepository,learning:LearningRepository) : GoalViewModel{
+        return GoalViewModel(implementation,academic,finance,work,training,learning)
     }
 
     @Provides
@@ -68,4 +68,7 @@ object AppModule {
 
     @Provides
     fun provideTrainingGoalRepository(implementation:DefaultTrainingGoalRepository) : TrainingGoalRepository = implementation
+
+    @Provides
+    fun provideLearningGoalRepository(implementation:LearningDefaultRepository) : LearningRepository = implementation
 }

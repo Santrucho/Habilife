@@ -1,7 +1,7 @@
 package com.santrucho.habilife.ui.data.remote.goals.finance
 
 import com.santrucho.habilife.ui.data.model.goals.FinanceGoal
-import com.santrucho.habilife.ui.utils.Resource
+import com.santrucho.habilife.ui.util.Resource
 
 interface FinanceGoalRepository {
 
@@ -9,9 +9,9 @@ interface FinanceGoalRepository {
                                description: String,
                                isCompleted: Boolean,
                                release_date: String,
-                               amount : Double?,
-                               amountGoal : String
+                               amount : Int?,
+                               amountGoal : Int?
     ) : Resource<FinanceGoal>
 
-    suspend fun updateGoal(goalId:String,amount:Double?)
+    suspend fun updateGoal(goalId:String,amount:Int?)
 }
