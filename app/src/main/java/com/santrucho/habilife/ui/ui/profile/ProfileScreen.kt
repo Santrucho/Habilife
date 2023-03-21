@@ -1,4 +1,4 @@
-package com.santrucho.habilife.ui.ui
+package com.santrucho.habilife.ui.ui.profile
 
 
 import androidx.compose.foundation.background
@@ -6,14 +6,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltNavGraphViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.GoalViewModel
@@ -25,6 +23,9 @@ import com.santrucho.habilife.ui.presentation.SignUpViewModel
 @Composable
 fun ProfileScreen(navController: NavController,goalViewModel: GoalViewModel,habitViewModel: HabitViewModel,loginViewModel: LoginViewModel, signUpViewModel: SignUpViewModel) {
 
+    val habitCount = habitViewModel.habitState.collectAsState().value.let {
+
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -35,10 +36,9 @@ fun ProfileScreen(navController: NavController,goalViewModel: GoalViewModel,habi
 
             signUpViewModel.currentUser?.let {
                 UserInfo(
-                    viewModel = signUpViewModel,
-                    navController = navController,
                     name = it.displayName.toString(),
-                    email = it.email.toString()
+                    email = it.email.toString(),
+                    habitCount = it.email.toString()
                 )
             }
             Button(
@@ -57,70 +57,6 @@ fun ProfileScreen(navController: NavController,goalViewModel: GoalViewModel,habi
             ) {
                 Text(
                     text = "Cerrar sesion"
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun UserInfo(
-    viewModel: SignUpViewModel?,
-    navController: NavController,
-    name: String,
-    email: String
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "Hola de nuevo"
-        )
-
-        Text(
-            text = name,
-        )
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = "nombre: ",
-                    modifier = Modifier.weight(0.3f),
-                )
-
-                Text(
-                    text = name,
-                    modifier = Modifier.weight(0.7f),
-                )
-            }
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-            ) {
-                Text(
-                    text = "email: ",
-                    modifier = Modifier.weight(0.3f),
-                )
-
-                Text(
-                    text = email,
-                    modifier = Modifier.weight(0.7f),
                 )
             }
         }
