@@ -46,10 +46,10 @@ fun ReleaseDatePicker(pickDate: LocalDate, onDatePicked: (LocalDate) -> Unit) {
             initialDate = LocalDate.now(),
             title = "Elija una fecha limite para el objetivo",
             colors = DatePickerDefaults.colors(
-                dateActiveTextColor = MaterialTheme.colors.secondaryVariant,
-                dateInactiveTextColor = MaterialTheme.colors.secondaryVariant,
+                dateActiveTextColor = MaterialTheme.colors.background,
+                dateInactiveTextColor = MaterialTheme.colors.background,
                 dateInactiveBackgroundColor = MaterialTheme.colors.secondary,
-                headerTextColor = MaterialTheme.colors.secondaryVariant,
+                headerTextColor = MaterialTheme.colors.background,
                 headerBackgroundColor = MaterialTheme.colors.secondary,
                 dateActiveBackgroundColor = MaterialTheme.colors.primary,
                 calendarHeaderTextColor = MaterialTheme.colors.primaryVariant
@@ -63,7 +63,7 @@ fun ReleaseDatePicker(pickDate: LocalDate, onDatePicked: (LocalDate) -> Unit) {
     Card(
         shape = MaterialTheme.shapes.medium,
         elevation = 3.dp,
-        backgroundColor = MaterialTheme.colors.secondaryVariant,
+        backgroundColor = MaterialTheme.colors.background,
         modifier = Modifier.padding(4.dp)
     ) {
         Column(

@@ -47,7 +47,7 @@ fun GoalCard(goal: GoalsResponse, navController: NavController) {
                 .wrapContentSize()
                 .padding(8.dp),
             elevation = 6.dp,
-            backgroundColor = MaterialTheme.colors.secondaryVariant
+            backgroundColor = MaterialTheme.colors.background
         ) {
             Column(
                 modifier = Modifier

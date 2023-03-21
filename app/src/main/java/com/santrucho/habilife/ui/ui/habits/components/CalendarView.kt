@@ -31,7 +31,7 @@ fun CalendarView(){
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            val background = MaterialTheme.colors.secondaryVariant
+            val background = MaterialTheme.colors.background
             val dayBackgroundColor = MaterialTheme.colors.secondary
             val headerTextColor = MaterialTheme.colors.primary
             val textColor = MaterialTheme.colors.primary

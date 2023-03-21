@@ -36,8 +36,8 @@ fun Categories(options: List<String>, onTypeSelection: (String) -> Unit) {
 
     Card(
         shape = MaterialTheme.shapes.medium,
-        elevation = 3.dp,
-        backgroundColor = MaterialTheme.colors.secondaryVariant,
+        elevation = 8.dp,
+        backgroundColor = MaterialTheme.colors.background,
         modifier = Modifier.padding(4.dp)
     ) {
         Column(
@@ -58,7 +58,7 @@ fun Categories(options: List<String>, onTypeSelection: (String) -> Unit) {
                     placeholder = { Text("Seleccione un tipo de habito") },
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon(
-                            expanded = expanded
+                            expanded = !expanded
                         )
                     },
                     colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(
@@ -89,7 +89,6 @@ fun Categories(options: List<String>, onTypeSelection: (String) -> Unit) {
                         .wrapContentHeight()
                 ) {
                     options.forEach { option ->
-                        val isSelected = option == selectedOption
                         DropdownMenuItem(
                             onClick = {
                                 selectedOption = option
@@ -146,8 +145,8 @@ fun TimePicker(pickTime: LocalTime, onTimePicked: (LocalTime) -> Unit) {
             is24HourClock = false,
             title = "Elija un horario para comenzar el habito:",
             colors = TimePickerDefaults.colors(
-                activeTextColor = MaterialTheme.colors.secondaryVariant,
-                inactiveTextColor = MaterialTheme.colors.secondaryVariant,
+                activeTextColor = MaterialTheme.colors.background,
+                inactiveTextColor = MaterialTheme.colors.background,
                 inactivePeriodBackground = MaterialTheme.colors.secondary,
                 headerTextColor = MaterialTheme.colors.primaryVariant,
                 activeBackgroundColor = MaterialTheme.colors.primary,
@@ -168,7 +167,7 @@ fun TimePicker(pickTime: LocalTime, onTimePicked: (LocalTime) -> Unit) {
     Card(
         shape = MaterialTheme.shapes.medium,
         elevation = 3.dp,
-        backgroundColor = MaterialTheme.colors.secondaryVariant,
+        backgroundColor = MaterialTheme.colors.background,
         modifier = Modifier.padding(4.dp)
     ) {
         Column(

@@ -19,7 +19,7 @@ fun BottomBar(
     onClick:(BottomNavScreen) -> Unit) {
 
     BottomNavigation(
-        backgroundColor = MaterialTheme.colors.secondaryVariant,
+        backgroundColor = MaterialTheme.colors.background,
         contentColor = MaterialTheme.colors.primaryVariant
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()

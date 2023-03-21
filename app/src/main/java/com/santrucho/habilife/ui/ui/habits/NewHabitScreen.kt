@@ -96,7 +96,7 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                 Card(
                     shape = MaterialTheme.shapes.medium,
                     elevation = 3.dp,
-                    backgroundColor = MaterialTheme.colors.secondaryVariant,
+                    backgroundColor = MaterialTheme.colors.background,
                     modifier = Modifier.padding(4.dp)
                 ) {
                     Column(

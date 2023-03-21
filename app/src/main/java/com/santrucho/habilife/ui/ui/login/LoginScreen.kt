@@ -22,12 +22,15 @@ import com.santrucho.habilife.ui.presentation.LoginViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.goals.components.NewFields
 import com.santrucho.habilife.ui.ui.goals.components.PasswordFields
+import com.santrucho.habilife.ui.util.BackPressHandler
 import com.santrucho.habilife.ui.util.HandleState
 
 
 @Composable
 fun LoginScreen(viewModel: LoginViewModel, navController: NavController) {
 
+    val onBack = {}
+    BackPressHandler(onBackPressed = onBack)
     viewModel.resetValues()
     val loginFlow = viewModel.loginFlow.collectAsState()
     //Set the fields in Login to fill
@@ -44,7 +47,7 @@ fun LoginScreen(viewModel: LoginViewModel, navController: NavController) {
             Card(
                 shape = MaterialTheme.shapes.medium,
                 elevation = 8.dp,
-                backgroundColor = MaterialTheme.colors.secondaryVariant,
+                backgroundColor = MaterialTheme.colors.background,
                 modifier = Modifier.padding(16.dp)
             ) {
 

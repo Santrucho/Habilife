@@ -88,11 +88,11 @@ fun <T> PasswordFields(
         shape = CircleShape,
         colors = TextFieldDefaults.outlinedTextFieldColors(
             textColor = Color.Black,
+            focusedBorderColor = Color.Black,
             errorCursorColor = Color.Red,
-            focusedBorderColor = Color.Blue,
-            unfocusedBorderColor = Color.Blue,
-            focusedLabelColor = Color.Blue,
-            unfocusedLabelColor = Color.Blue
+            unfocusedBorderColor = Color.Gray,
+            focusedLabelColor = Color.Black,
+            unfocusedLabelColor = Color.Gray
         )
     )
     Text(

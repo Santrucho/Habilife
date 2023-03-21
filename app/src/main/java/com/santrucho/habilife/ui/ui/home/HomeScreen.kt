@@ -1,31 +1,31 @@
 package com.santrucho.habilife.ui.ui.home
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.navArgument
 import coil.compose.AsyncImage
+import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.GoalViewModel
 import com.santrucho.habilife.ui.presentation.HabitViewModel
+import com.santrucho.habilife.ui.presentation.LoginViewModel
 import com.santrucho.habilife.ui.presentation.SignUpViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.goals.components.GoalsUI
 import com.santrucho.habilife.ui.ui.habits.components.HabitUI
+import com.santrucho.habilife.ui.ui.habits.components.MyChip
 import com.santrucho.habilife.ui.ui.home.components.HandleFilterState
 import com.santrucho.habilife.ui.util.BackPressHandler
 import com.santrucho.habilife.ui.util.Resource
@@ -39,6 +39,7 @@ import java.util.*
 fun HomeScreen(
     navController: NavController,
     userViewModel: SignUpViewModel,
+    loginViewModel: LoginViewModel,
     goalViewModel: GoalViewModel,
     habitViewModel: HabitViewModel
 ) {
@@ -90,7 +91,7 @@ fun HomeScreen(
 
         //Welcomes the user to the main screen
         userViewModel.currentUser?.let {
-            UserInfo(name = it.displayName.toString())
+            UserInfo(name = it.displayName.toString(),userViewModel,navController,loginViewModel)
         }
         //Show a list of habits to make in the current day
         TextInScreen(
@@ -102,7 +103,7 @@ fun HomeScreen(
         Card(
             shape = MaterialTheme.shapes.medium,
             elevation = 3.dp,
-            backgroundColor = MaterialTheme.colors.secondaryVariant,
+            backgroundColor = MaterialTheme.colors.background,
             modifier = Modifier.padding(8.dp, 2.dp)
         ) {
             Column(
@@ -144,48 +145,92 @@ fun HomeScreen(
 
 /*Welcome to user, changing the background image depending of what time of day it is */
 @Composable
-fun UserInfo(name: String) {
-    Spacer(modifier = Modifier.height(16.dp))
+fun UserInfo(name: String,userViewModel:SignUpViewModel,navController: NavController,loginViewModel: LoginViewModel) {
+    var showOptions by remember { mutableStateOf(false) }
 
-    Card(
-        shape = MaterialTheme.shapes.medium,
-        modifier = Modifier
-            .fillMaxWidth(0.8f)
-            .fillMaxHeight(0.20f)
-            .padding(8.dp),
-        elevation = 8.dp
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Box(
-            modifier = Modifier.clickable { }
-        ) {
-            AsyncImage(
-                model = "https://firebasestorage.googleapis.com/v0/b/habilife-2bba3.appspot.com/o/sunshinee.png?alt=media&token=7a57199f-0adb-4bd1-b104-6303ed8a42c7",
-                contentDescription = "image",
-                contentScale = ContentScale.Crop,
-                colorFilter = ColorFilter.tint(Color.Black.copy(alpha = 0.45f), BlendMode.Multiply)
-            )
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-                    .padding(8.dp),
-                horizontalAlignment = Alignment.End
-            ) {
 
-                Text(
-                    text = "BIENVENIDO",
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colors.secondaryVariant,
-                    fontSize = 24.sp
-                )
-                Text(
-                    text = "$name",
-                    fontWeight = FontWeight.ExtraBold,
-                    color = MaterialTheme.colors.secondaryVariant,
-                    fontSize = 60.sp
-                )
-            }
+        AsyncImage(
+            model = "https://firebasestorage.googleapis.com/v0/b/habilife-2bba3.appspot.com/o/Habi(1).png?alt=media&token=8cbe8c2c-ee97-4f80-b8ba-e130fcce7379",
+            contentDescription = "profile image",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .width(68.dp)
+                .height(68.dp)
+                .padding(4.dp)
+                .clip(CircleShape)
+        )
+
+        Column(
+            modifier = Modifier
+                .wrapContentSize()
+                .padding(horizontal = 8.dp),
+            horizontalAlignment = Alignment.Start
+        ) {
+
+            Text(
+                text = "BIENVENIDO",
+                fontWeight = FontWeight.Bold,
+                fontSize = 12.sp
+            )
+            Text(
+                text = "$name",
+                fontWeight = FontWeight.ExtraBold,
+                fontSize = 30.sp
+            )
         }
+        IconButton(onClick = { showOptions = !showOptions }) {
+            Icon(
+                imageVector = Icons.Outlined.Settings,
+                contentDescription = "settings",
+                modifier = Modifier
+                    .width(58.dp),
+                tint = MaterialTheme.colors.primaryVariant
+            )
+        }
+    }
+    Spacer(modifier = Modifier.padding(12.dp))
+
+    if (showOptions) {
+        AlertDialog(
+            onDismissRequest = { showOptions = false },
+            backgroundColor = MaterialTheme.colors.secondaryVariant,
+            title = {
+                Text(
+                    text = "Ajustes",
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
+            },
+            buttons = {
+                Box(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)) {
+                    Column(verticalArrangement = Arrangement.SpaceBetween) {
+                        Divider(modifier = Modifier.padding(4.dp))
+                        Row(modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),horizontalArrangement = Arrangement.SpaceBetween) {
+                            Text(text = "Activar modo oscuro" )
+                            //MyChip(title = , selected = , onSelected = )
+                        }
+                        TextButton(onClick = {
+                            userViewModel.logout()
+                            loginViewModel.logout()
+                            navController.navigate(Screen.LoginScreen.route) },
+                            modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)){
+                            Text(text = "Cerrar sesion", color = MaterialTheme.colors.primaryVariant)
+                        }
+                    }
+                }
+            }
+        )
     }
 }
 

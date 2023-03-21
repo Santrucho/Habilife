@@ -87,7 +87,7 @@ fun MyHabitsSection(habitViewModel: HabitViewModel) {
     Card(
         shape = MaterialTheme.shapes.medium,
         elevation = 3.dp,
-        backgroundColor = MaterialTheme.colors.secondaryVariant,
+        backgroundColor = MaterialTheme.colors.background,
         modifier = Modifier.padding(8.dp)
     ) {
         Column(
