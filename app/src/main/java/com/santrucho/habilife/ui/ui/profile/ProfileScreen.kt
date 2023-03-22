@@ -5,13 +5,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.google.firebase.ktx.Firebase
 import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.GoalViewModel
@@ -19,12 +19,15 @@ import com.santrucho.habilife.ui.presentation.HabitViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.presentation.LoginViewModel
 import com.santrucho.habilife.ui.presentation.SignUpViewModel
+import com.santrucho.habilife.ui.util.Resource
 
 @Composable
-fun ProfileScreen(navController: NavController,goalViewModel: GoalViewModel,habitViewModel: HabitViewModel,loginViewModel: LoginViewModel, signUpViewModel: SignUpViewModel) {
+fun ProfileScreen(navController: NavController,goalViewModel: GoalViewModel,habitViewModel: HabitViewModel,loginViewModel: LoginViewModel, signUpViewModel: SignUpViewModel,) {
 
-    val habitCount = habitViewModel.habitState.collectAsState().value.let {
+    val habitComplete = habitViewModel.habitComplete.value ?: 0
 
+    LaunchedEffect(Unit) {
+        habitViewModel.getHabitComplete()
     }
     Column(
         modifier = Modifier
@@ -38,7 +41,7 @@ fun ProfileScreen(navController: NavController,goalViewModel: GoalViewModel,habi
                 UserInfo(
                     name = it.displayName.toString(),
                     email = it.email.toString(),
-                    habitCount = it.email.toString()
+                    habitCount = habitComplete.toString()
                 )
             }
             Button(

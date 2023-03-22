@@ -1,5 +1,7 @@
 package com.santrucho.habilife.ui.data.remote.habits
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.santrucho.habilife.ui.data.model.Habit
@@ -62,8 +64,22 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
         }
     }
 
-    override suspend fun updateHabit(habitId:String,isChecked:Boolean){
-        firestore.collection("habits").document(habitId).update("completed",isChecked).await()
+    override suspend fun updateHabit(habitId:String,isChecked:Boolean,habitCount:Int){
+        try {
+            firestore.collection("habits").document(habitId).update("completed", isChecked).await()
+
+            val userId = firebaseAuth.currentUser
+            val userCollection = firestore.collection("users")
+            val query = userCollection.whereEqualTo("userId", userId?.uid).get().await()
+            if (!query.isEmpty) {
+                val userDocument = query.documents[0]
+                userCollection.document(userDocument.id)
+                    .update("habitComplete", habitCount)
+                    .await()
+            }
+        }catch(e:Exception){
+            Log.e(TAG, "Error updating habit: $e")
+        }
     }
 
     override suspend fun getOptions(): Resource<List<String>> {
@@ -83,6 +99,18 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
             Resource.Success(result)
         } catch (e:Exception){
             Resource.Failure(e)
+        }
+    }
+
+    override suspend fun getHabitComplete(): Int? {
+        val userId = firebaseAuth.currentUser?.uid
+        val userCollection = firestore.collection("users")
+        val query = userCollection.whereEqualTo("userId", userId).get().await()
+        return if (!query.isEmpty) {
+            val userDocument = query.documents[0]
+            userDocument.getLong("habitComplete")?.toInt()
+        } else {
+            null
         }
     }
 }

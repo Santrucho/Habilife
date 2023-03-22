@@ -48,12 +48,12 @@ fun EmptyMessage(text: String) {
                 fontWeight = FontWeight.Medium,
                 color = Color.DarkGray,
                 modifier = Modifier.wrapContentWidth(Alignment.CenterHorizontally),
-                textAlign = TextAlign.Start,
+                textAlign = TextAlign.Center,
                 fontSize = 16.sp
             )
         } else {
             Text(
-                text = "Al parecer no tienes ningun $text \npara realizar hoy",
+                text = "Al parecer no tienes ningun $text\n para realizar hoy",
                 fontWeight = FontWeight.Medium,
                 color = Color.DarkGray,
                 modifier = Modifier.wrapContentWidth(Alignment.CenterHorizontally),

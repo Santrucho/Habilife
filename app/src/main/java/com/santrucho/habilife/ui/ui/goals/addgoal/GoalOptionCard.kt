@@ -15,11 +15,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.santrucho.habilife.ui.data.model.goals.GoalsOption
 import com.santrucho.habilife.ui.navigation.Screen
 
-@OptIn(ExperimentalGlideComposeApi::class)
+
 @Composable
 fun GoalOptionCard(goalOption: GoalsOption, navController: NavController) {
     Box(modifier = Modifier

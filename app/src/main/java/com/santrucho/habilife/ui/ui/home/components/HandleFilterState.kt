@@ -14,7 +14,6 @@ import com.santrucho.habilife.ui.util.Resource
 @Composable
 fun HandleFilterState(
     flow: State<Resource<List<Any>>?>,
-
     filteredList: List<Any>,
     emptyText: String,
     cardUI: Unit
