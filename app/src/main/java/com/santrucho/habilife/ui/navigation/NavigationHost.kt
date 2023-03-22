@@ -2,7 +2,6 @@ package com.santrucho.habilife.ui.navigation
 
 import android.net.Uri
 import android.os.Bundle
-import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -13,7 +12,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.santrucho.habilife.ui.data.model.goals.GoalsResponse
 import com.santrucho.habilife.ui.presentation.*
-import com.santrucho.habilife.ui.ui.*
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.goals.GoalDetail
 import com.santrucho.habilife.ui.ui.login.LoginScreen
@@ -24,9 +22,9 @@ import com.santrucho.habilife.ui.ui.goals.GoalsScreen
 import com.santrucho.habilife.ui.ui.goals.addgoal.AddGoal
 import com.santrucho.habilife.ui.ui.goals.addgoal.NewGoalScreen
 import com.santrucho.habilife.ui.ui.home.HomeScreen
+import com.santrucho.habilife.ui.ui.profile.ProfileScreen
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.encodeToJsonElement
 
 
 @Composable

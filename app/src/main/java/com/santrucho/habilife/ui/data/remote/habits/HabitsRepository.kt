@@ -19,10 +19,12 @@ interface HabitsRepository {
 
     suspend fun deleteHabit(habit:Habit)
 
-    suspend fun updateHabit(habitId:String,isChecked:Boolean)
+    suspend fun updateHabit(habitId:String,isChecked:Boolean,habitCount:Int)
 
     suspend fun getOptions() : Resource<List<String>>
 
     suspend fun getDaysOfWeek() : Resource<List<String>>
+
+    suspend fun getHabitComplete() : Int?
 
 }

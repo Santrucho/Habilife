@@ -1,5 +1,6 @@
 package com.santrucho.habilife.ui.presentation
 
+import android.content.SharedPreferences
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -28,6 +29,8 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
     var frequentlyMsg: MutableState<String> = mutableStateOf("")
 
     var isEnabledConfirmButton: MutableState<Boolean> = mutableStateOf(false)
+
+    var habitComplete: MutableState<Int?> = mutableStateOf(null)
 
     private val _habitState = MutableStateFlow<Resource<List<Habit>>?>(null)
     val habitState: StateFlow<Resource<List<Habit>>?> = _habitState
@@ -143,8 +146,20 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
 
     fun onCompleted(habit:Habit,isChecked:Boolean){
         viewModelScope.launch {
-            repository.updateHabit(habit.id,isChecked)
+            val newHabitCount = if (isChecked) {
+                habitComplete.value?.plus(1) ?: 0
+            } else {
+                habitComplete.value!!
+            }
+            repository.updateHabit(habit.id,isChecked,newHabitCount)
+            habitComplete.value = newHabitCount
             getAllHabits()
+        }
+    }
+
+    fun getHabitComplete() {
+        viewModelScope.launch {
+            habitComplete.value = repository.getHabitComplete()
         }
     }
 }

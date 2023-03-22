@@ -55,8 +55,6 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
     private val _subjectApproved = MutableStateFlow<List<String>>(emptyList())
     val subjectApproved : StateFlow<List<String>> = _subjectApproved
 
-
-
     private val _learningFlow = MutableStateFlow<Resource<LearningGoal>?>(null)
     val learningFlow : StateFlow<Resource<LearningGoal>?> = _learningFlow
 

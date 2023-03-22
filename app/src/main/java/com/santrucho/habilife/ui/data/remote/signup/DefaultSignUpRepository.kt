@@ -24,6 +24,7 @@ class DefaultSignUpRepository @Inject constructor(private val firebaseAuth : Fir
             val result = firebaseAuth.createUserWithEmailAndPassword(email,password).await()
             result?.user?.updateProfile(UserProfileChangeRequest.Builder().setDisplayName(username).build())
 
+            val firestoreCollection = firebaseFirestore.collection("users").document()
             //Added user to firestore database
             currentUser.let{ userLogged ->
                 val userToSave = User(
@@ -31,7 +32,7 @@ class DefaultSignUpRepository @Inject constructor(private val firebaseAuth : Fir
                     username = username,
                     email = email
                 )
-                firebaseFirestore.collection("users").add(userToSave).await()
+                firestoreCollection.set(userToSave).await()
             }
 
             Resource.Success(result.user!!)

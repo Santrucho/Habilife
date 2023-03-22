@@ -109,7 +109,7 @@ fun HomeScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.45f),
+                    .fillMaxHeight(0.35f),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 HandleFilterState(
@@ -130,16 +130,21 @@ fun HomeScreen(
             route = BottomNavScreen.Goals.screen_route,
             navController = navController
         )
-
-        HandleFilterState(
-            flow = goal,
-            emptyText = "objetivo",
-            filteredList = filteredGoalList,
-            cardUI = GoalsUI(
-                goals = filteredGoalList,
-                navController = navController
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            HandleFilterState(
+                flow = goal,
+                emptyText = "objetivo",
+                filteredList = filteredGoalList,
+                cardUI = GoalsUI(
+                    goals = filteredGoalList,
+                    navController = navController
+                )
             )
-        )
+        }
     }
 }
 

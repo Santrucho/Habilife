@@ -1,5 +1,6 @@
 package com.santrucho.habilife.ui.ui.habits.components
 
+import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -41,7 +42,6 @@ fun HabitCard(
     val isEnabled = habit.frequently.any{ day ->
         day.equals(LocalDate.now().dayOfWeek.getDisplayName(TextStyle.FULL, Locale("es","ARG")),ignoreCase = true)
     }
-
 
     Column(modifier = Modifier.wrapContentSize()) {
         Row(
