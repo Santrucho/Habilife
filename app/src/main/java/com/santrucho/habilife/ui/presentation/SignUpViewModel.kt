@@ -39,8 +39,6 @@ class SignUpViewModel @Inject constructor(private val repository: SignUpReposito
     private val _signUpFlow = MutableStateFlow<Resource<FirebaseUser>?>(null)
     val signUpFlow: StateFlow<Resource<FirebaseUser>?> = _signUpFlow
 
-    val currentUser: FirebaseUser?
-        get() = repository.currentUser
 
     private fun shouldEnabledConfirmButton() {
         isEnabledConfirmButton.value =
@@ -112,8 +110,8 @@ class SignUpViewModel @Inject constructor(private val repository: SignUpReposito
         emailValue.value = ""
         passwordValue.value = ""
         confirmPasswordValue.value = ""
+        _signUpFlow.value = null
     }
-
 
     //Call the repository and create an new user
     fun signUp(username: String, email: String, password: String) = viewModelScope.launch {
@@ -121,11 +119,4 @@ class SignUpViewModel @Inject constructor(private val repository: SignUpReposito
         val resultData = repository.createUser(username, email, password)
         _signUpFlow.value = resultData
     }
-
-    //Sign out the user
-    fun logout() {
-        repository.logout()
-        _signUpFlow.value = null
-    }
-
 }

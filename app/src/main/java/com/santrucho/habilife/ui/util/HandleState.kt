@@ -15,7 +15,8 @@ import androidx.navigation.NavController
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun HandleState(flow: State<Resource<Any>?>, navController: NavController,route:String,text:String) {
+fun HandleState(flow: State<Resource<Any>?>, navController: NavController,route:String,text:String,isRegister:Boolean = false) {
+
     val context = LocalContext.current
     flow.value?.let {
         when (it) {
@@ -27,6 +28,9 @@ fun HandleState(flow: State<Resource<Any>?>, navController: NavController,route:
                         "$text correctamente!",
                         Toast.LENGTH_SHORT
                     ).show()
+                    if(isRegister){
+
+                    }
                 }
             }
             is Resource.Failure -> {

@@ -1,5 +1,6 @@
 package com.santrucho.habilife.ui.ui.signup
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -28,9 +29,8 @@ import com.santrucho.habilife.ui.util.HandleState
 @Composable
 fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel) {
 
-    viewModel.resetValues()
     val signUpFlow = viewModel.signUpFlow.collectAsState()
-
+    Log.d("3333333333333333333333333333",signUpFlow.value.toString())
     //Set the fields in SignUp to fill
     Column(
         modifier = Modifier
