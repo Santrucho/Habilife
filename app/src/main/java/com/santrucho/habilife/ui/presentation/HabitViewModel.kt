@@ -47,6 +47,7 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
     init {
         getOptions()
         getDays()
+        getHabitComplete()
     }
     //Check if the confirm button can be activated, when the validations are correct
     private fun shouldEnabledConfirmButton() {
@@ -149,9 +150,11 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
             val newHabitCount = if (isChecked) {
                 habitComplete.value?.plus(1) ?: 0
             } else {
-                habitComplete.value!!
+                habitComplete.value
             }
-            repository.updateHabit(habit.id,isChecked,newHabitCount)
+            if (newHabitCount != null) {
+                repository.updateHabit(habit.id,isChecked,newHabitCount)
+            }
             habitComplete.value = newHabitCount
             getAllHabits()
         }

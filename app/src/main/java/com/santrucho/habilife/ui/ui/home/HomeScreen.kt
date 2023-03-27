@@ -1,5 +1,6 @@
 package com.santrucho.habilife.ui.ui.home
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -47,9 +48,13 @@ fun HomeScreen(
     goalViewModel.getAllGoals()
     habitViewModel.getAllHabits()
 
+    LaunchedEffect(Unit) {
+        userViewModel.resetValues()
+    }
+
     val goal = goalViewModel.goalState.collectAsState()
     val habit = habitViewModel.habitState.collectAsState()
-
+    Log.d("@@@@@@@@@@@@@@@@@@@@@@@@@@@",loginViewModel.currentUser?.email.toString())
     val formatter = DateTimeFormatter.ofPattern("dd MM yyyy")
     val filteredGoalList = goal.value.let { resource ->
         when (resource) {
@@ -90,8 +95,8 @@ fun HomeScreen(
     ) {
 
         //Welcomes the user to the main screen
-        userViewModel.currentUser?.let {
-            UserInfo(name = it.displayName.toString(),userViewModel,navController,loginViewModel)
+        loginViewModel.currentUser?.let {
+            UserInfo(name = it.displayName.toString(),navController, loginViewModel::logout)
         }
         //Show a list of habits to make in the current day
         TextInScreen(
@@ -150,7 +155,7 @@ fun HomeScreen(
 
 /*Welcome to user, changing the background image depending of what time of day it is */
 @Composable
-fun UserInfo(name: String,userViewModel:SignUpViewModel,navController: NavController,loginViewModel: LoginViewModel) {
+fun UserInfo(name: String,navController: NavController,onLogout:() -> Unit) {
     var showOptions by remember { mutableStateOf(false) }
 
     Row(
@@ -224,8 +229,7 @@ fun UserInfo(name: String,userViewModel:SignUpViewModel,navController: NavContro
                             //MyChip(title = , selected = , onSelected = )
                         }
                         TextButton(onClick = {
-                            userViewModel.logout()
-                            loginViewModel.logout()
+                            onLogout()
                             navController.navigate(Screen.LoginScreen.route) },
                             modifier = Modifier
                             .fillMaxWidth()

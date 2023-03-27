@@ -18,6 +18,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.santrucho.habilife.ui.data.model.Habit
@@ -57,7 +58,7 @@ fun HabitCard(
                 onCheckedChange = { isChecked ->
                    viewModel.onCompleted(habit, isChecked)
                 },
-                colors = CheckboxDefaults.colors(checkedColor = Color.Blue),
+                colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary),
                 enabled = isEnabled
             )
             Card(
@@ -73,7 +74,7 @@ fun HabitCard(
                     ),
                 elevation = 3.dp,
                 onClick = { expandedState = !expandedState },
-                backgroundColor = typeHelper(habit.type)
+                backgroundColor = if(habit.completed) Color.Gray else typeHelper(habit.type)
             ) {
                 Column(modifier = Modifier
                     .fillMaxWidth()
@@ -99,7 +100,8 @@ fun HabitCard(
                                     .wrapContentHeight(Alignment.Top)
                                     .wrapContentWidth(Alignment.CenterHorizontally),
                                 color = White,
-                                fontSize = 25.sp
+                                fontSize = 25.sp,
+                                textDecoration = if(habit.completed) TextDecoration.LineThrough else TextDecoration.None
                             )
                         }
                         IconButton(

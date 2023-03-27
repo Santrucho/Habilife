@@ -1,5 +1,6 @@
 package com.santrucho.habilife.ui.ui.login
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -31,7 +32,6 @@ fun LoginScreen(viewModel: LoginViewModel, navController: NavController) {
 
     val onBack = {}
     BackPressHandler(onBackPressed = onBack)
-    viewModel.resetValues()
     val loginFlow = viewModel.loginFlow.collectAsState()
     //Set the fields in Login to fill
     Column(

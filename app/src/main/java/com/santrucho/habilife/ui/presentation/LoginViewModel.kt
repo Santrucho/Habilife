@@ -4,8 +4,10 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseUser
 import com.santrucho.habilife.ui.data.remote.login.LoginRepository
+import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,6 +33,9 @@ class LoginViewModel @Inject constructor(private val repository: LoginRepository
     private val _loginFlow = MutableStateFlow<Resource<FirebaseUser>?>(null)
     val loginFlow : StateFlow<Resource<FirebaseUser>?> = _loginFlow
 
+    val currentUser: FirebaseUser?
+        get() = repository.currentUser
+
     private fun shouldEnabledConfirmButton() {
         isEnabledConfirmButton.value =
             emailErrMsg.value.isEmpty()
@@ -38,14 +43,16 @@ class LoginViewModel @Inject constructor(private val repository: LoginRepository
                     && passwordValue.value.isNotBlank()
     }
     //Reset the fields values
-    fun resetValues(){
+    private fun resetValues(){
         emailValue.value = ""
         passwordValue.value = ""
     }
     //If the user is register and its already login, initialize the app and go to the home screen directly
     init{
-        if(repository.currentUser != null){
-            _loginFlow.value = Resource.Success(repository.currentUser!!)
+        repository.currentUser?.let { user ->
+            _loginFlow.value = Resource.Success(user)
+        } ?: run {
+            _loginFlow.value = null
         }
     }
 
@@ -54,9 +61,12 @@ class LoginViewModel @Inject constructor(private val repository: LoginRepository
         _loginFlow.value = Resource.Loading()
         val resultData = repository.loginUser(email, password)
         _loginFlow.value = resultData
+
+        resetValues()
     }
     //Sign out the user
     fun logout(){
+        _loginFlow.value = Resource.Loading()
         repository.logout()
         _loginFlow.value = null
     }
