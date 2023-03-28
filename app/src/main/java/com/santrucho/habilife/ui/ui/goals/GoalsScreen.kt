@@ -1,9 +1,13 @@
 package com.santrucho.habilife.ui.ui.goals
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,7 +22,6 @@ import com.santrucho.habilife.ui.presentation.GoalViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.goals.components.FilterGoals
 import com.santrucho.habilife.ui.ui.habits.components.MyChip
-import com.santrucho.habilife.ui.ui.home.components.HandleFilterState
 import com.santrucho.habilife.ui.util.BackPressHandler
 import com.santrucho.habilife.ui.util.Resource
 
@@ -43,7 +46,10 @@ fun GoalsScreen(goalViewModel: GoalViewModel, navController: NavController) {
 
     var selectedChip by remember { mutableStateOf("Todos") }
 
-    Column(Modifier.fillMaxSize()) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.secondaryVariant)) {
         //Set each element inside column
         Spacer(modifier = Modifier.padding(4.dp))
         Card(
@@ -78,7 +84,7 @@ fun GoalsScreen(goalViewModel: GoalViewModel, navController: NavController) {
                             elevation = 16.dp,
                             ambientColor = Color.Black,
                         ),
-                    color = Color.White,
+                    color = MaterialTheme.colors.primary,
                     fontSize = 50.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -99,7 +105,8 @@ fun GoalsScreen(goalViewModel: GoalViewModel, navController: NavController) {
                     } else {
                         ""
                     }
-                }
+                },
+                colorBackground = MaterialTheme.colors.background
             )
             MyChip(
                 title = "Año",
@@ -110,7 +117,8 @@ fun GoalsScreen(goalViewModel: GoalViewModel, navController: NavController) {
                     } else {
                         ""
                     }
-                }
+                },
+                colorBackground = MaterialTheme.colors.background
             )
             MyChip(
                 title = "Mes",
@@ -121,22 +129,18 @@ fun GoalsScreen(goalViewModel: GoalViewModel, navController: NavController) {
                     } else {
                         ""
                     }
-                }
+                },
+                colorBackground = MaterialTheme.colors.background
             )
         }
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.75f),
-            horizontalAlignment = Alignment.Start
-        ) {
 
-            FilterGoals(
-                title = selectedChip,
-                goalViewModel = goalViewModel,
-                navController = navController
-            )
-        }
+
+        FilterGoals(
+            title = selectedChip,
+            goalViewModel = goalViewModel,
+            navController = navController
+        )
+
         //Set FAB Button Row above BottomBar
         Spacer(modifier = Modifier.weight(1f))
         FabButton(navController)

@@ -1,5 +1,6 @@
 package com.santrucho.habilife.ui.ui.habits
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -32,7 +33,7 @@ fun HabitScreen(
     //Set the screen in habits
     Column(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize().background(MaterialTheme.colors.secondaryVariant),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CalendarView()
@@ -90,14 +91,9 @@ fun MyHabitsSection(habitViewModel: HabitViewModel) {
         backgroundColor = MaterialTheme.colors.background,
         modifier = Modifier.padding(8.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(.75f),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            HabitList(habitViewModel)
-        }
+
+        HabitList(habitViewModel)
+
     }
 }
 

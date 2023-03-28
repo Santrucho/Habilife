@@ -14,36 +14,36 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.navigation.Screen
-import com.santrucho.habilife.ui.presentation.SignUpViewModel
 
 @Composable
 fun UserInfo(
     name: String,
     email: String,
-    onLogout:() -> Unit,
-    navController: NavController
+    onLogout: () -> Unit,
+    navController: NavController,
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight(),
-        horizontalAlignment = Alignment.CenterHorizontally
+    Card(
+        modifier = Modifier.padding(12.dp),
+        elevation = 8.dp,
+        shape = RoundedCornerShape(4.dp),
+        backgroundColor = MaterialTheme.colors.background
     ) {
-        Card(
-            modifier = Modifier.padding(8.dp),
-            elevation = 8.dp,
-            shape = RoundedCornerShape(4.dp)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            LogOut(onLogout = onLogout,navController = navController)
+            Spacer(modifier = Modifier.padding(32.dp))
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .wrapContentWidth()
                     .wrapContentHeight()
                     .padding(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -53,18 +53,21 @@ fun UserInfo(
                     contentDescription = "profile image",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
-                        .width(68.dp)
-                        .height(68.dp)
+                        .width(82.dp)
+                        .height(82.dp)
                         .padding(4.dp)
                         .clip(CircleShape)
                 )
+
                 Text(
                     text = name, fontWeight = FontWeight.W600, fontSize = 24.sp
                 )
+
                 Text(
-                    text = email, fontWeight = FontWeight.W600, fontSize = 24.sp
+                    text = email, fontWeight = FontWeight.W300, fontSize = 16.sp
                 )
             }
+            LogOut(onLogout = onLogout, navController = navController)
         }
     }
 }
@@ -72,31 +75,31 @@ fun UserInfo(
 @Composable
 fun LogOut(
     onLogout: () -> Unit,
-    navController: NavController
+    navController: NavController,
 ) {
     val openDialog = remember { mutableStateOf(false) }
     IconButton(onClick = {
         openDialog.value = true
-    }) {
-        Icon(imageVector = Icons.Outlined.Close, contentDescription = "log out")
+    }, modifier = Modifier.size(48.dp)) {
+        Icon(painter = painterResource(id = R.drawable.ic_log_out_svgrepo_com), contentDescription = "log out",tint = MaterialTheme.colors.primary)
     }
     if (openDialog.value) {
         AlertDialog(onDismissRequest = { openDialog.value = false },
             title = { Text(text = "Cerrar sesion", fontSize = 22.sp) },
-            text = {Text(text= "Estas seguro que desea cerrar sesion?",fontSize = 18.sp)} ,
+            text = { Text(text = "Estas seguro que desea cerrar sesion?", fontSize = 18.sp) },
             confirmButton = {
                 TextButton(onClick = {
                     onLogout()
                     navController.navigate(Screen.LoginScreen.route)
                 }) {
-                    Text("Confirm", color = Color.Black,fontSize = 18.sp)
+                    Text("Confirm", color = Color.Black, fontSize = 18.sp)
                 }
             },
             dismissButton = {
                 TextButton(onClick = {
                     openDialog.value = false
                 }) {
-                    Text("Cancel", color = Color.Black,fontSize = 18.sp)
+                    Text("Cancel", color = Color.Black, fontSize = 18.sp)
                 }
             })
     }

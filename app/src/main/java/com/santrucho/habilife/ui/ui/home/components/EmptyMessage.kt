@@ -16,17 +16,7 @@ import com.santrucho.habilife.R
 
 //In case there doesn't exist any Habit or Goals to make that day, show a Empty Message to notify the user
 @Composable
-fun EmptyMessage(text: String) {
-
-    AsyncImage(
-        model = R.drawable.ic_undraw_empty_re_opql,
-        contentDescription = "empty icon",
-        contentScale = ContentScale.Crop,
-        alpha = 0.6f,
-        modifier = Modifier
-            .width(122.dp)
-            .height(122.dp),
-    )
+fun EmptyMessage(text: String, textClick: String) {
     Column(
         modifier = Modifier
             .fillMaxWidth(0.8f)
@@ -34,40 +24,34 @@ fun EmptyMessage(text: String) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        if (text == "objetivo") {
-            Text(
-                text = "Al parecer no tienes ningun $text\n creado actualmente",
-                fontWeight = FontWeight.Medium,
-                color = Color.DarkGray,
-                modifier = Modifier.wrapContentWidth(Alignment.CenterHorizontally),
-                textAlign = TextAlign.Center,
-                fontSize = 16.sp
-            )
-            Text(
-                text = "Haz click aqui y empieza el primero!\n",
-                fontWeight = FontWeight.Medium,
-                color = Color.DarkGray,
-                modifier = Modifier.wrapContentWidth(Alignment.CenterHorizontally),
-                textAlign = TextAlign.Center,
-                fontSize = 16.sp
-            )
-        } else {
-            Text(
-                text = "Al parecer no tienes ningun $text\n para realizar hoy",
-                fontWeight = FontWeight.Medium,
-                color = Color.DarkGray,
-                modifier = Modifier.wrapContentWidth(Alignment.CenterHorizontally),
-                textAlign = TextAlign.Center,
-                fontSize = 16.sp
-            )
-            Text(
-                text = "Crea nuevos habitos aqui",
-                fontWeight = FontWeight.Medium,
-                color = Color.DarkGray,
-                modifier = Modifier.wrapContentWidth(Alignment.CenterHorizontally),
-                textAlign = TextAlign.Center,
-                fontSize = 16.sp
-            )
-        }
+        AsyncImage(
+            model = R.drawable.ic_undraw_empty_re_opql,
+            contentDescription = "empty icon",
+            contentScale = ContentScale.Crop,
+            alpha = 0.6f,
+            modifier = Modifier
+                .width(122.dp)
+                .height(122.dp),
+        )
+        Spacer(modifier = Modifier.padding(2.dp))
+        Text(
+            text = text,
+            fontWeight = FontWeight.Medium,
+            color = Color.DarkGray,
+            modifier = Modifier.wrapContentWidth(Alignment.CenterHorizontally),
+            textAlign = TextAlign.Center,
+            fontSize = 16.sp
+        )
+        Text(
+            text = textClick,
+            fontWeight = FontWeight.Medium,
+            color = Color.DarkGray,
+            modifier = Modifier.wrapContentWidth(Alignment.CenterHorizontally),
+            textAlign = TextAlign.Center,
+            fontSize = 16.sp
+        )
+
     }
 }
+
+

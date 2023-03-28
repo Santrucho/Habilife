@@ -43,6 +43,8 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
 
     var isEnabledConfirmButton: MutableState<Boolean> = mutableStateOf(false)
 
+    var goalComplete: MutableState<Int?> = mutableStateOf(null)
+
     private val _financeFlow = MutableStateFlow<Resource<FinanceGoal>?>(null)
     val financeFlow : StateFlow<Resource<FinanceGoal>?> = _financeFlow
 

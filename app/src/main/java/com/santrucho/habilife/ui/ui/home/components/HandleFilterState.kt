@@ -1,13 +1,15 @@
 package com.santrucho.habilife.ui.ui.home.components
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.santrucho.habilife.ui.util.Resource
 
 
@@ -15,7 +17,6 @@ import com.santrucho.habilife.ui.util.Resource
 fun HandleFilterState(
     flow: State<Resource<List<Any>>?>,
     filteredList: List<Any>,
-    emptyText: String,
     cardUI: Unit
 ) {
 
@@ -33,10 +34,10 @@ fun HandleFilterState(
             is Resource.Success -> {
                 val filterList = filteredList
                 //val filteredList = result.data.filter { it.release_date.contains("1") }
-                if (filterList.isEmpty()) {
-                    EmptyMessage(emptyText)
-                } else {
+                if (filterList.isNotEmpty()) {
                     cardUI
+                } else {
+                    null
                 }
             }
             is Resource.Failure -> {
