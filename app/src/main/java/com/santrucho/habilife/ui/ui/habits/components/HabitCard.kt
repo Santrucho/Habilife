@@ -57,6 +57,7 @@ fun HabitCard(
                 checked = habit.completed,
                 onCheckedChange = { isChecked ->
                    viewModel.onCompleted(habit, isChecked)
+                    viewModel.coloredDay.value = isChecked
                 },
                 colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary),
                 enabled = isEnabled

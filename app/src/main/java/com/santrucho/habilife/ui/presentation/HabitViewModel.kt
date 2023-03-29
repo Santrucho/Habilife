@@ -31,6 +31,7 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
     var isEnabledConfirmButton: MutableState<Boolean> = mutableStateOf(false)
 
     var habitComplete: MutableState<Int?> = mutableStateOf(null)
+    var coloredDay : MutableState<Boolean> = mutableStateOf(false)
 
     private val _habitState = MutableStateFlow<Resource<List<Habit>>?>(null)
     val habitState: StateFlow<Resource<List<Habit>>?> = _habitState

@@ -31,6 +31,7 @@ import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.compose.weekcalendar.WeekCalendarState
 import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
 import com.kizitonwose.calendar.core.*
+import com.santrucho.habilife.ui.presentation.HabitViewModel
 import com.santrucho.habilife.ui.ui.habits.components.calendar.rememberFirstVisibleMonthAfterScroll
 import com.santrucho.habilife.ui.ui.habits.components.calendar.rememberFirstVisibleWeekAfterScroll
 import kotlinx.coroutines.launch
@@ -44,11 +45,12 @@ import java.util.*
 
 @SuppressLint("RememberReturnType")
 @Composable
-fun CalendarView() {
+fun CalendarView(habitViewModel: HabitViewModel) {
     var isMonthCalendar by remember { mutableStateOf(false) }
     var isWeekCalendar by remember { mutableStateOf(true) }
 
     val selections = remember { mutableStateListOf<CalendarDay>() }
+    val coloredDay = habitViewModel.coloredDay.value
 
     Card(
         shape = MaterialTheme.shapes.medium,
@@ -117,20 +119,19 @@ fun CalendarView() {
             }
 
             if (isMonthCalendar) {
-                var selectedDate by remember { mutableStateOf<LocalDate?>(LocalDate.now()) }
                 HorizontalCalendar(
                     state = stateCalendar,
                     dayContent = { day ->
-                        DayCalendar(day, isSelected = selections.contains(day)) { day ->
-                            if(selections.contains(day)){
+                        DayCalendar(day, habitComplete = coloredDay) { day ->
+                            if (day.date != LocalDate.now()) {
                                 selections.remove(day)
                             } else {
                                 selections.add(day)
                             }
                         }
                     },
-                    monthHeader = { MonthHeader(daysOfWeek = daysOfWeek)}
-                    )
+                    monthHeader = { MonthHeader(daysOfWeek = daysOfWeek) }
+                )
             }
         }
     }
@@ -178,12 +179,16 @@ private fun Day(date: LocalDate, isSelected: Boolean, onClick: (LocalDate) -> Un
 }
 
 @Composable
-fun DayCalendar(day: CalendarDay, isSelected: Boolean, onClick: (CalendarDay) -> Unit) {
+fun DayCalendar(day: CalendarDay, habitComplete: Boolean, onClick: (CalendarDay) -> Unit) {
     Box(
         modifier = Modifier
             .aspectRatio(1f)
             .clip(CircleShape)
-            .background(color = if (isSelected) MaterialTheme.colors.primary else Color.Transparent)
+            .background(
+                color = if (habitComplete && day.date == LocalDate.now()) {
+                    MaterialTheme.colors.primary
+                } else Color.Transparent
+            )
             .clickable(
                 enabled = day.position == DayPosition.MonthDate,
                 onClick = { onClick(day) }
@@ -211,7 +216,7 @@ fun MonthHeader(daysOfWeek: List<DayOfWeek>) {
                 modifier = Modifier.weight(1f),
                 textAlign = TextAlign.Center,
                 fontSize = 15.sp,
-                text = dayOfWeek.getDisplayName(TextStyle.SHORT,Locale("es","ES")),
+                text = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale("es", "ES")),
                 fontWeight = FontWeight.Medium,
             )
         }

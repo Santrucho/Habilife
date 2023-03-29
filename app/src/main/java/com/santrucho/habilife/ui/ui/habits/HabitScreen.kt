@@ -53,7 +53,7 @@ fun HabitScreen(
                 .fillMaxHeight(0.82f)
 
         ) {
-            CalendarView()
+            CalendarView(habitViewModel)
             Spacer(modifier = Modifier.padding(4.dp))
             MyHabitsSection(habitViewModel = habitViewModel)
 
