@@ -64,9 +64,10 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
         }
     }
 
-    override suspend fun updateHabit(habitId:String,isChecked:Boolean,habitCount:Int){
+    override suspend fun updateHabit(habitId:String,isChecked:Boolean,habitCount:Int,daysCompleted:MutableList<String>){
         try {
             firestore.collection("habits").document(habitId).update("completed", isChecked).await()
+            firestore.collection("habits").document(habitId).update("daysCompleted",daysCompleted).await()
 
             val userId = firebaseAuth.currentUser
             val userCollection = firestore.collection("users")
@@ -111,6 +112,20 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
             userDocument.getLong("habitComplete")?.toInt()
         } else {
             null
+        }
+    }
+
+    override suspend fun getHabitsDateCompleted(): MutableList<String> {
+
+        val userId = firebaseAuth.currentUser?.uid
+        val userCollection = firestore.collection("habits")
+        val query = userCollection.whereEqualTo("userId", userId).get().await()
+        return if (!query.isEmpty) {
+            val userDocument = query.documents[0]
+            val daysCompleted = userDocument.get("daysCompleted") as? List<String>
+            daysCompleted?.toMutableList() ?: mutableListOf()
+        } else {
+            mutableListOf<String>()
         }
     }
 }

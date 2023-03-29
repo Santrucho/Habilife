@@ -1,6 +1,7 @@
 package com.santrucho.habilife.ui.ui.habits.components
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -46,6 +47,12 @@ import java.util.*
 @SuppressLint("RememberReturnType")
 @Composable
 fun CalendarView(habitViewModel: HabitViewModel) {
+
+    LaunchedEffect(Unit) {
+        habitViewModel.getHabitsDateCompleted()
+    }
+
+
     var isMonthCalendar by remember { mutableStateOf(false) }
     var isWeekCalendar by remember { mutableStateOf(true) }
 
@@ -122,7 +129,7 @@ fun CalendarView(habitViewModel: HabitViewModel) {
                 HorizontalCalendar(
                     state = stateCalendar,
                     dayContent = { day ->
-                        DayCalendar(day, habitComplete = coloredDay) { day ->
+                        DayCalendar(day,habitViewModel) { day ->
                             if (day.date != LocalDate.now()) {
                                 selections.remove(day)
                             } else {
@@ -179,13 +186,15 @@ private fun Day(date: LocalDate, isSelected: Boolean, onClick: (LocalDate) -> Un
 }
 
 @Composable
-fun DayCalendar(day: CalendarDay, habitComplete: Boolean, onClick: (CalendarDay) -> Unit) {
+fun DayCalendar(day: CalendarDay, habitViewModel: HabitViewModel, onClick: (CalendarDay) -> Unit) {
+    val daysCompleted = habitViewModel.daysCompleted.value ?: emptyList()
+
     Box(
         modifier = Modifier
             .aspectRatio(1f)
             .clip(CircleShape)
             .background(
-                color = if (habitComplete && day.date == LocalDate.now()) {
+                color = if (daysCompleted.any { it == day.date.toString() })  {
                     MaterialTheme.colors.primary
                 } else Color.Transparent
             )
