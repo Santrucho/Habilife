@@ -1,9 +1,15 @@
 package com.santrucho.habilife.ui.ui.habits
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,13 +37,27 @@ fun HabitScreen(
 
     habitViewModel.resetResult()
     //Set the screen in habits
+
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = Modifier
-            .fillMaxSize().background(MaterialTheme.colors.secondaryVariant),
+            .fillMaxSize(1f)
+            .background(MaterialTheme.colors.secondaryVariant)
+            .scrollable(state = scrollState, orientation = Orientation.Vertical),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        CalendarView()
-        MyHabitsSection(habitViewModel = habitViewModel)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.82f)
+
+        ) {
+            CalendarView()
+            Spacer(modifier = Modifier.padding(4.dp))
+            MyHabitsSection(habitViewModel = habitViewModel)
+
+        }
         Spacer(modifier = Modifier.weight(1f))
         FABButton(navController = navController)
     }
@@ -91,9 +111,7 @@ fun MyHabitsSection(habitViewModel: HabitViewModel) {
         backgroundColor = MaterialTheme.colors.background,
         modifier = Modifier.padding(8.dp)
     ) {
-
         HabitList(habitViewModel)
-
     }
 }
 
