@@ -57,6 +57,7 @@ fun CalendarView(habitViewModel: HabitViewModel) {
     var isWeekCalendar by remember { mutableStateOf(true) }
 
     val selections = remember { mutableStateListOf<CalendarDay>() }
+    val selectionsWeek = remember { mutableStateListOf<LocalDate>()}
     val coloredDay = habitViewModel.coloredDay.value
 
     Card(
@@ -109,16 +110,17 @@ fun CalendarView(habitViewModel: HabitViewModel) {
                 weekState = stateWeek
             )
             if (isWeekCalendar) {
-                var selectedDay by remember { mutableStateOf<LocalDate?>(LocalDate.now()) }
                 WeekCalendar(
                     modifier = Modifier
                         .background(color = MaterialTheme.colors.background)
                         .padding(16.dp),
                     state = stateWeek,
                     dayContent = { day ->
-                        Day(day.date, isSelected = selectedDay == day.date) { clicked ->
-                            if (selectedDay != clicked) {
-                                selectedDay = clicked
+                        Day(day.date, habitViewModel) { date ->
+                            if (day.date != LocalDate.now()) {
+                                selectionsWeek.remove(date)
+                            } else {
+                                selectionsWeek.add(date)
                             }
                         }
                     }
@@ -146,13 +148,18 @@ fun CalendarView(habitViewModel: HabitViewModel) {
 
 
 @Composable
-private fun Day(date: LocalDate, isSelected: Boolean, onClick: (LocalDate) -> Unit) {
+private fun Day(date: LocalDate, habitViewModel: HabitViewModel, onClick: (LocalDate) -> Unit) {
+    val daysCompleted = habitViewModel.daysCompleted.value ?: emptyList()
     val dateFormatter = DateTimeFormatter.ofPattern("dd")
+
+    val isDateComplete = (daysCompleted.any { it == date.toString() } && LocalDate.parse((date.toString())) <= LocalDate.now())
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .clickable { onClick(date) },
+            .clickable { onClick(date) }
+            .background(if(LocalDate.now() == date) MaterialTheme.colors.secondaryVariant else MaterialTheme.colors.background),
         contentAlignment = Alignment.Center,
     ) {
         Column(
@@ -163,23 +170,23 @@ private fun Day(date: LocalDate, isSelected: Boolean, onClick: (LocalDate) -> Un
             Text(
                 text = date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale("es", "ES")),
                 fontSize = 14.sp,
-                color = MaterialTheme.colors.primaryVariant,
+                color = if(LocalDate.now() == date) MaterialTheme.colors.primary else MaterialTheme.colors.primaryVariant,
                 fontWeight = FontWeight.Bold,
             )
             Text(
                 text = dateFormatter.format(date),
                 fontSize = 14.sp,
-                color = if (isSelected) MaterialTheme.colors.primary else MaterialTheme.colors.primaryVariant,
+                color = if (LocalDate.now() == date) MaterialTheme.colors.primary else MaterialTheme.colors.primaryVariant,
                 fontWeight = FontWeight.Bold,
             )
         }
-        if (isSelected) {
+        if (isDateComplete) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(5.dp)
                     .background(MaterialTheme.colors.primary)
-                    .align(Alignment.BottomCenter),
+                    .align(Alignment.BottomCenter)
             )
         }
     }
@@ -194,7 +201,7 @@ fun DayCalendar(day: CalendarDay, habitViewModel: HabitViewModel, onClick: (Cale
             .aspectRatio(1f)
             .clip(CircleShape)
             .background(
-                color = if (daysCompleted.any { it == day.date.toString() })  {
+                color = if (daysCompleted.any { it == day.date.toString() } && LocalDate.parse((day.date.toString())) <= LocalDate.now())  {
                     MaterialTheme.colors.primary
                 } else Color.Transparent
             )

@@ -49,6 +49,7 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
         getOptions()
         getDays()
         getHabitComplete()
+        getHabitsDateCompleted()
     }
     //Check if the confirm button can be activated, when the validations are correct
     private fun shouldEnabledConfirmButton() {
@@ -88,11 +89,6 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
         _habitFlow.value = null
         titleValue.value = ""
         descriptionValue.value = ""
-    }
-
-    //Reset the response for the call to get the habits in the database
-    fun resetValue(){
-        _habitState.value = null
     }
 
     //Call the options to select a type in NewHabitScreen
@@ -156,8 +152,8 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
                 newHabitCount = habitComplete.value ?: 0
             }
             repository.updateHabit(habit.id,isChecked,newHabitCount,habit.daysCompleted)
-            daysCompleted.value = habit.daysCompleted
             habitComplete.value = newHabitCount
+            getHabitsDateCompleted()
             getAllHabits()
         }
     }
