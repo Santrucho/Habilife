@@ -50,7 +50,7 @@ fun HabitScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.82f)
+                .fillMaxHeight(0.85f)
 
         ) {
             CalendarView(habitViewModel)
@@ -80,7 +80,7 @@ fun FABButton(navController: NavController) {
             Text("Crear nuevo habito")
         }
     }
-    Spacer(modifier = Modifier.height(60.dp))
+    Spacer(modifier = Modifier.height(120.dp))
 }
 
 /*Set and display the currents habits create for the user

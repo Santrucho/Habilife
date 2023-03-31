@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
@@ -35,6 +36,8 @@ import com.kizitonwose.calendar.core.*
 import com.santrucho.habilife.ui.presentation.HabitViewModel
 import com.santrucho.habilife.ui.ui.habits.components.calendar.rememberFirstVisibleMonthAfterScroll
 import com.santrucho.habilife.ui.ui.habits.components.calendar.rememberFirstVisibleWeekAfterScroll
+import com.santrucho.habilife.ui.util.Resource
+import com.santrucho.habilife.ui.util.typeHelper
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -56,9 +59,9 @@ fun CalendarView(habitViewModel: HabitViewModel) {
     var isMonthCalendar by remember { mutableStateOf(false) }
     var isWeekCalendar by remember { mutableStateOf(true) }
 
+
     val selections = remember { mutableStateListOf<CalendarDay>() }
-    val selectionsWeek = remember { mutableStateListOf<LocalDate>()}
-    val coloredDay = habitViewModel.coloredDay.value
+    val selectionsWeek = remember { mutableStateListOf<LocalDate>() }
 
     Card(
         shape = MaterialTheme.shapes.medium,
@@ -131,7 +134,7 @@ fun CalendarView(habitViewModel: HabitViewModel) {
                 HorizontalCalendar(
                     state = stateCalendar,
                     dayContent = { day ->
-                        DayCalendar(day,habitViewModel) { day ->
+                        DayCalendar(day, habitViewModel) { day ->
                             if (day.date != LocalDate.now()) {
                                 selections.remove(day)
                             } else {
@@ -148,18 +151,30 @@ fun CalendarView(habitViewModel: HabitViewModel) {
 
 
 @Composable
-private fun Day(date: LocalDate, habitViewModel: HabitViewModel, onClick: (LocalDate) -> Unit) {
+private fun Day(
+    date: LocalDate,
+    habitViewModel: HabitViewModel,
+    onClick: (LocalDate) -> Unit
+) {
     val daysCompleted = habitViewModel.daysCompleted.value ?: emptyList()
     val dateFormatter = DateTimeFormatter.ofPattern("dd")
 
-    val isDateComplete = (daysCompleted.any { it == date.toString() } && LocalDate.parse((date.toString())) <= LocalDate.now())
-
+    val isDateComplete =
+        (daysCompleted.any { it == date.toString() } && LocalDate.parse((date.toString())) <= LocalDate.now())
+    val habits = habitViewModel.habitState.collectAsState().value.let { resource ->
+        when (resource) {
+            is Resource.Success -> resource.data
+            else -> {
+                emptyList()
+            }
+        }
+    }
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
             .clickable { onClick(date) }
-            .background(if(LocalDate.now() == date) MaterialTheme.colors.secondaryVariant else MaterialTheme.colors.background),
+            .background(if (LocalDate.now() == date) MaterialTheme.colors.secondaryVariant else MaterialTheme.colors.background),
         contentAlignment = Alignment.Center,
     ) {
         Column(
@@ -170,7 +185,7 @@ private fun Day(date: LocalDate, habitViewModel: HabitViewModel, onClick: (Local
             Text(
                 text = date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale("es", "ES")),
                 fontSize = 14.sp,
-                color = if(LocalDate.now() == date) MaterialTheme.colors.primary else MaterialTheme.colors.primaryVariant,
+                color = if (LocalDate.now() == date) MaterialTheme.colors.primary else MaterialTheme.colors.primaryVariant,
                 fontWeight = FontWeight.Bold,
             )
             Text(
@@ -179,31 +194,53 @@ private fun Day(date: LocalDate, habitViewModel: HabitViewModel, onClick: (Local
                 color = if (LocalDate.now() == date) MaterialTheme.colors.primary else MaterialTheme.colors.primaryVariant,
                 fontWeight = FontWeight.Bold,
             )
+            if (isDateComplete) {
+                val habitsWithDate = habits.filter { it.daysCompleted.contains(date.toString()) }
+                Box(modifier = Modifier.wrapContentSize(), contentAlignment = Alignment.TopCenter) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        habitsWithDate.forEach { habit ->
+                            Box(
+                                modifier = Modifier
+                                    .clip(CircleShape)
+                                    .height(4.dp)
+                                    .width(4.dp)
+                                    .background(typeHelper(habitType = habit.type))
+                            )
+                        }
+                    }
+                }
+            }
         }
-        if (isDateComplete) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(5.dp)
-                    .background(MaterialTheme.colors.primary)
-                    .align(Alignment.BottomCenter)
-            )
-        }
+
     }
 }
 
 @Composable
-fun DayCalendar(day: CalendarDay, habitViewModel: HabitViewModel, onClick: (CalendarDay) -> Unit) {
+fun DayCalendar(
+    day: CalendarDay,
+    habitViewModel: HabitViewModel,
+    onClick: (CalendarDay) -> Unit
+) {
     val daysCompleted = habitViewModel.daysCompleted.value ?: emptyList()
-
+    val isCompleted =
+        (daysCompleted.any { it == day.date.toString() } && LocalDate.parse((day.date.toString())) <= LocalDate.now())
+    val habits = habitViewModel.habitState.collectAsState().value.let { resource ->
+        when (resource) {
+            is Resource.Success -> resource.data
+            else -> {
+                emptyList()
+            }
+        }
+    }
     Box(
         modifier = Modifier
             .aspectRatio(1f)
-            .clip(CircleShape)
+            .clip(RectangleShape)
             .background(
-                color = if (daysCompleted.any { it == day.date.toString() } && LocalDate.parse((day.date.toString())) <= LocalDate.now())  {
-                    MaterialTheme.colors.primary
-                } else Color.Transparent
+                color = if (LocalDate.now() == day.date) MaterialTheme.colors.secondaryVariant else MaterialTheme.colors.background
             )
             .clickable(
                 enabled = day.position == DayPosition.MonthDate,
@@ -213,9 +250,30 @@ fun DayCalendar(day: CalendarDay, habitViewModel: HabitViewModel, onClick: (Cale
     ) {
         Text(
             text = day.date.dayOfMonth.toString(),
-            color = if (day.position == DayPosition.MonthDate) MaterialTheme.colors.primaryVariant else Color.Gray,
+            color = if (day.position == DayPosition.MonthDate) {
+                if (LocalDate.now() == day.date) MaterialTheme.colors.primary
+                else MaterialTheme.colors.primaryVariant
+            } else Color.Gray,
             fontWeight = FontWeight.Medium
         )
+        if (isCompleted) {
+            val habitsWithDate = habits.filter { it.daysCompleted.contains(day.date.toString()) }
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    habitsWithDate.forEach { habit ->
+                        Box(
+                            modifier = Modifier
+                                .padding(top = 1.dp)
+                                .height(5.dp)
+                                .fillMaxWidth()
+                                .background(typeHelper(habitType = habit.type))
+                        )
+                    }
+                }
+            }
+        }
     }
 }
 

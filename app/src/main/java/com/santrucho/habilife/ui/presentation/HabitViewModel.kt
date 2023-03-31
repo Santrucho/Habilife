@@ -1,7 +1,5 @@
 package com.santrucho.habilife.ui.presentation
 
-import android.content.SharedPreferences
-import android.util.Log
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -31,7 +29,7 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
     var habitComplete: MutableState<Int?> = mutableStateOf(null)
     var daysCompleted : MutableState<List<String>> = mutableStateOf(emptyList())
 
-    var coloredDay : MutableState<Boolean> = mutableStateOf(false)
+    var habitType : MutableState<String> = mutableStateOf("")
 
     private val _habitState = MutableStateFlow<Resource<List<Habit>>?>(null)
     val habitState: StateFlow<Resource<List<Habit>>?> = _habitState
@@ -147,9 +145,11 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
             if (isChecked) {
                 habit.daysCompleted.add(LocalDate.now().toString())
                 newHabitCount = habitComplete.value?.plus(1) ?: 0
+                habitType.value = habit.type
             } else {
                 habit.daysCompleted.remove(LocalDate.now().toString())
                 newHabitCount = habitComplete.value ?: 0
+                habitType.value = ""
             }
             repository.updateHabit(habit.id,isChecked,newHabitCount,habit.daysCompleted)
             habitComplete.value = newHabitCount

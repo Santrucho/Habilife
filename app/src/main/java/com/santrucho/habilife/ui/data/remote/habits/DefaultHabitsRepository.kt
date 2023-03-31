@@ -117,8 +117,8 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
 
     override suspend fun getHabitsDateCompleted(): MutableList<String> {
         val userId = firebaseAuth.currentUser?.uid
-        val userCollection = firestore.collection("habits")
-        val query = userCollection.whereEqualTo("userId", userId).get().await()
+        val habitCollection = firestore.collection("habits")
+        val query = habitCollection.whereEqualTo("userId", userId).get().await()
 
         val daysCompletedList = mutableListOf<String>()
         for (document in query.documents) {
