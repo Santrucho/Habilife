@@ -316,7 +316,7 @@ fun SimpleCalendarTitle(
         Text(
             modifier = Modifier
                 .weight(1f),
-            text = currentMonth.toString(),
+            text = currentMonth.getDisplayName(TextStyle.FULL,Locale("es","ES")),
             fontSize = 22.sp,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Medium,
@@ -404,28 +404,3 @@ fun MonthAndWeekCalendarTitle(
         },
     )
 }
-
-
-/*
-            val background = MaterialTheme.colors.background
-            val dayBackgroundColor = MaterialTheme.colors.secondary
-            val headerTextColor = MaterialTheme.colors.primary
-            val textColor = MaterialTheme.colors.primary
-            val selectedColor = MaterialTheme.colors.primary
-
-            if(weekCalendar) {
-                Kalendar(
-                    kalendarDayColors = KalendarDayColors(textColor, selectedColor),
-                    kalendarThemeColor = KalendarThemeColor(
-                        background,
-                        dayBackgroundColor,
-                        headerTextColor
-                    ),
-                    kalendarType = KalendarType.Oceanic
-                )
-            }
-
-            if(monthCalendar){
-                Kalendar(kalendarDayColors = KalendarDayColors(textColor,selectedColor),kalendarThemeColor = KalendarThemeColor(background,dayBackgroundColor,headerTextColor), kalendarType = KalendarType.Firey)
-            }
-        }*/

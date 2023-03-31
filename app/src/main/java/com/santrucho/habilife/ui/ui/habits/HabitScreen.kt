@@ -1,13 +1,10 @@
 package com.santrucho.habilife.ui.ui.habits
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Button
 import androidx.compose.material.Card
+import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -38,28 +35,17 @@ fun HabitScreen(
     habitViewModel.resetResult()
     //Set the screen in habits
 
-    val scrollState = rememberScrollState()
-
     Column(
         modifier = Modifier
-            .fillMaxSize(1f)
-            .background(MaterialTheme.colors.secondaryVariant)
-            .scrollable(state = scrollState, orientation = Orientation.Vertical),
+            .fillMaxSize()
+            .background(MaterialTheme.colors.secondaryVariant),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.85f)
 
-        ) {
-            CalendarView(habitViewModel)
-            Spacer(modifier = Modifier.padding(4.dp))
-            MyHabitsSection(habitViewModel = habitViewModel)
-
-        }
-        Spacer(modifier = Modifier.weight(1f))
-        FABButton(navController = navController)
+        CalendarView(habitViewModel)
+        Spacer(modifier = Modifier.padding(4.dp))
+        MyHabitsSection(habitViewModel = habitViewModel)
+        //FABButton(navController = navController)
     }
 }
 
@@ -71,16 +57,13 @@ fun FABButton(navController: NavController) {
             .fillMaxWidth()
             .padding(8.dp), horizontalArrangement = Arrangement.Center
     ) {
-        Button(
+        ExtendedFloatingActionButton(
             onClick = { navController.navigate(Screen.NewHabitScreen.route) },
             modifier = Modifier.defaultMinSize(240.dp, 56.dp),
-            shape = CircleShape
-
-        ) {
-            Text("Crear nuevo habito")
-        }
+            shape = CircleShape,
+            text = { Text("Crear nuevo habito") }
+        )
     }
-    Spacer(modifier = Modifier.height(120.dp))
 }
 
 /*Set and display the currents habits create for the user

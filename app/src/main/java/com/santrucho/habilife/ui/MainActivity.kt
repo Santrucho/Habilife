@@ -5,9 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.collectAsState
@@ -58,7 +56,17 @@ class MainActivity : ComponentActivity() {
                             navController.navigate(it.screen_route)
                         }
                     )
-                }){
+                },
+                    floatingActionButton = {
+                        FloatingActionButton(onClick = { /* Tus acciones */ },backgroundColor = MaterialTheme.colors.primary) {
+                            Icon(
+                                imageVector = Icons.Default.Add,
+                                contentDescription = "Crear nota"
+                            )
+                        }
+                    },
+                    floatingActionButtonPosition = FabPosition.End
+                ){
                     NavigationHost(navController)
                 }
             }
