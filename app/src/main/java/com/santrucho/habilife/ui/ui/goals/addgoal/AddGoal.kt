@@ -48,7 +48,8 @@ fun AddGoal(goalViewModel: GoalViewModel, navController: NavController, type: St
     BackPressHandler(onBackPressed = onBack)
 
     Scaffold(
-        topBar = { DetailsAppBar(onBack) }
+        topBar = { DetailsAppBar(onBack) },
+        backgroundColor = MaterialTheme.colors.secondaryVariant
     ) {
         Box(
             contentAlignment = Alignment.Center,

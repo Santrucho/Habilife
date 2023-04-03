@@ -134,37 +134,10 @@ fun GoalsScreen(goalViewModel: GoalViewModel, navController: NavController) {
             )
         }
 
-
         FilterGoals(
             title = selectedChip,
             goalViewModel = goalViewModel,
             navController = navController
         )
-
-        //Set FAB Button Row above BottomBar
-        Spacer(modifier = Modifier.weight(1f))
-        FabButton(navController)
-
     }
-}
-
-//Set Fab Button which navigate to Create New Habit screen
-@Composable
-fun FabButton(navController: NavController) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp), horizontalArrangement = Arrangement.Center
-    ) {
-        Button(
-            onClick = { navController.navigate(Screen.NewGoalScreen.route) },
-            modifier = Modifier
-                .defaultMinSize(240.dp, 56.dp),
-            shape = CircleShape
-
-        ) {
-            Text("Crear nuevo objetivo")
-        }
-    }
-    Spacer(modifier = Modifier.height(60.dp))
 }

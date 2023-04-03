@@ -58,11 +58,25 @@ class MainActivity : ComponentActivity() {
                     )
                 },
                     floatingActionButton = {
-                        FloatingActionButton(onClick = { /* Tus acciones */ },backgroundColor = MaterialTheme.colors.primary) {
-                            Icon(
-                                imageVector = Icons.Default.Add,
-                                contentDescription = "Crear nota"
-                            )
+                        when(currentState) {
+                            BottomNavScreen.Habit.screen_route -> {
+                                FloatingActionButton(backgroundColor = MaterialTheme.colors.primary, onClick = { navController.navigate(Screen.NewHabitScreen.route) }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Add,
+                                        contentDescription = "Crear nuevo habito",
+                                        tint = MaterialTheme.colors.background
+                                    )
+                                }
+                            }
+                            BottomNavScreen.Goals.screen_route -> {
+                                FloatingActionButton(backgroundColor = MaterialTheme.colors.primary,onClick = { navController.navigate(Screen.NewGoalScreen.route) }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Add,
+                                        contentDescription = "Crear nuevo goal",
+                                        tint = MaterialTheme.colors.background
+                                    )
+                                }
+                            }
                         }
                     },
                     floatingActionButtonPosition = FabPosition.End

@@ -45,24 +45,6 @@ fun HabitScreen(
         CalendarView(habitViewModel)
         Spacer(modifier = Modifier.padding(4.dp))
         MyHabitsSection(habitViewModel = habitViewModel)
-        //FABButton(navController = navController)
-    }
-}
-
-//Set the button to access or navigate to create a new habit
-@Composable
-fun FABButton(navController: NavController) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp), horizontalArrangement = Arrangement.Center
-    ) {
-        ExtendedFloatingActionButton(
-            onClick = { navController.navigate(Screen.NewHabitScreen.route) },
-            modifier = Modifier.defaultMinSize(240.dp, 56.dp),
-            shape = CircleShape,
-            text = { Text("Crear nuevo habito") }
-        )
     }
 }
 

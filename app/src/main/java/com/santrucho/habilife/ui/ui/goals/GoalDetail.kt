@@ -29,7 +29,8 @@ fun GoalDetail(goal: GoalsResponse, goalViewModel: GoalViewModel, navController:
     BackPressHandler(onBackPressed = onBack)
 
     Scaffold(
-        topBar = { DetailsAppBar(onBack) }
+        topBar = { DetailsAppBar(onBack) },
+        backgroundColor = MaterialTheme.colors.secondaryVariant
     ) {
         Column(
             modifier = Modifier
