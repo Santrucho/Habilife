@@ -119,6 +119,7 @@ fun TypeFieldDetail(goal: GoalsResponse, goalViewModel: GoalViewModel) {
                 CustomLinearProgress(
                     maxProgress = goal.subjectList?.size?.toFloat(),
                     currentProgress = subjectApprovedCount,
+                    valueType = "%"
                 )
             }
 

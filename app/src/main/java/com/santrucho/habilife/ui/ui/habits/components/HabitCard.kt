@@ -1,6 +1,5 @@
 package com.santrucho.habilife.ui.ui.habits.components
 
-import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -40,8 +39,11 @@ fun HabitCard(
     var expandedState by remember { mutableStateOf(false) }
     val rotationState by animateFloatAsState(targetValue = if (expandedState) 180f else 0f)
 
-    val isEnabled = habit.frequently.any{ day ->
-        day.equals(LocalDate.now().dayOfWeek.getDisplayName(TextStyle.FULL, Locale("es","ARG")),ignoreCase = true)
+    val isEnabled = habit.frequently.any { day ->
+        day.equals(
+            LocalDate.now().dayOfWeek.getDisplayName(TextStyle.FULL, Locale("es", "ARG")),
+            ignoreCase = true
+        )
     }
 
     Column(modifier = Modifier.wrapContentSize()) {
@@ -56,7 +58,7 @@ fun HabitCard(
                     .padding(2.dp),
                 checked = habit.completed,
                 onCheckedChange = { isChecked ->
-                   viewModel.onCompleted(habit, isChecked)
+                    viewModel.onCompleted(habit, isChecked)
                 },
                 colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary),
                 enabled = isEnabled
@@ -74,25 +76,33 @@ fun HabitCard(
                     ),
                 elevation = 3.dp,
                 onClick = { expandedState = !expandedState },
-                backgroundColor = if(habit.completed) Color.Gray else typeHelper(habit.type)
+                backgroundColor = if (habit.completed) Color.Gray else typeHelper(habit.type)
             ) {
-                Column(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                ) {
 
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Row(verticalAlignment = Alignment.CenterVertically,
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier
-                            .padding(2.dp)
-                            .wrapContentSize()){
+                            modifier = Modifier
+                                .padding(2.dp)
+                                .wrapContentSize()
+                        ) {
 
-                            Icon(painterResource(id = iconHelper(habitType = habit.type)),
-                            contentDescription = "Selected icon",
-                            modifier = Modifier.wrapContentSize().padding(4.dp))
+                            Icon(
+                                painterResource(id = iconHelper(habitType = habit.type)),
+                                contentDescription = "Selected icon",
+                                modifier = Modifier
+                                    .wrapContentSize()
+                                    .padding(4.dp)
+                            )
                             Text(
                                 text = habit.title,
                                 modifier = Modifier
@@ -101,7 +111,7 @@ fun HabitCard(
                                     .wrapContentWidth(Alignment.CenterHorizontally),
                                 color = White,
                                 fontSize = 25.sp,
-                                textDecoration = if(habit.completed) TextDecoration.LineThrough else TextDecoration.None
+                                textDecoration = if (habit.completed) TextDecoration.LineThrough else TextDecoration.None
                             )
                         }
                         IconButton(
@@ -119,29 +129,36 @@ fun HabitCard(
                         }
                     }
                     if (expandedState) {
+                        Divider(modifier = Modifier.padding(1.dp))
+                        Spacer(modifier = Modifier.padding(1.dp))
                         Text(
-                            text = habit.description,
+                            text = "Descripcion: ${habit.description}",
                             modifier = Modifier
                                 .wrapContentHeight(Alignment.Top),
                             color = White,
                             fontSize = 16.sp
                         )
+                        Divider(modifier = Modifier.padding(1.dp))
+                        Spacer(modifier = Modifier.padding(1.dp))
                         Text(
-                            text = habit.timePicker,
+                            text = "Hora: ${habit.timePicker}",
                             modifier = Modifier
                                 .wrapContentHeight(Alignment.Top),
                             color = White,
                             fontSize = 16.sp
                         )
-
+                        Divider(modifier = Modifier.padding(1.dp))
+                        Spacer(modifier = Modifier.padding(1.dp))
                         Text(
-                            text = habit.frequently.joinToString(),
+                            text = "Dias: ${habit.frequently.joinToString()}",
                             modifier = Modifier
                                 .wrapContentHeight(Alignment.Bottom)
                                 .wrapContentWidth(Alignment.Start),
                             color = White,
                             fontSize = 12.sp
                         )
+                        Divider(modifier = Modifier.padding(1.dp))
+                        Spacer(modifier = Modifier.padding(1.dp))
                         Row(
                             modifier = Modifier
                                 .wrapContentWidth(Alignment.End),
@@ -152,7 +169,6 @@ fun HabitCard(
                             IconButton(
                                 modifier = Modifier
                                     .weight(1f)
-                                    .alpha(ContentAlpha.medium)
                                     .wrapContentWidth(Alignment.End),
                                 onClick = {
                                     onDelete(habit)
@@ -160,7 +176,7 @@ fun HabitCard(
                                 Icon(
                                     imageVector = Icons.Filled.Delete,
                                     contentDescription = "Drop-Down Arrow",
-                                    tint = Color.Black
+                                    tint = MaterialTheme.colors.primary
                                 )
                             }
                         }

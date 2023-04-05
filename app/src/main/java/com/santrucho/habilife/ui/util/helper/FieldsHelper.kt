@@ -45,7 +45,6 @@ fun FieldsHelper(type: String, goalViewModel: GoalViewModel) {
                         )
                     }
                     "Academic" -> {
-
                         Row(
                             Modifier.padding(8.dp),
                             verticalAlignment = Alignment.CenterVertically,

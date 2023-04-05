@@ -57,82 +57,86 @@ fun AddGoal(goalViewModel: GoalViewModel, navController: NavController, type: St
                 .wrapContentSize()
                 .padding(8.dp)
         ) {
-            Column(modifier = Modifier.fillMaxSize()) {
-
-                Card(
-                    shape = MaterialTheme.shapes.medium,
-                    elevation = 3.dp,
-                    backgroundColor = MaterialTheme.colors.background,
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight(1f)
+            ) {
+                Column(
                     modifier = Modifier
-                        .padding(4.dp)
-                        .wrapContentHeight()
-                        .fillMaxWidth()
+                        .fillMaxHeight(0.90f)
                 ) {
-
-                    Column(
+                    Card(
+                        shape = MaterialTheme.shapes.medium,
+                        elevation = 3.dp,
+                        backgroundColor = MaterialTheme.colors.background,
                         modifier = Modifier
+                            .padding(4.dp)
+                            .wrapContentHeight()
                             .fillMaxWidth()
-                            .padding(8.dp)
                     ) {
-                        Text("Personalice su objetivo", fontSize = 20.sp)
-                        NewFields(text = "Nombre del objetivo",
-                            value = goalViewModel.titleValue.value ?: "",
-                            isError = goalViewModel.isTitleValid.value,
-                            error = goalViewModel.titleErrMsg.value,
-                            valueChange = { goalViewModel.titleValue.value = it },
-                            onValidate = { goalViewModel.validateTitle() })
 
-                        NewFields(text = "Descripcion",
-                            value = goalViewModel.descriptionValue.value,
-                            isError = goalViewModel.isDescriptionValid.value,
-                            error = goalViewModel.descriptionErrMsg.value,
-                            valueChange = { goalViewModel.descriptionValue.value = it },
-                            onValidate = { goalViewModel.validateDescription() })
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
+                        ) {
+                            Text("Personalice su objetivo", fontSize = 20.sp)
+                            NewFields(text = "Nombre del objetivo",
+                                value = goalViewModel.titleValue.value ?: "",
+                                isError = goalViewModel.isTitleValid.value,
+                                error = goalViewModel.titleErrMsg.value,
+                                valueChange = { goalViewModel.titleValue.value = it },
+                                onValidate = { goalViewModel.validateTitle() })
+
+                            NewFields(text = "Descripcion",
+                                value = goalViewModel.descriptionValue.value,
+                                isError = goalViewModel.isDescriptionValid.value,
+                                error = goalViewModel.descriptionErrMsg.value,
+                                valueChange = { goalViewModel.descriptionValue.value = it },
+                                onValidate = { goalViewModel.validateDescription() })
+                        }
                     }
-                }
-                Card(
-                    shape = MaterialTheme.shapes.medium,
-                    elevation = 3.dp,
-                    backgroundColor = MaterialTheme.colors.background,
-                    modifier = Modifier
-                        .padding(4.dp)
-                        .wrapContentHeight()
-                        .fillMaxWidth()
-                ) {
-
-                    Column(
+                    Card(
+                        shape = MaterialTheme.shapes.medium,
+                        elevation = 3.dp,
+                        backgroundColor = MaterialTheme.colors.background,
                         modifier = Modifier
+                            .padding(4.dp)
+                            .wrapContentHeight()
                             .fillMaxWidth()
-                            .padding(8.dp)
                     ) {
-                        OutlinedTextField(
-                            value = type,
-                            onValueChange = {},
-                            enabled = false,
-                            label = { Text(text = "Tipo") },
-                            singleLine = true,
-                            modifier = Modifier.fillMaxWidth(1f),
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                            shape = CircleShape,
-                            colors = TextFieldDefaults.outlinedTextFieldColors(
-                                textColor = Color.Black,
-                                focusedBorderColor = Color.Gray,
-                                unfocusedBorderColor = Color.Black,
-                                focusedLabelColor = Color.Gray,
-                                unfocusedLabelColor = Color.Black
+
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
+                        ) {
+                            OutlinedTextField(
+                                value = type,
+                                onValueChange = {},
+                                enabled = false,
+                                label = { Text(text = "Tipo") },
+                                singleLine = true,
+                                modifier = Modifier.fillMaxWidth(1f),
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                                shape = CircleShape,
+                                colors = TextFieldDefaults.outlinedTextFieldColors(
+                                    textColor = Color.Black,
+                                    focusedBorderColor = Color.Gray,
+                                    unfocusedBorderColor = Color.Black,
+                                    focusedLabelColor = Color.Gray,
+                                    unfocusedLabelColor = Color.Black
+                                )
                             )
-                        )
+                        }
                     }
+
+                    ReleaseDatePicker(pickDate = pickedDate, onDatePicked = { date ->
+                        pickedDate = date
+                    })
+                    FieldsHelper(type, goalViewModel)
+                    Spacer(modifier = Modifier.weight(1f))
                 }
-
-                ReleaseDatePicker(pickDate = pickedDate, onDatePicked = { date ->
-                    pickedDate = date
-                })
-
-
-                FieldsHelper(type, goalViewModel)
-
-                Spacer(modifier = Modifier.weight(1f))
 
                 //Set the button to add the goal into database
                 Button(

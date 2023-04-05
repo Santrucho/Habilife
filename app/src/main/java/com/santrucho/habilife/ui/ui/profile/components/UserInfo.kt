@@ -92,14 +92,14 @@ fun LogOut(
                     onLogout()
                     navController.navigate(Screen.LoginScreen.route)
                 }) {
-                    Text("Confirm", color = Color.Black, fontSize = 18.sp)
+                    Text("Confirmar", color = Color.Black, fontSize = 18.sp)
                 }
             },
             dismissButton = {
                 TextButton(onClick = {
                     openDialog.value = false
                 }) {
-                    Text("Cancel", color = Color.Black, fontSize = 18.sp)
+                    Text("Cancelar", color = Color.Black, fontSize = 18.sp)
                 }
             })
     }
