@@ -5,9 +5,11 @@ import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,6 +24,7 @@ import com.santrucho.habilife.ui.presentation.LoginViewModel
 import com.santrucho.habilife.ui.presentation.SignUpViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.util.Resource
+import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun ProfileScreen(
@@ -29,30 +32,23 @@ fun ProfileScreen(
     goalViewModel: GoalViewModel,
     habitViewModel: HabitViewModel,
     loginViewModel: LoginViewModel,
-    signUpViewModel: SignUpViewModel,
 ) {
 
     val habitComplete = habitViewModel.habitComplete.value ?: 0
     val habit = habitViewModel.habitState.collectAsState()
 
-    val actualHabits = habit.value.let { resource ->
-        when (resource) {
-            is Resource.Success -> {
-                resource.data.size
-            }
-            else -> {
-                0
-            }
-        }
-    }
+    val goalComplete = goalViewModel.goalComplete.value ?: 0
+    val goal = goalViewModel.goalState.collectAsState()
+
+    val actualHabits = getActualStats(flow = habit)
+    val actualGoals = getActualStats(flow = goal)
 
     LaunchedEffect(Unit) {
         habitViewModel.getHabitComplete()
     }
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .background(colorResource(id = R.color.white)),
+            .fillMaxSize().background(MaterialTheme.colors.secondaryVariant),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
@@ -63,8 +59,22 @@ fun ProfileScreen(
                 loginViewModel::logout,
                 navController = navController
             )
-            Log.d("@@@@@@@@@@@@@@@@@@@@@@@@@@@",loginViewModel.loginFlow.value.toString())
         }
-        StatsSection(actualHabits.toString(),habitComplete.toString(),actualHabits.toString(),habitComplete.toString())
+        StatsSection(actualHabits.toString(),habitComplete.toString(),actualGoals.toString(),goalComplete.toString())
     }
+}
+
+
+fun getActualStats(flow: State<Resource<List<Any>>?>) : Int{
+    val flowValue = flow.value.let { resource ->
+        when (resource) {
+            is Resource.Success -> {
+                resource.data.size
+            }
+            else -> {
+                0
+            }
+        }
+    }
+    return flowValue
 }

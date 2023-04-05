@@ -5,9 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.collectAsState
@@ -58,7 +56,31 @@ class MainActivity : ComponentActivity() {
                             navController.navigate(it.screen_route)
                         }
                     )
-                }){
+                },
+                    floatingActionButton = {
+                        when(currentState) {
+                            BottomNavScreen.Habit.screen_route -> {
+                                FloatingActionButton(backgroundColor = MaterialTheme.colors.primary, onClick = { navController.navigate(Screen.NewHabitScreen.route) }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Add,
+                                        contentDescription = "Crear nuevo habito",
+                                        tint = MaterialTheme.colors.background
+                                    )
+                                }
+                            }
+                            BottomNavScreen.Goals.screen_route -> {
+                                FloatingActionButton(backgroundColor = MaterialTheme.colors.primary,onClick = { navController.navigate(Screen.NewGoalScreen.route) }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Add,
+                                        contentDescription = "Crear nuevo goal",
+                                        tint = MaterialTheme.colors.background
+                                    )
+                                }
+                            }
+                        }
+                    },
+                    floatingActionButtonPosition = FabPosition.End
+                ){
                     NavigationHost(navController)
                 }
             }

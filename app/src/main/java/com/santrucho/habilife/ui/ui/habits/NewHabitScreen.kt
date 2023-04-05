@@ -1,6 +1,7 @@
 package com.santrucho.habilife.ui.ui.habits
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -75,7 +76,8 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
     BackPressHandler(onBackPressed = onBack)
 
     Scaffold(
-        topBar = { DetailsAppBar(onBack) }
+        topBar = { DetailsAppBar(onBack) },
+        backgroundColor = MaterialTheme.colors.secondaryVariant
     ) {
         Box(
             contentAlignment = Alignment.Center,
@@ -104,7 +106,7 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                             .wrapContentHeight()
                             .fillMaxWidth()
                             .padding(8.dp)
-                    ) {
+                        ) {
                         Text("Personalice su habito", fontSize = 20.sp, color = Color.Black)
                         NewFields(text = "Habito",
                             value = habitViewModel.titleValue.value.toString() ?: "",
@@ -169,7 +171,7 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
 fun DetailsAppBar(onBack: () -> Unit) {
     TopAppBar(
         title = { },
-        backgroundColor = MaterialTheme.colors.secondary,
+        backgroundColor = MaterialTheme.colors.background,
         navigationIcon = {
             IconButton(onClick = onBack) {
                 Icon(

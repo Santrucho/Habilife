@@ -1,6 +1,5 @@
 package com.santrucho.habilife.ui.presentation
 
-import android.content.SharedPreferences
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,6 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,13 +24,12 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
     var isDescriptionValid: MutableState<Boolean> = mutableStateOf(false)
     var descriptionErrMsg: MutableState<String> = mutableStateOf("")
 
-    var frequencyValue: MutableState<String> = mutableStateOf("")
-    var isFrequentlyValid: MutableState<Boolean> = mutableStateOf(false)
-    var frequentlyMsg: MutableState<String> = mutableStateOf("")
-
     var isEnabledConfirmButton: MutableState<Boolean> = mutableStateOf(false)
 
     var habitComplete: MutableState<Int?> = mutableStateOf(null)
+    var daysCompleted : MutableState<List<String>> = mutableStateOf(emptyList())
+
+    var habitType : MutableState<String> = mutableStateOf("")
 
     private val _habitState = MutableStateFlow<Resource<List<Habit>>?>(null)
     val habitState: StateFlow<Resource<List<Habit>>?> = _habitState
@@ -48,6 +47,7 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
         getOptions()
         getDays()
         getHabitComplete()
+        getHabitsDateCompleted()
     }
     //Check if the confirm button can be activated, when the validations are correct
     private fun shouldEnabledConfirmButton() {
@@ -87,12 +87,6 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
         _habitFlow.value = null
         titleValue.value = ""
         descriptionValue.value = ""
-        frequencyValue.value = ""
-    }
-
-    //Reset the response for the call to get the habits in the database
-    fun resetValue(){
-        _habitState.value = null
     }
 
     //Call the options to select a type in NewHabitScreen
@@ -147,15 +141,19 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
 
     fun onCompleted(habit:Habit,isChecked:Boolean){
         viewModelScope.launch {
-            val newHabitCount = if (isChecked) {
-                habitComplete.value?.plus(1) ?: 0
+            var newHabitCount = 0
+            if (isChecked) {
+                habit.daysCompleted.add(LocalDate.now().toString())
+                newHabitCount = habitComplete.value?.plus(1) ?: 0
+                habitType.value = habit.type
             } else {
-                habitComplete.value
+                habit.daysCompleted.remove(LocalDate.now().toString())
+                newHabitCount = habitComplete.value ?: 0
+                habitType.value = ""
             }
-            if (newHabitCount != null) {
-                repository.updateHabit(habit.id,isChecked,newHabitCount)
-            }
+            repository.updateHabit(habit.id,isChecked,newHabitCount,habit.daysCompleted)
             habitComplete.value = newHabitCount
+            getHabitsDateCompleted()
             getAllHabits()
         }
     }
@@ -163,6 +161,15 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
     fun getHabitComplete() {
         viewModelScope.launch {
             habitComplete.value = repository.getHabitComplete()
+        }
+    }
+    fun getHabitsDateCompleted() {
+        viewModelScope.launch {
+            try {
+                daysCompleted.value = repository.getHabitsDateCompleted()
+            } catch (e: NullPointerException) {
+                daysCompleted.value = emptyList()
+            }
         }
     }
 }

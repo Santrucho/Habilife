@@ -4,15 +4,23 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.data.model.goals.GoalsResponse
+import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.GoalViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.goals.addgoal.GoalImage
@@ -29,7 +37,8 @@ fun GoalDetail(goal: GoalsResponse, goalViewModel: GoalViewModel, navController:
     BackPressHandler(onBackPressed = onBack)
 
     Scaffold(
-        topBar = { DetailsAppBar(onBack) }
+        topBar = { DetailsAppBar(onBack) },
+        backgroundColor = MaterialTheme.colors.secondaryVariant
     ) {
         Column(
             modifier = Modifier
@@ -37,7 +46,8 @@ fun GoalDetail(goal: GoalsResponse, goalViewModel: GoalViewModel, navController:
         ) {
             LazyColumn(
                 modifier = Modifier
-                    .fillMaxWidth().fillMaxHeight(0.90f)
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.90f)
                     .padding(8.dp)
             ) {
                 item {
@@ -94,6 +104,8 @@ fun GoalDetail(goal: GoalsResponse, goalViewModel: GoalViewModel, navController:
                                 goalText = goal.description,
                                 modifier = Modifier.fillMaxWidth()
                             )
+                            Divider(modifier = Modifier.padding(4.dp))
+                            DeleteGoal(onDelete = goalViewModel::deleteGoal, navController = navController,goal)
                         }
                     }
                     Card(
@@ -112,7 +124,9 @@ fun GoalDetail(goal: GoalsResponse, goalViewModel: GoalViewModel, navController:
                 }
             }
 
-            Row(modifier = Modifier.padding(8.dp).fillMaxWidth(),
+            Row(modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth(),
                 verticalAlignment = Alignment.Bottom,
                 horizontalArrangement = Arrangement.SpaceBetween) {
                 OutlinedButton(
@@ -175,5 +189,50 @@ fun GoalField(text: String, goalText: String, modifier: Modifier = Modifier) {
                 fontFamily = FontFamily.SansSerif
             )
         }
+    }
+}
+
+@Composable
+fun DeleteGoal(
+    onDelete: (GoalsResponse) -> Unit,
+    navController: NavController,
+    goal:GoalsResponse
+) {
+    val openDialog = remember { mutableStateOf(false) }
+    Row(
+        modifier = Modifier
+            .wrapContentWidth(Alignment.End),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.End
+    ) {
+        IconButton(onClick = {
+            openDialog.value = true
+        }, modifier = Modifier.weight(1f).wrapContentWidth(Alignment.End)) {
+            Icon(
+                imageVector = Icons.Outlined.Delete,
+                contentDescription = "delete",
+                tint = MaterialTheme.colors.primary
+            )
+        }
+    }
+    if (openDialog.value) {
+        AlertDialog(onDismissRequest = { openDialog.value = false },
+            title = { Text(text = "Eliminar objetivo", fontSize = 22.sp) },
+            text = { Text(text = "Estas seguro que desea eliminar el objetivo?", fontSize = 18.sp) },
+            confirmButton = {
+                TextButton(onClick = {
+                    onDelete(goal)
+                    navController.navigate(BottomNavScreen.Goals.screen_route)
+                }) {
+                    Text("Confirmar", color = Color.Black, fontSize = 18.sp)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    openDialog.value = false
+                }) {
+                    Text("Cancelar", color = Color.Black, fontSize = 18.sp)
+                }
+            })
     }
 }

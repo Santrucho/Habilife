@@ -94,6 +94,7 @@ fun FrequencyPicker(itemList: List<String>, onDaySelected:(List<String>) -> Unit
                             }
                             onDaySelected(selectedDays)
                         },
+                        colorBackground = MaterialTheme.colors.secondaryVariant
                     )
                 }
             }
@@ -107,9 +108,10 @@ fun MyChip(
     title: String,
     selected: Boolean,
     onSelected: (Boolean) -> Unit,
+    colorBackground : Color
 ) {
 
-    val background = if (selected) MaterialTheme.colors.primary else MaterialTheme.colors.secondaryVariant
+    val background = if (selected) MaterialTheme.colors.primary else colorBackground
     val contentColor = if (selected) Color.White else Color.Black
 
     Box(

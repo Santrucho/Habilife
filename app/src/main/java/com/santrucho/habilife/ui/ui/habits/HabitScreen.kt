@@ -1,8 +1,12 @@
 package com.santrucho.habilife.ui.ui.habits
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.ExtendedFloatingActionButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,36 +34,18 @@ fun HabitScreen(
 
     habitViewModel.resetResult()
     //Set the screen in habits
+
     Column(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .background(MaterialTheme.colors.secondaryVariant),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        CalendarView()
+
+        CalendarView(habitViewModel)
+        Spacer(modifier = Modifier.padding(4.dp))
         MyHabitsSection(habitViewModel = habitViewModel)
-        Spacer(modifier = Modifier.weight(1f))
-        FABButton(navController = navController)
     }
-}
-
-//Set the button to access or navigate to create a new habit
-@Composable
-fun FABButton(navController: NavController) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp), horizontalArrangement = Arrangement.Center
-    ) {
-        Button(
-            onClick = { navController.navigate(Screen.NewHabitScreen.route) },
-            modifier = Modifier.defaultMinSize(240.dp, 56.dp),
-            shape = CircleShape
-
-        ) {
-            Text("Crear nuevo habito")
-        }
-    }
-    Spacer(modifier = Modifier.height(60.dp))
 }
 
 /*Set and display the currents habits create for the user
@@ -90,14 +76,7 @@ fun MyHabitsSection(habitViewModel: HabitViewModel) {
         backgroundColor = MaterialTheme.colors.background,
         modifier = Modifier.padding(8.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(.75f),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            HabitList(habitViewModel)
-        }
+        HabitList(habitViewModel)
     }
 }
 
