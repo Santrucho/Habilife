@@ -11,10 +11,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.presentation.HabitViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
@@ -24,6 +26,7 @@ import com.santrucho.habilife.ui.ui.habits.components.FrequencyPicker
 import com.santrucho.habilife.ui.ui.habits.components.TimePicker
 import com.santrucho.habilife.ui.util.BackPressHandler
 import com.santrucho.habilife.ui.util.HandleState
+import com.santrucho.habilife.ui.util.LogBundle
 import com.santrucho.habilife.ui.util.Resource
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -32,6 +35,9 @@ import java.time.format.DateTimeFormatter
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController) {
+
+    val context = LocalContext.current
+    val firebaseAnalytics : FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
 
     val habitValue = habitViewModel.habitFlow.collectAsState()
 
@@ -146,6 +152,7 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                                 habitViewModel.descriptionValue.value, selectedOption,
                                 orderedDays!!, formattedTime, false
                             )
+                            LogBundle.logBundleAnalytics(firebaseAnalytics,"Add Habit","add_habit_pressed")
                         }
                     },
                     enabled = areDaysSelected && habitViewModel.isEnabledConfirmButton.value,
@@ -161,7 +168,12 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                 Spacer(modifier = Modifier.height(20.dp))
                 //In case the call is correct, navigate to Habit Screen and show the habit created, in case is Incorrect, show a error message
             }
-            HandleState(flow = habitValue, navController = navController , route = BottomNavScreen.Habit.screen_route , text = "Habito creado")
+            HandleState(flow = habitValue,
+                navController = navController ,
+                route = BottomNavScreen.Habit.screen_route ,
+                text = "Habito creado",
+                message = "Add Habit",
+                eventName = "add_habit")
         }
     }
 }

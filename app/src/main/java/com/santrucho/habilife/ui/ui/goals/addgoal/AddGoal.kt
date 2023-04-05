@@ -9,10 +9,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.GoalViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
@@ -22,12 +24,17 @@ import com.santrucho.habilife.ui.ui.habits.DetailsAppBar
 import com.santrucho.habilife.ui.util.BackPressHandler
 import com.santrucho.habilife.ui.util.FieldsHelper
 import com.santrucho.habilife.ui.util.HandleState
+import com.santrucho.habilife.ui.util.LogBundle
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
 @Composable
 fun AddGoal(goalViewModel: GoalViewModel, navController: NavController, type: String) {
+
+    val context = LocalContext.current
+    val firebaseAnalytics : FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
+
 
     val financeValue = goalViewModel.financeFlow.collectAsState()
     val academicValue = goalViewModel.academicFlow.collectAsState()
@@ -153,6 +160,7 @@ fun AddGoal(goalViewModel: GoalViewModel, navController: NavController, type: St
                             kilometersGoal = goalViewModel.trainingValue.value,
                             timesAWeek = 4
                         )
+                        LogBundle.logBundleAnalytics(firebaseAnalytics,"Add Goal","add_goal_pressed")
                     },
                     enabled = goalViewModel.isEnabledConfirmButton.value,
                     modifier = Modifier
@@ -169,26 +177,34 @@ fun AddGoal(goalViewModel: GoalViewModel, navController: NavController, type: St
                 flow = financeValue,
                 navController = navController,
                 route = BottomNavScreen.Goals.screen_route,
-                text = "Objetivo creado"
+                text = "Objetivo creado",
+                message = "Finance Goal",
+                eventName = "add_finance_goal"
             )
             HandleState(
                 flow = academicValue,
                 navController = navController,
                 route = BottomNavScreen.Goals.screen_route,
-                text = "Objetivo creado"
+                text = "Objetivo creado",
+                message = "Academic Goal",
+                eventName = "add_academic_goal"
             )
             //HandleState(flow = workValue , navController = navController,route = BottomNavScreen.Goals.screen_route,text ="Objetivo creado")
             HandleState(
                 flow = trainingValue,
                 navController = navController,
                 route = BottomNavScreen.Goals.screen_route,
-                text = "Objetivo creado"
+                text = "Objetivo creado",
+                message = "Training Goal",
+                eventName = "add_training_goal"
             )
             HandleState(
                 flow = learningValue,
                 navController = navController,
                 route = BottomNavScreen.Goals.screen_route,
-                text = "Objetivo creado"
+                text = "Objetivo creado",
+                message = "Learning Goal",
+                eventName = "add_learning_goal"
             )
         }
     }

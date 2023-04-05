@@ -13,9 +13,11 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.GoalViewModel
@@ -23,6 +25,7 @@ import com.santrucho.habilife.ui.presentation.HabitViewModel
 import com.santrucho.habilife.ui.presentation.LoginViewModel
 import com.santrucho.habilife.ui.presentation.SignUpViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
+import com.santrucho.habilife.ui.util.LogBundle
 import com.santrucho.habilife.ui.util.Resource
 import kotlinx.coroutines.flow.Flow
 
@@ -33,6 +36,10 @@ fun ProfileScreen(
     habitViewModel: HabitViewModel,
     loginViewModel: LoginViewModel,
 ) {
+
+    val context = LocalContext.current
+    val firebaseAnalytics : FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
+    LogBundle.logBundleAnalytics(firebaseAnalytics,"Profile Screen View","profile_screen_view")
 
     val habitComplete = habitViewModel.habitComplete.value ?: 0
     val habit = habitViewModel.habitState.collectAsState()

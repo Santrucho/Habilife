@@ -12,12 +12,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
+import com.google.firebase.analytics.FirebaseAnalytics
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun HandleState(flow: State<Resource<Any>?>, navController: NavController,route:String,text:String,isRegister:Boolean = false) {
+fun HandleState(flow: State<Resource<Any>?>, navController: NavController,route:String,text:String,
+                message:String,eventName:String) {
 
     val context = LocalContext.current
+    val firebaseAnalytics : FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
+
     flow.value?.let {
         when (it) {
             is Resource.Success -> {
@@ -28,15 +32,14 @@ fun HandleState(flow: State<Resource<Any>?>, navController: NavController,route:
                         "$text correctamente!",
                         Toast.LENGTH_SHORT
                     ).show()
-                    if(isRegister){
-
-                    }
+                    LogBundle.logBundleAnalytics(firebaseAnalytics,"$message Succeeded","${eventName}_success")
                 }
             }
             is Resource.Failure -> {
                 LaunchedEffect(flow.value) {
                     Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG)
                         .show()
+                    LogBundle.logBundleAnalytics(firebaseAnalytics,"$message Failure","${eventName}_failure")
                 }
             }
             is Resource.Loading -> {

@@ -4,6 +4,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -16,12 +17,15 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.santrucho.habilife.ui.data.model.Habit
 import com.santrucho.habilife.ui.presentation.HabitViewModel
+import com.santrucho.habilife.ui.util.LogBundle
 import com.santrucho.habilife.ui.util.iconHelper
 import com.santrucho.habilife.ui.util.typeHelper
 import java.time.LocalDate
@@ -35,6 +39,9 @@ import java.util.*
 fun HabitCard(
     habit: Habit, onDelete: (Habit) -> Unit, viewModel: HabitViewModel
 ) {
+
+    val context = LocalContext.current
+    val firebaseAnalytics : FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
 
     var expandedState by remember { mutableStateOf(false) }
     val rotationState by animateFloatAsState(targetValue = if (expandedState) 180f else 0f)
@@ -59,6 +66,7 @@ fun HabitCard(
                 checked = habit.completed,
                 onCheckedChange = { isChecked ->
                     viewModel.onCompleted(habit, isChecked)
+                    LogBundle.logBundleAnalytics(firebaseAnalytics,"Habit Check","habit_checked_pressed")
                 },
                 colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary),
                 enabled = isEnabled
@@ -67,6 +75,7 @@ fun HabitCard(
                 shape = MaterialTheme.shapes.medium,
                 modifier = Modifier
                     .padding(8.dp, 2.dp)
+                    .clickable { LogBundle.logBundleAnalytics(firebaseAnalytics,"Habit Card","habit_card_pressed") }
                     .fillMaxWidth()
                     .animateContentSize(
                         animationSpec = tween(
@@ -172,6 +181,7 @@ fun HabitCard(
                                     .wrapContentWidth(Alignment.End),
                                 onClick = {
                                     onDelete(habit)
+                                    LogBundle.logBundleAnalytics(firebaseAnalytics,"Delete Habit","delete_habit_pressed")
                                 }) {
                                 Icon(
                                     imageVector = Icons.Filled.Delete,
