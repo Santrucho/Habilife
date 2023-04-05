@@ -9,11 +9,14 @@ import androidx.compose.material.icons.outlined.ArrowForward
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.santrucho.habilife.ui.data.model.goals.GoalsResponse
 import com.santrucho.habilife.ui.ui.goals.addgoal.GoalImage
+import com.santrucho.habilife.ui.util.LogBundle
 import com.santrucho.habilife.ui.util.helper.ProgressBarHelper
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToJsonElement
@@ -23,6 +26,8 @@ import kotlinx.serialization.json.encodeToJsonElement
 @Composable
 fun GoalCard(goal: GoalsResponse, navController: NavController) {
 
+    val context = LocalContext.current
+    val firebaseAnalytics : FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
 
     Box(
         modifier = Modifier
@@ -45,6 +50,7 @@ fun GoalCard(goal: GoalsResponse, navController: NavController) {
         Card(
             modifier = Modifier
                 .wrapContentSize()
+                .clickable { LogBundle.logBundleAnalytics(firebaseAnalytics,"Goal Card","goal_card_pressed") }
                 .padding(8.dp),
             elevation = 6.dp,
             backgroundColor = MaterialTheme.colors.background

@@ -12,12 +12,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.GoalViewModel
 import com.santrucho.habilife.ui.presentation.HabitViewModel
@@ -29,6 +31,7 @@ import com.santrucho.habilife.ui.ui.habits.components.HabitUI
 import com.santrucho.habilife.ui.ui.home.components.EmptyMessage
 import com.santrucho.habilife.ui.ui.home.components.HandleFilterState
 import com.santrucho.habilife.ui.util.BackPressHandler
+import com.santrucho.habilife.ui.util.LogBundle
 import com.santrucho.habilife.ui.util.Resource
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -44,6 +47,11 @@ fun HomeScreen(
     goalViewModel: GoalViewModel,
     habitViewModel: HabitViewModel
 ) {
+
+    val context = LocalContext.current
+    val firebaseAnalytics : FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
+    LogBundle.logBundleAnalytics(firebaseAnalytics,"Home Screen View","home_screen_view")
+
 
     goalViewModel.getAllGoals()
     habitViewModel.getAllHabits()
@@ -179,6 +187,9 @@ fun HomeScreen(
 /*Welcome to user, changing the background image depending of what time of day it is */
 @Composable
 fun UserWelcome(name: String, navController: NavController, onLogout: () -> Unit) {
+    val context = LocalContext.current
+    val firebaseAnalytics : FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
+
     var showOptions by remember { mutableStateOf(false) }
     Box(modifier = Modifier.fillMaxWidth().background(MaterialTheme.colors.background)) {
         Row(
@@ -217,7 +228,10 @@ fun UserWelcome(name: String, navController: NavController, onLogout: () -> Unit
                     fontSize = 30.sp
                 )
             }
-            IconButton(onClick = { showOptions = !showOptions }) {
+            IconButton(onClick = {
+                showOptions = !showOptions
+                LogBundle.logBundleAnalytics(firebaseAnalytics,"Settings Pressed","settings_pressed")
+                }) {
                 Icon(
                     imageVector = Icons.Outlined.Settings,
                     contentDescription = "settings",
@@ -260,6 +274,7 @@ fun UserWelcome(name: String, navController: NavController, onLogout: () -> Unit
                                 onClick = {
                                     onLogout()
                                     navController.navigate(Screen.LoginScreen.route)
+                                    LogBundle.logBundleAnalytics(firebaseAnalytics,"SignOut Pressed","sign_out_pressed")
                                 },
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -280,6 +295,8 @@ fun UserWelcome(name: String, navController: NavController, onLogout: () -> Unit
 
 @Composable
 fun TextInScreen(title: String, route: String, navController: NavController) {
+    val context = LocalContext.current
+    val firebaseAnalytics : FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -294,7 +311,10 @@ fun TextInScreen(title: String, route: String, navController: NavController) {
             textAlign = TextAlign.Start,
             fontSize = 20.sp
         )
-        TextButton(onClick = { navController.navigate(route) }) {
+        TextButton(onClick = {
+            navController.navigate(route)
+            LogBundle.logBundleAnalytics(firebaseAnalytics,"See All","see_all_pressed")
+        }) {
             Text(
                 text = "ver todos",
                 fontWeight = FontWeight.Bold,

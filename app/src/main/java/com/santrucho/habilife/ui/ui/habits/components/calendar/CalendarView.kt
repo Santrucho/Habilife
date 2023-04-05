@@ -20,12 +20,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.kizitonwose.calendar.compose.CalendarState
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.WeekCalendar
@@ -36,6 +38,7 @@ import com.kizitonwose.calendar.core.*
 import com.santrucho.habilife.ui.presentation.HabitViewModel
 import com.santrucho.habilife.ui.ui.habits.components.calendar.rememberFirstVisibleMonthAfterScroll
 import com.santrucho.habilife.ui.ui.habits.components.calendar.rememberFirstVisibleWeekAfterScroll
+import com.santrucho.habilife.ui.util.LogBundle
 import com.santrucho.habilife.ui.util.Resource
 import com.santrucho.habilife.ui.util.typeHelper
 import kotlinx.coroutines.launch
@@ -50,6 +53,10 @@ import java.util.*
 @SuppressLint("RememberReturnType")
 @Composable
 fun CalendarView(habitViewModel: HabitViewModel) {
+
+    val context = LocalContext.current
+    val firebaseAnalytics : FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
+
 
     LaunchedEffect(Unit) {
         habitViewModel.getHabitsDateCompleted()
@@ -72,6 +79,7 @@ fun CalendarView(habitViewModel: HabitViewModel) {
             .clickable {
                 isMonthCalendar = !isMonthCalendar
                 isWeekCalendar = !isWeekCalendar
+                LogBundle.logBundleAnalytics(firebaseAnalytics,"Calendar Expanded","calendar_expanded_pressed")
             }
     ) {
         Column(

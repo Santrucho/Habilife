@@ -14,10 +14,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.LoginViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
@@ -25,10 +27,16 @@ import com.santrucho.habilife.ui.ui.goals.components.NewFields
 import com.santrucho.habilife.ui.ui.goals.components.PasswordFields
 import com.santrucho.habilife.ui.util.BackPressHandler
 import com.santrucho.habilife.ui.util.HandleState
+import com.santrucho.habilife.ui.util.LogBundle
 
 
 @Composable
 fun LoginScreen(viewModel: LoginViewModel, navController: NavController) {
+
+    val context = LocalContext.current
+    val firebaseAnalytics : FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
+
+    LogBundle.logBundleAnalytics(firebaseAnalytics,"Login Screen View","log_in_screen_view")
 
     val onBack = {}
     BackPressHandler(onBackPressed = onBack)
@@ -61,7 +69,7 @@ fun LoginScreen(viewModel: LoginViewModel, navController: NavController) {
                     Spacer(modifier = Modifier.padding(8.dp))
                     Text(text = "Email", fontSize = 18.sp, color = Color.Black,modifier = Modifier.padding(4.dp))
                     NewFields(text = "Email",
-                        value = viewModel.emailValue.value.toString() ?: "",
+                        value = viewModel.emailValue.value,
                         isError = viewModel.isEmailValid.value,
                         error = viewModel.emailErrMsg.value,
                         valueChange = { viewModel.emailValue.value = it }, onValidate = { })
@@ -85,6 +93,7 @@ fun LoginScreen(viewModel: LoginViewModel, navController: NavController) {
                                 viewModel.emailValue.value,
                                 viewModel.passwordValue.value
                             )
+                            LogBundle.logBundleAnalytics(firebaseAnalytics,"Login Pressed","log_in_pressed")
                         },
                         modifier = Modifier
                             .fillMaxWidth(0.8f)
@@ -102,6 +111,7 @@ fun LoginScreen(viewModel: LoginViewModel, navController: NavController) {
                             .fillMaxWidth()
                             .clickable(onClick = {
                                 navController.navigate(Screen.SignUpScreen.route)
+                                LogBundle.logBundleAnalytics(firebaseAnalytics,"Go to Sign Up","go_to_sign_up_pressed")
                             }),
                         horizontalArrangement = Arrangement.Center
                     ) {
@@ -129,7 +139,9 @@ fun LoginScreen(viewModel: LoginViewModel, navController: NavController) {
                 flow = loginFlow,
                 navController = navController,
                 route = BottomNavScreen.Home.screen_route,
-                text = "Se ha iniciado sesion"
+                text = "Se ha iniciado sesion",
+                message = "Login",
+                eventName = "log_in"
             )
         }
     }

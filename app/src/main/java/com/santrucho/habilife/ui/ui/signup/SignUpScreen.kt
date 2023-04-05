@@ -14,23 +14,32 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.SignUpViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.goals.components.NewFields
 import com.santrucho.habilife.ui.ui.goals.components.PasswordFields
 import com.santrucho.habilife.ui.util.HandleState
+import com.santrucho.habilife.ui.util.LogBundle
 
 
 @Composable
 fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel) {
 
+    val context = LocalContext.current
+    val firebaseAnalytics : FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
+
+    LogBundle.logBundleAnalytics(firebaseAnalytics,"Signup Screen View","sign_up_screen_view")
+
+
     val signUpFlow = viewModel.signUpFlow.collectAsState()
-    Log.d("3333333333333333333333333333",signUpFlow.value.toString())
+
     //Set the fields in SignUp to fill
     Column(
         modifier = Modifier
@@ -56,7 +65,7 @@ fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel) {
                 ) {
                     Spacer(modifier = Modifier.padding(12.dp))
                     NewFields(text = "Username",
-                        value = viewModel.usernameValue.value.toString() ?: "",
+                        value = viewModel.usernameValue.value,
                         isError = viewModel.isUsernameValid.value,
                         error = viewModel.usernameErrMsg.value,
                         valueChange = { viewModel.usernameValue.value = it }, onValidate = { viewModel.validateUsername() })
@@ -95,6 +104,7 @@ fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel) {
                                 viewModel.emailValue.value,
                                 viewModel.passwordValue.value
                             )
+                            LogBundle.logBundleAnalytics(firebaseAnalytics,"Register Pressed","register_pressed")
                         },
                         shape = CircleShape,
                         enabled = viewModel.isEnabledConfirmButton.value,
@@ -112,6 +122,7 @@ fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel) {
                         .fillMaxWidth()
                         .clickable(onClick = {
                             navController.navigate(Screen.LoginScreen.route)
+                            LogBundle.logBundleAnalytics(firebaseAnalytics,"Go to Login","go_to_login_pressed")
                         }),
                         horizontalArrangement = Arrangement.Center){
                         Text(
@@ -138,7 +149,9 @@ fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel) {
                 flow = signUpFlow,
                 navController = navController,
                 route = BottomNavScreen.Home.screen_route,
-                text = "Cuenta creada"
+                text = "Cuenta creada",
+                message = "Sign up",
+                eventName = "sign_up"
             )
         }
     }

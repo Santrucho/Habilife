@@ -14,14 +14,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.navigation.Screen
+import com.santrucho.habilife.ui.util.LogBundle
 
 @Composable
 fun UserInfo(
@@ -77,9 +80,13 @@ fun LogOut(
     onLogout: () -> Unit,
     navController: NavController,
 ) {
+    val context = LocalContext.current
+    val firebaseAnalytics : FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
+
     val openDialog = remember { mutableStateOf(false) }
     IconButton(onClick = {
         openDialog.value = true
+        LogBundle.logBundleAnalytics(firebaseAnalytics,"Sign Out","sign_out_pressed")
     }, modifier = Modifier.size(48.dp)) {
         Icon(painter = painterResource(id = R.drawable.ic_log_out_svgrepo_com), contentDescription = "log out",tint = MaterialTheme.colors.primary)
     }
@@ -91,6 +98,7 @@ fun LogOut(
                 TextButton(onClick = {
                     onLogout()
                     navController.navigate(Screen.LoginScreen.route)
+                    LogBundle.logBundleAnalytics(firebaseAnalytics,"Sign Out Confirm","confirm_sign_out_pressed")
                 }) {
                     Text("Confirmar", color = Color.Black, fontSize = 18.sp)
                 }
@@ -98,6 +106,7 @@ fun LogOut(
             dismissButton = {
                 TextButton(onClick = {
                     openDialog.value = false
+                    LogBundle.logBundleAnalytics(firebaseAnalytics,"Sign Out Cancel","cancel_sign_out_pressed")
                 }) {
                     Text("Cancelar", color = Color.Black, fontSize = 18.sp)
                 }

@@ -13,11 +13,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.data.model.goals.GoalsResponse
 import com.santrucho.habilife.ui.navigation.Screen
@@ -26,12 +28,17 @@ import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.goals.addgoal.GoalImage
 import com.santrucho.habilife.ui.ui.habits.DetailsAppBar
 import com.santrucho.habilife.ui.util.BackPressHandler
+import com.santrucho.habilife.ui.util.LogBundle
 import com.santrucho.habilife.ui.util.TypeFieldDetail
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun GoalDetail(goal: GoalsResponse, goalViewModel: GoalViewModel, navController: NavController) {
+
+    val context = LocalContext.current
+    val firebaseAnalytics : FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
+    LogBundle.logBundleAnalytics(firebaseAnalytics,"Goal Detail View","goal_detail_view")
 
     val onBack = { navController.navigate(BottomNavScreen.Goals.screen_route) }
     BackPressHandler(onBackPressed = onBack)
@@ -130,7 +137,9 @@ fun GoalDetail(goal: GoalsResponse, goalViewModel: GoalViewModel, navController:
                 verticalAlignment = Alignment.Bottom,
                 horizontalArrangement = Arrangement.SpaceBetween) {
                 OutlinedButton(
-                    onClick = { navController.navigate(BottomNavScreen.Goals.screen_route) },
+                    onClick = {
+                        navController.navigate(BottomNavScreen.Goals.screen_route)
+                        LogBundle.logBundleAnalytics(firebaseAnalytics,"Cancel Goal Update","cancel_goal_update_pressed")},
                     Modifier
                         .weight(1f)
                         .padding(8.dp)
@@ -150,6 +159,7 @@ fun GoalDetail(goal: GoalsResponse, goalViewModel: GoalViewModel, navController:
                             goal.subjectApproved
                         )
                         navController.navigate(BottomNavScreen.Goals.screen_route)
+                        LogBundle.logBundleAnalytics(firebaseAnalytics,"Confirm Goal Update","confirm_goal_update_pressed")
                     },
                     Modifier
                         .weight(1f)
@@ -198,6 +208,9 @@ fun DeleteGoal(
     navController: NavController,
     goal:GoalsResponse
 ) {
+    val context = LocalContext.current
+    val firebaseAnalytics : FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
+
     val openDialog = remember { mutableStateOf(false) }
     Row(
         modifier = Modifier
@@ -207,6 +220,7 @@ fun DeleteGoal(
     ) {
         IconButton(onClick = {
             openDialog.value = true
+            LogBundle.logBundleAnalytics(firebaseAnalytics,"Delete Goal Option","delete_goal_option_pressed")
         }, modifier = Modifier.weight(1f).wrapContentWidth(Alignment.End)) {
             Icon(
                 imageVector = Icons.Outlined.Delete,
@@ -223,6 +237,7 @@ fun DeleteGoal(
                 TextButton(onClick = {
                     onDelete(goal)
                     navController.navigate(BottomNavScreen.Goals.screen_route)
+                    LogBundle.logBundleAnalytics(firebaseAnalytics,"Delete Goal ","delete_goal_pressed")
                 }) {
                     Text("Confirmar", color = Color.Black, fontSize = 18.sp)
                 }
@@ -230,6 +245,7 @@ fun DeleteGoal(
             dismissButton = {
                 TextButton(onClick = {
                     openDialog.value = false
+                    LogBundle.logBundleAnalytics(firebaseAnalytics,"Delete Goal Cancel","delete_goal_cancel_pressed")
                 }) {
                     Text("Cancelar", color = Color.Black, fontSize = 18.sp)
                 }

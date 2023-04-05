@@ -13,24 +13,30 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.GoalViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.goals.components.FilterGoals
 import com.santrucho.habilife.ui.ui.habits.components.MyChip
 import com.santrucho.habilife.ui.util.BackPressHandler
+import com.santrucho.habilife.ui.util.LogBundle
 import com.santrucho.habilife.ui.util.Resource
 
 @Composable
 fun GoalsScreen(goalViewModel: GoalViewModel, navController: NavController) {
 
+    val context = LocalContext.current
+    val firebaseAnalytics : FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
+    LogBundle.logBundleAnalytics(firebaseAnalytics,"Goal Screen View","goal_screen_view")
+
     goalViewModel.resetResult()
     goalViewModel.getAllGoals()
-
 
     val onBack = { navController.navigate(BottomNavScreen.Home.screen_route) }
     BackPressHandler(onBackPressed = onBack)
@@ -56,7 +62,7 @@ fun GoalsScreen(goalViewModel: GoalViewModel, navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth(0.6f)
                 .padding(8.dp)
-                .clickable { },
+                .clickable { LogBundle.logBundleAnalytics(firebaseAnalytics,"Goal Count","goal_count_pressed") },
             shape = MaterialTheme.shapes.large,
             elevation = 8.dp,
             backgroundColor = MaterialTheme.colors.secondary

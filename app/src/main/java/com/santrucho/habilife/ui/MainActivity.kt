@@ -10,9 +10,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.santrucho.habilife.ui.navigation.NavigationHost
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.GoalViewModel
@@ -22,10 +24,13 @@ import com.santrucho.habilife.ui.presentation.SignUpViewModel
 import com.santrucho.habilife.ui.theme.HabilifeTheme
 import com.santrucho.habilife.ui.ui.bottombar.BottomBar
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
+import com.santrucho.habilife.ui.util.LogBundle
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    val firebaseAnalytics : FirebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +65,9 @@ class MainActivity : ComponentActivity() {
                     floatingActionButton = {
                         when(currentState) {
                             BottomNavScreen.Habit.screen_route -> {
-                                FloatingActionButton(backgroundColor = MaterialTheme.colors.primary, onClick = { navController.navigate(Screen.NewHabitScreen.route) }) {
+                                FloatingActionButton(backgroundColor = MaterialTheme.colors.primary, onClick = { navController.navigate(Screen.NewHabitScreen.route)
+                                    LogBundle.logBundleAnalytics(firebaseAnalytics,"New Habit","new_habit_pressed")
+                                }) {
                                     Icon(
                                         imageVector = Icons.Default.Add,
                                         contentDescription = "Crear nuevo habito",
@@ -69,7 +76,9 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
                             BottomNavScreen.Goals.screen_route -> {
-                                FloatingActionButton(backgroundColor = MaterialTheme.colors.primary,onClick = { navController.navigate(Screen.NewGoalScreen.route) }) {
+                                FloatingActionButton(backgroundColor = MaterialTheme.colors.primary,onClick = { navController.navigate(Screen.NewGoalScreen.route)
+                                    LogBundle.logBundleAnalytics(firebaseAnalytics,"New Goal","new_goal_pressed")
+                                }) {
                                     Icon(
                                         imageVector = Icons.Default.Add,
                                         contentDescription = "Crear nuevo goal",
