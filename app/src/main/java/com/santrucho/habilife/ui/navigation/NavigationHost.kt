@@ -47,7 +47,7 @@ fun NavigationHost(navController:NavController) {
         composable(
             route = Screen.SignUpScreen.route) {
             SignUpScreen(
-                navController = navController,signUpViewModel)
+                viewModel = signUpViewModel,navController = navController,)
         }
         composable(
             route = Screen.NewHabitScreen.route,
