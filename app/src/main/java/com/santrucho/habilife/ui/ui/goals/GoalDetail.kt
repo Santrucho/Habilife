@@ -1,6 +1,7 @@
 package com.santrucho.habilife.ui.ui.goals
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
@@ -8,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -30,11 +32,16 @@ import com.santrucho.habilife.ui.ui.habits.DetailsAppBar
 import com.santrucho.habilife.ui.util.BackPressHandler
 import com.santrucho.habilife.ui.util.LogBundle
 import com.santrucho.habilife.ui.util.TypeFieldDetail
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun GoalDetail(goal: GoalsResponse, goalViewModel: GoalViewModel, navController: NavController) {
+
+    // Recordar si se ha mostrado el diálogo de completado
+    val isCompletedDialogOpen = remember { mutableStateOf(false) }
 
     val context = LocalContext.current
     val firebaseAnalytics : FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
@@ -206,7 +213,7 @@ fun GoalField(text: String, goalText: String, modifier: Modifier = Modifier) {
 fun DeleteGoal(
     onDelete: (GoalsResponse) -> Unit,
     navController: NavController,
-    goal:GoalsResponse
+    goal:GoalsResponse,
 ) {
     val context = LocalContext.current
     val firebaseAnalytics : FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
@@ -218,10 +225,23 @@ fun DeleteGoal(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.End
     ) {
+        if (goal.completed) {
+            Text(text = "Completado", fontSize = 22.sp, color = Color.Green)
+        } else {
+            val releaseDate = LocalDate.parse(goal.release_date, DateTimeFormatter.ofPattern("dd MM yyyy"))
+            val currentDate = LocalDate.now()
+            if (releaseDate.isBefore(currentDate)) {
+                Text(text = "Incompleto", fontSize = 22.sp, color = Color.Red)
+            } else {
+                Text(text = "En progreso", fontSize = 22.sp, color = MaterialTheme.colors.primary)
+            }
+        }
         IconButton(onClick = {
             openDialog.value = true
             LogBundle.logBundleAnalytics(firebaseAnalytics,"Delete Goal Option","delete_goal_option_pressed")
-        }, modifier = Modifier.weight(1f).wrapContentWidth(Alignment.End)) {
+        }, modifier = Modifier
+            .weight(1f)
+            .wrapContentWidth(Alignment.End)) {
             Icon(
                 imageVector = Icons.Outlined.Delete,
                 contentDescription = "delete",

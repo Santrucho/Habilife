@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.santrucho.habilife.ui.data.model.goals.GoalsResponse
+import com.santrucho.habilife.ui.ui.goals.GoalsComplete
 import com.santrucho.habilife.ui.ui.goals.addgoal.GoalImage
 import com.santrucho.habilife.ui.util.LogBundle
 import com.santrucho.habilife.ui.util.helper.ProgressBarHelper
@@ -27,7 +28,7 @@ import kotlinx.serialization.json.encodeToJsonElement
 fun GoalCard(goal: GoalsResponse, navController: NavController) {
 
     val context = LocalContext.current
-    val firebaseAnalytics : FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
+    val firebaseAnalytics: FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
 
     Box(
         modifier = Modifier
@@ -45,19 +46,20 @@ fun GoalCard(goal: GoalsResponse, navController: NavController) {
                         )
                     }"
                 )
+                LogBundle.logBundleAnalytics(firebaseAnalytics, "Goal Card", "goal_card_pressed")
             }
     ) {
         Card(
             modifier = Modifier
                 .wrapContentSize()
-                .clickable { LogBundle.logBundleAnalytics(firebaseAnalytics,"Goal Card","goal_card_pressed") }
                 .padding(8.dp),
             elevation = 6.dp,
             backgroundColor = MaterialTheme.colors.background
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth().padding(4.dp)
+                    .fillMaxWidth()
+                    .padding(4.dp)
             ) {
                 Row(
                     modifier = Modifier.fillMaxSize(),
@@ -80,9 +82,11 @@ fun GoalCard(goal: GoalsResponse, navController: NavController) {
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Top
                         ) {
-                            Row(modifier = Modifier.fillMaxWidth(),
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically) {
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
                                 Text(
                                     text = goal.title,
                                     modifier = Modifier.wrapContentWidth(),
@@ -130,3 +134,4 @@ fun GoalCard(goal: GoalsResponse, navController: NavController) {
         }
     }
 }
+
