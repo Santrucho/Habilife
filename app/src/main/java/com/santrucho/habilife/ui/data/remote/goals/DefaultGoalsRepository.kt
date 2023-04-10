@@ -27,7 +27,7 @@ class DefaultGoalsRepository @Inject constructor(private val firestore:FirebaseF
                     userId = userLogged?.uid.toString(),
                     title = title,
                     description = description,
-                    isCompleted = isCompleted,
+                    completed = isCompleted,
                     release_date = release_date,
                 )
                 docRef.set(goalToSave).await()
@@ -66,6 +66,36 @@ class DefaultGoalsRepository @Inject constructor(private val firestore:FirebaseF
             Resource.Success(resultData)
         } catch (e:Exception) {
             Resource.Failure(e)
+        }
+    }
+
+    override suspend fun completeGoal(goalId:String,goalCount:Int,goalComplete:Boolean) {
+        try {
+            firestore.collection("goals").document(goalId).update("completed",goalComplete).await()
+            val userId = firebaseAuth.currentUser
+            val userCollection = firestore.collection("users")
+            val query = userCollection.whereEqualTo("userId", userId?.uid).get().await()
+            if (!query.isEmpty) {
+                val userDocument = query.documents[0]
+                userCollection.document(userDocument.id)
+                    .update("goalComplete", goalCount)
+                    .await()
+            }
+        }
+        catch(e:Exception){
+            Resource.Failure(e)
+        }
+    }
+
+    override suspend fun getGoalsCompleted(): Int? {
+        val userId = firebaseAuth.currentUser?.uid
+        val userCollection = firestore.collection("users")
+        val query = userCollection.whereEqualTo("userId", userId).get().await()
+        return if (!query.isEmpty) {
+            val userDocument = query.documents[0]
+            userDocument.getLong("goalComplete")?.toInt()
+        } else {
+            null
         }
     }
 

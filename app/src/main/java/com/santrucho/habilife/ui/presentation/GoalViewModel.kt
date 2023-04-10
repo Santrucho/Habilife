@@ -1,5 +1,6 @@
 package com.santrucho.habilife.ui.presentation
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -44,6 +45,7 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
     var isEnabledConfirmButton: MutableState<Boolean> = mutableStateOf(false)
 
     var goalComplete: MutableState<Int?> = mutableStateOf(null)
+    val isCompleted = mutableStateOf(false)
 
     private val _financeFlow = MutableStateFlow<Resource<FinanceGoal>?>(null)
     val financeFlow : StateFlow<Resource<FinanceGoal>?> = _financeFlow
@@ -60,9 +62,6 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
     private val _learningFlow = MutableStateFlow<Resource<LearningGoal>?>(null)
     val learningFlow : StateFlow<Resource<LearningGoal>?> = _learningFlow
 
-    //private val _workFlow = MutableStateFlow<Resource<WorkGoal>?>(null)
-    //val workFlow : StateFlow<Resource<WorkGoal>?> = _workFlow
-
     private val _trainingFlow = MutableStateFlow<Resource<TrainingGoal>?>(null)
     val trainingFlow : StateFlow<Resource<TrainingGoal>?> = _trainingFlow
 
@@ -74,6 +73,7 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
 
     init {
         getOptionsGoals()
+        getGoalComplete()
     }
 
     //Check if the confirm button can be activated, when the validations are correct
@@ -214,14 +214,25 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
         trainingValue.value = null
         confirmSubject.value = false
     }
-    //Reset the response for each call to get the goals in the database
-    fun resetValue(){
-        _goalState.value = null
-    }
     //Call the repository and display all goals
     fun getAllGoals(){
         viewModelScope.launch {
             _goalState.value = repository.getGoals()
+        }
+    }
+
+    //Complete goal
+    fun completeGoal(goal:GoalsResponse,isGoalComplete:Boolean){
+        var goalCount = 0
+        viewModelScope.launch {
+            goalCount = if(isGoalComplete){
+                goalComplete.value?.plus(1) ?: 0
+            }else{
+                goalComplete.value ?: 0
+            }
+            repository.completeGoal(goal.id,goalCount,isGoalComplete)
+            goalComplete.value = goalCount
+            isCompleted.value = true
         }
     }
 
@@ -241,8 +252,7 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
     fun deleteGoal(goal: GoalsResponse){
         viewModelScope.launch {
             repository.deleteGoal(goal)
-            val currentResource = _goalState.value
-            val currentGoals = when (currentResource) {
+            val currentGoals = when (val currentResource = _goalState.value) {
                 is Resource.Success -> currentResource.data
                 else -> emptyList()
             }
@@ -278,5 +288,11 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
         val approvedList = _subjectApproved.value.toMutableList()
         approvedList.remove(subjectValue ?: "")
         _subjectApproved.value = approvedList
+    }
+
+    fun getGoalComplete() {
+        viewModelScope.launch {
+            goalComplete.value = repository.getGoalsCompleted()
+        }
     }
 }

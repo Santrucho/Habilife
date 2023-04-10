@@ -29,7 +29,6 @@ import com.santrucho.habilife.ui.util.BackPressHandler
 import com.santrucho.habilife.ui.util.HandleState
 import com.santrucho.habilife.ui.util.LogBundle
 
-
 @Composable
 fun LoginScreen(viewModel: LoginViewModel, navController: NavController) {
 

@@ -22,7 +22,8 @@ fun ProgressBarHelper(goal: GoalsResponse) {
                 maxProgress = goal.amountGoal?.toFloat(),
                 currentProgress = goal.amount?.toFloat(),
                 valueType = "%",
-                showValues = false
+                showValues = false,
+                goalComplete = goal.completed
             )
         }
         "Training" -> {
@@ -30,7 +31,8 @@ fun ProgressBarHelper(goal: GoalsResponse) {
                 maxProgress = goal.kilometersGoal?.toFloat(),
                 currentProgress = goal.kilometers?.toFloat(),
                 valueType = "%",
-                showValues = false
+                showValues = false,
+                goalComplete = goal.completed
             )
         }
         "Academic" -> {
@@ -38,7 +40,8 @@ fun ProgressBarHelper(goal: GoalsResponse) {
                 maxProgress = goal.subjectList?.size?.toFloat(),
                 currentProgress = goal.subjectApproved.size.toFloat(),
                 valueType = "%",
-                showValues = false
+                showValues = false,
+                goalComplete = goal.completed
             )
         }
     }
@@ -49,9 +52,9 @@ fun CustomLinearProgress(
     maxProgress: Float?,
     currentProgress: Float?,
     valueType: String = "",
-    showValues: Boolean = false
+    showValues: Boolean = false,
+    goalComplete:Boolean = false
 ) {
-
     if (showValues) {
         Row(
             modifier = Modifier
@@ -80,7 +83,6 @@ fun CustomLinearProgress(
                 color = MaterialTheme.colors.secondary,
                 fontSize = 16.sp
             )
-
         }
     }
     //Progress Bar
@@ -106,6 +108,14 @@ fun CustomLinearProgress(
                 .background(MaterialTheme.colors.secondary)
                 .animateContentSize()
         )
+    }
+    if (currentProgress != null) {
+        if(currentProgress >= maxProgress!!){
+            !goalComplete
+        }
+        else{
+            goalComplete
+        }
     }
 }
 
