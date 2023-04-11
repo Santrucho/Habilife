@@ -26,6 +26,7 @@ import com.santrucho.habilife.ui.presentation.LoginViewModel
 import com.santrucho.habilife.ui.presentation.SignUpViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.goals.components.GoalsUI
+import com.santrucho.habilife.ui.ui.habits.FinishHabit
 import com.santrucho.habilife.ui.ui.habits.components.HabitUI
 import com.santrucho.habilife.ui.ui.home.components.EmptyMessage
 import com.santrucho.habilife.ui.ui.home.components.HandleFilterState

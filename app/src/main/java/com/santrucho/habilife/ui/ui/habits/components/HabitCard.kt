@@ -1,5 +1,6 @@
 package com.santrucho.habilife.ui.ui.habits.components
 
+import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -11,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -25,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.santrucho.habilife.ui.data.model.Habit
 import com.santrucho.habilife.ui.presentation.HabitViewModel
+import com.santrucho.habilife.ui.ui.habits.FinishHabit
 import com.santrucho.habilife.ui.util.LogBundle
 import com.santrucho.habilife.ui.util.iconHelper
 import com.santrucho.habilife.ui.util.typeHelper
@@ -40,8 +43,23 @@ fun HabitCard(
     habit: Habit, onDelete: (Habit) -> Unit, viewModel: HabitViewModel
 ) {
 
+    // Recordar si se ha mostrado el diálogo de completado
+    val isCompletedDialogOpen = viewModel.openDialog
+
+    LaunchedEffect(habit) {
+        viewModel.finishHabit(habit)
+    }
+
+    if (isCompletedDialogOpen.value && habit in viewModel.finishedHabits) {
+        // El hábito ya ha sido completado, mostrar el diálogo de finalización
+        FinishHabit(habit.title, viewModel,habit,viewModel::deleteHabit,viewModel::extendedHabit) {
+            // Aquí puedes realizar cualquier acción necesaria después de cerrar el di  álogo
+            isCompletedDialogOpen.value = false
+        }
+    }
+
     val context = LocalContext.current
-    val firebaseAnalytics : FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
+    val firebaseAnalytics: FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
 
     var expandedState by remember { mutableStateOf(false) }
     val rotationState by animateFloatAsState(targetValue = if (expandedState) 180f else 0f)
@@ -66,7 +84,11 @@ fun HabitCard(
                 checked = habit.completed,
                 onCheckedChange = { isChecked ->
                     viewModel.onCompleted(habit, isChecked)
-                    LogBundle.logBundleAnalytics(firebaseAnalytics,"Habit Check","habit_checked_pressed")
+                    LogBundle.logBundleAnalytics(
+                        firebaseAnalytics,
+                        "Habit Check",
+                        "habit_checked_pressed"
+                    )
                 },
                 colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colors.primary),
                 enabled = isEnabled
@@ -75,7 +97,13 @@ fun HabitCard(
                 shape = MaterialTheme.shapes.medium,
                 modifier = Modifier
                     .padding(8.dp, 2.dp)
-                    .clickable { LogBundle.logBundleAnalytics(firebaseAnalytics,"Habit Card","habit_card_pressed") }
+                    .clickable {
+                        LogBundle.logBundleAnalytics(
+                            firebaseAnalytics,
+                            "Habit Card",
+                            "habit_card_pressed"
+                        )
+                    }
                     .fillMaxWidth()
                     .animateContentSize(
                         animationSpec = tween(
@@ -181,7 +209,11 @@ fun HabitCard(
                                     .wrapContentWidth(Alignment.End),
                                 onClick = {
                                     onDelete(habit)
-                                    LogBundle.logBundleAnalytics(firebaseAnalytics,"Delete Habit","delete_habit_pressed")
+                                    LogBundle.logBundleAnalytics(
+                                        firebaseAnalytics,
+                                        "Delete Habit",
+                                        "delete_habit_pressed"
+                                    )
                                 }) {
                                 Icon(
                                     imageVector = Icons.Filled.Delete,
