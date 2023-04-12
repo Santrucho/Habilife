@@ -20,12 +20,6 @@ import javax.inject.Inject
 class HabitViewModel @Inject constructor(private val repository: HabitsRepository) : ViewModel() {
 
     var titleValue: MutableState<String> = mutableStateOf("")
-    var isTitleValid: MutableState<Boolean> = mutableStateOf(false)
-    var titleErrMsg: MutableState<String> = mutableStateOf("")
-
-    var descriptionValue: MutableState<String> = mutableStateOf("")
-    var isDescriptionValid: MutableState<Boolean> = mutableStateOf(false)
-    var descriptionErrMsg: MutableState<String> = mutableStateOf("")
 
     var isEnabledConfirmButton: MutableState<Boolean> = mutableStateOf(false)
 
@@ -37,7 +31,7 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
 
     val openDialog : MutableState<Boolean> = mutableStateOf(false)
 
-    var limitsDays: MutableState<Int> = mutableStateOf(16)
+    private var limitsDays: MutableState<Int> = mutableStateOf(16)
 
     private val _habitState = MutableStateFlow<Resource<List<Habit>>?>(null)
     val habitState: StateFlow<Resource<List<Habit>>?> = _habitState
@@ -60,42 +54,21 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
 
     //Check if the confirm button can be activated, when the validations are correct
     private fun shouldEnabledConfirmButton() {
-        isEnabledConfirmButton.value =
-            titleErrMsg.value.isEmpty()
-                    && descriptionErrMsg.value.isEmpty()
-                    && !titleValue.value.isNullOrBlank()
-                    && !descriptionValue.value.isNullOrBlank()
+        isEnabledConfirmButton.value = titleValue.value.isNotEmpty()
     }
 
-    //Check if the title is valid
     fun validateTitle() {
-        if (titleValue.value.length >= 20) {
-            isTitleValid.value = true
-            titleErrMsg.value = "Title should be less than 20 chars"
-        } else {
-            isTitleValid.value = false
-            titleErrMsg.value = ""
+        val textRegex = Regex("^[a-zA-Z][a-zA-Z0-9 ]*$")
+        if (textRegex.matches(titleValue.value)) {
+            shouldEnabledConfirmButton()
         }
-        shouldEnabledConfirmButton()
-    }
 
-    //Check if the description is valid
-    fun validateDescription() {
-        if (descriptionValue.value.length <= 5) {
-            isDescriptionValid.value = true
-            descriptionErrMsg.value = "Description should be long than 5 chars"
-        } else {
-            isDescriptionValid.value = false
-            descriptionErrMsg.value = ""
-        }
-        shouldEnabledConfirmButton()
     }
 
     //Reset the result of each fields
     fun resetResult() {
         _habitFlow.value = null
         titleValue.value = ""
-        descriptionValue.value = ""
     }
 
     //Call the options to select a type in NewHabitScreen
@@ -121,7 +94,6 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
     //Call to the repository and add a Habit into the database
     fun addHabit(
         title: String,
-        description: String,
         type: String,
         frequently: List<String>,
         timePicker: String,
@@ -131,7 +103,7 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
         viewModelScope.launch {
             _habitFlow.value = Resource.Loading()
             _habitFlow.value =
-                repository.addHabit(title, description, type, frequently, timePicker, isCompleted)
+                repository.addHabit(title, type, frequently, timePicker, isCompleted)
             getAllHabits()
         }
     }
@@ -181,9 +153,6 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
     }
 
     fun finishHabit(habit: Habit) {
-        Log.d("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",finishHabit.value.toString())
-        Log.d("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",limitsDays.value.toString())
-        Log.d("22222222222222222222222222222222222",habit.daysCompleted.size.toString())
         var habitCount = 0
         if (habit.daysCompleted.size == limitsDays.value && habit !in finishedHabits) {
             viewModelScope.launch {

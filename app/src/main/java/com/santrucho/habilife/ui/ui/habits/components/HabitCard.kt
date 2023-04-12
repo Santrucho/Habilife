@@ -169,15 +169,6 @@ fun HabitCard(
                         Divider(modifier = Modifier.padding(1.dp))
                         Spacer(modifier = Modifier.padding(1.dp))
                         Text(
-                            text = "Descripcion: ${habit.description}",
-                            modifier = Modifier
-                                .wrapContentHeight(Alignment.Top),
-                            color = White,
-                            fontSize = 16.sp
-                        )
-                        Divider(modifier = Modifier.padding(1.dp))
-                        Spacer(modifier = Modifier.padding(1.dp))
-                        Text(
                             text = "Hora: ${habit.timePicker}",
                             modifier = Modifier
                                 .wrapContentHeight(Alignment.Top),

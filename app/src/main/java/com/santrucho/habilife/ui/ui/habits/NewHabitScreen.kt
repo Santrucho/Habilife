@@ -1,7 +1,6 @@
 package com.santrucho.habilife.ui.ui.habits
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -20,14 +19,11 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.presentation.HabitViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
-import com.santrucho.habilife.ui.ui.goals.components.NewFields
+import com.santrucho.habilife.ui.ui.goals.components.TextFields
 import com.santrucho.habilife.ui.ui.habits.components.Categories
 import com.santrucho.habilife.ui.ui.habits.components.FrequencyPicker
 import com.santrucho.habilife.ui.ui.habits.components.TimePicker
-import com.santrucho.habilife.ui.util.BackPressHandler
-import com.santrucho.habilife.ui.util.HandleState
-import com.santrucho.habilife.ui.util.LogBundle
-import com.santrucho.habilife.ui.util.Resource
+import com.santrucho.habilife.ui.util.*
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
@@ -96,7 +92,6 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                 //Set the fields to show and fill for create a new habit
                 //Call Categories and NewHabitFields in NewHabitFields function
 
-
                 Categories(options = options!!, onTypeSelection = { newOption ->
                         selectedOption = newOption
                 })
@@ -113,20 +108,14 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                             .fillMaxWidth()
                             .padding(8.dp)
                         ) {
-                        Text("Personalice su habito", fontSize = 20.sp, color = Color.Black)
-                        NewFields(text = "Habito",
-                            value = habitViewModel.titleValue.value.toString() ?: "",
-                            isError = habitViewModel.isTitleValid.value,
-                            error = habitViewModel.titleErrMsg.value,
-                            valueChange = {habitViewModel.titleValue.value = it },
-                            onValidate = { habitViewModel.validateTitle() })
 
-                        NewFields(text = "Descripcion",
-                            value = habitViewModel.descriptionValue.value.toString() ?: "",
-                            isError = habitViewModel.isDescriptionValid.value,
-                            error = habitViewModel.descriptionErrMsg.value,
-                            valueChange = { habitViewModel.descriptionValue.value = it },
-                            onValidate = { habitViewModel.validateDescription() })
+                        Text("Personalice su habito", fontSize = 20.sp, color = Color.Black)
+
+                        TextFields(
+                            value = habitViewModel.titleValue.value.toString() ?: "",
+                            valueChange = {habitViewModel.titleValue.value = it },
+                            placeholder = placeholderType(type = typeHelper(habitType = selectedOption!!)),
+                            onValidate = {habitViewModel.validateTitle()})
                     }
                 }
                 Spacer(modifier = Modifier.padding(4.dp))
@@ -148,8 +137,7 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                         //Makes the call in the ViewModel to access a database and create the habit
                         selectedOption?.let { selectedOption ->
                             habitViewModel.addHabit(
-                                habitViewModel.titleValue.value,
-                                habitViewModel.descriptionValue.value, selectedOption,
+                                habitViewModel.titleValue.value, selectedOption,
                                 orderedDays!!, formattedTime, false
                             )
                             LogBundle.logBundleAnalytics(firebaseAnalytics,"Add Habit","add_habit_pressed")

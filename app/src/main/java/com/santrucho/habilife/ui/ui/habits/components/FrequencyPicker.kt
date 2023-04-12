@@ -46,7 +46,7 @@ fun FrequencyPicker(itemList: List<String>, onDaySelected:(List<String>) -> Unit
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text("Frecuencia del habito:", fontSize = 20.sp, color = Color.Black)
+                Text("Frecuencia del habito", fontSize = 20.sp, color = Color.Black)
 
                 Row(
                     modifier = Modifier

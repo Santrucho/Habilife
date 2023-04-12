@@ -9,7 +9,6 @@ interface HabitsRepository {
 
     suspend fun addHabit(
         title:String,
-        description:String,
         type:String,
         frequently : List<String>,
         timePicker : String,

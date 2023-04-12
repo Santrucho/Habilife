@@ -19,7 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.santrucho.habilife.ui.presentation.GoalViewModel
-import com.santrucho.habilife.ui.ui.goals.components.NewFields
+import com.santrucho.habilife.ui.ui.goals.components.TextFields
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
@@ -36,7 +36,7 @@ fun FieldsHelper(type: String, goalViewModel: GoalViewModel) {
             ) {
                 when (type) {
                     "Finance" -> {
-                        NewFields(
+                        TextFields(
                             text = "Monto objetivo",
                             value = goalViewModel.amountValue.value?.toString() ?: "",
                             valueChange = { goalViewModel.amountValue.value = it.toIntOrNull() },
@@ -50,7 +50,7 @@ fun FieldsHelper(type: String, goalViewModel: GoalViewModel) {
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            NewFields(text = "Agregar materia",
+                            TextFields(text = "Agregar materia",
                                 value = goalViewModel.subjectValue.value ?: "",
                                 modifier = Modifier
                                     .fillMaxWidth(0.8f),
@@ -129,7 +129,7 @@ fun FieldsHelper(type: String, goalViewModel: GoalViewModel) {
                     }
                     "Learning" -> {
 
-                        NewFields(
+                        TextFields(
                             text = "Veces a hacer en la semana",
                             value = goalViewModel.learningValue.value?.toString() ?: "",
                             valueChange = { goalViewModel.learningValue.value = it.toIntOrNull() },
@@ -140,7 +140,7 @@ fun FieldsHelper(type: String, goalViewModel: GoalViewModel) {
                     }
                     "Training" -> {
 
-                        NewFields(
+                        TextFields(
                             text = "Kilometros a recorrer: ",
                             value = goalViewModel.trainingValue.value?.toString() ?: "",
                             valueChange = { goalViewModel.trainingValue.value = it.toIntOrNull() },

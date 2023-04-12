@@ -14,7 +14,6 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
 
     override suspend fun addHabit(
         title: String,
-        description: String,
         type:String,
         frequently : List<String>,
         timePicker : String,
@@ -29,7 +28,6 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
                     id = documentReference.id,
                     userId = userLogged?.uid.toString(),
                     title = title,
-                    description = description,
                     type = type,
                     frequently = frequently,
                     timePicker = timePicker,

@@ -18,7 +18,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.GoalViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
-import com.santrucho.habilife.ui.ui.goals.components.NewFields
+import com.santrucho.habilife.ui.ui.goals.components.TextFields
 import com.santrucho.habilife.ui.ui.goals.components.ReleaseDatePicker
 import com.santrucho.habilife.ui.ui.habits.DetailsAppBar
 import com.santrucho.habilife.ui.util.BackPressHandler
@@ -88,14 +88,14 @@ fun AddGoal(goalViewModel: GoalViewModel, navController: NavController, type: St
                                 .padding(8.dp)
                         ) {
                             Text("Personalice su objetivo", fontSize = 20.sp)
-                            NewFields(text = "Nombre del objetivo",
+                            TextFields(text = "Nombre del objetivo",
                                 value = goalViewModel.titleValue.value ?: "",
                                 isError = goalViewModel.isTitleValid.value,
                                 error = goalViewModel.titleErrMsg.value,
                                 valueChange = { goalViewModel.titleValue.value = it },
                                 onValidate = { goalViewModel.validateTitle() })
 
-                            NewFields(text = "Descripcion",
+                            TextFields(text = "Descripcion",
                                 value = goalViewModel.descriptionValue.value,
                                 isError = goalViewModel.isDescriptionValid.value,
                                 error = goalViewModel.descriptionErrMsg.value,

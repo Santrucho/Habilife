@@ -22,7 +22,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.LoginViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
-import com.santrucho.habilife.ui.ui.goals.components.NewFields
+import com.santrucho.habilife.ui.ui.goals.components.TextFields
 import com.santrucho.habilife.ui.ui.goals.components.PasswordFields
 import com.santrucho.habilife.ui.util.BackPressHandler
 import com.santrucho.habilife.ui.util.HandleState
@@ -109,7 +109,7 @@ fun LoginScreen(viewModel: LoginViewModel, navController: NavController) {
                        * This is the field to Email data
                      */
 
-                    NewFields(text = "Email",
+                    TextFields(text = "Email",
                         value = viewModel.emailValue.value,
                         isError = viewModel.isEmailValid.value,
                         error = viewModel.emailErrMsg.value,

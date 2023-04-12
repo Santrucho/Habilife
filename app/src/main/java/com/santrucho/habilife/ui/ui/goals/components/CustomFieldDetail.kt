@@ -1,7 +1,6 @@
 package com.santrucho.habilife.ui.util
 
 import android.annotation.SuppressLint
-import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -13,7 +12,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -22,7 +20,7 @@ import com.santrucho.habilife.ui.data.model.goals.GoalsResponse
 import com.santrucho.habilife.ui.presentation.GoalViewModel
 import com.santrucho.habilife.ui.ui.goals.GoalField
 import com.santrucho.habilife.ui.ui.goals.GoalsComplete
-import com.santrucho.habilife.ui.ui.goals.components.NewFields
+import com.santrucho.habilife.ui.ui.goals.components.TextFields
 import com.santrucho.habilife.ui.util.helper.CustomLinearProgress
 
 @SuppressLint("StateFlowValueCalledInComposition")
@@ -75,7 +73,7 @@ fun TypeFieldDetail(goal: GoalsResponse, goalViewModel: GoalViewModel) {
 
             Divider(modifier = Modifier.padding(4.dp))
             Spacer(modifier = Modifier.padding(4.dp))
-            NewFields(
+            TextFields(
                 text = "Agregar monto:",
                 value = goalViewModel.amountValue.value?.toString() ?: "",
                 valueChange = { goalViewModel.amountValue.value = it.toIntOrNull() },
@@ -130,7 +128,7 @@ fun TypeFieldDetail(goal: GoalsResponse, goalViewModel: GoalViewModel) {
             }
             Divider(modifier = Modifier.padding(4.dp))
             Spacer(modifier = Modifier.padding(4.dp))
-            NewFields(
+            TextFields(
                 text = "Agregar kilometros: ",
                 value = goalViewModel.trainingValue.value?.toString() ?: "",
                 valueChange = {
@@ -239,7 +237,7 @@ fun TypeFieldDetail(goal: GoalsResponse, goalViewModel: GoalViewModel) {
                 text = "Veces a hacer en la semana: ",
                 goalText = goal.timesAWeek.toString() ?: ""
             )
-            NewFields(
+            TextFields(
                 text = "Veces que cumplio en esta semana: ",
                 value = goalViewModel.learningValue.value?.toString() ?: "",
                 valueChange = { goalViewModel.learningValue.value = it.toIntOrNull() },
