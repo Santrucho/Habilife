@@ -13,10 +13,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
+import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.util.typeHelper
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.time.TimePickerDefaults
@@ -46,7 +48,7 @@ fun Categories(options: List<String>, onTypeSelection: (String) -> Unit) {
                 .wrapContentSize()
                 .padding(8.dp)
         ) {
-            Text("Seleccione un tipo de habito:", fontSize = 20.sp, color = Color.Black)
+            Text("Seleccione un tipo de habito", fontSize = 20.sp, color = Color.Black)
             Spacer(modifier = Modifier.padding(2.dp))
             ExposedDropdownMenuBox(
                 expanded = expanded,
@@ -143,7 +145,7 @@ fun TimePicker(pickTime: LocalTime, onTimePicked: (LocalTime) -> Unit) {
         timepicker(
             initialTime = LocalTime.now(),
             is24HourClock = false,
-            title = "Elija un horario para comenzar el habito:",
+            title = "Elija un horario para comenzar el habito",
             colors = TimePickerDefaults.colors(
                 activeTextColor = MaterialTheme.colors.background,
                 inactiveTextColor = MaterialTheme.colors.background,
@@ -199,8 +201,8 @@ fun TimePicker(pickTime: LocalTime, onTimePicked: (LocalTime) -> Unit) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        imageVector = Icons.Outlined.LocationOn,
-                        modifier = Modifier.width(28.dp),
+                        painter = painterResource(id = R.drawable.ic_clock),
+                        modifier = Modifier.width(24.dp),
                         contentDescription = "arrow forward",
                         tint = MaterialTheme.colors.primary,
                     )

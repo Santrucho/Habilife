@@ -8,6 +8,8 @@ import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,6 +33,7 @@ fun HabitScreen(
     habitViewModel: HabitViewModel,
     navController: NavController,
 ) {
+
 
     val context = LocalContext.current
     val firebaseAnalytics : FirebaseAnalytics = FirebaseAnalytics.getInstance(context)

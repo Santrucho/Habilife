@@ -9,7 +9,6 @@ interface HabitsRepository {
 
     suspend fun addHabit(
         title:String,
-        description:String,
         type:String,
         frequently : List<String>,
         timePicker : String,
@@ -19,7 +18,7 @@ interface HabitsRepository {
 
     suspend fun deleteHabit(habit:Habit)
 
-    suspend fun updateHabit(habitId:String,isChecked:Boolean,habitCount:Int,daysCompleted:MutableList<String>)
+    suspend fun updateHabit(habitId:String,isChecked:Boolean,daysCompleted:MutableList<String>)
 
     suspend fun getOptions() : Resource<List<String>>
 
@@ -28,5 +27,7 @@ interface HabitsRepository {
     suspend fun getHabitComplete() : Int?
 
     suspend fun getHabitsDateCompleted() : MutableList<String>
+
+    suspend fun finishHabit(habitId:String,habitCount:Int,habitFinish:Boolean)
 
 }

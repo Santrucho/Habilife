@@ -14,7 +14,6 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
 
     override suspend fun addHabit(
         title: String,
-        description: String,
         type:String,
         frequently : List<String>,
         timePicker : String,
@@ -29,7 +28,6 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
                     id = documentReference.id,
                     userId = userLogged?.uid.toString(),
                     title = title,
-                    description = description,
                     type = type,
                     frequently = frequently,
                     timePicker = timePicker,
@@ -64,20 +62,10 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
         }
     }
 
-    override suspend fun updateHabit(habitId:String,isChecked:Boolean,habitCount:Int,daysCompleted:MutableList<String>){
+    override suspend fun updateHabit(habitId:String,isChecked:Boolean,daysCompleted:MutableList<String>){
         try {
             firestore.collection("habits").document(habitId).update("completed", isChecked).await()
             firestore.collection("habits").document(habitId).update("daysCompleted",daysCompleted).await()
-
-            val userId = firebaseAuth.currentUser
-            val userCollection = firestore.collection("users")
-            val query = userCollection.whereEqualTo("userId", userId?.uid).get().await()
-            if (!query.isEmpty) {
-                val userDocument = query.documents[0]
-                userCollection.document(userDocument.id)
-                    .update("habitComplete", habitCount)
-                    .await()
-            }
         }catch(e:Exception){
             Log.e(TAG, "Error updating habit: $e")
         }
@@ -128,5 +116,18 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
             }
         }
         return daysCompletedList
+    }
+
+    override suspend fun finishHabit(habitId:String,habitCount:Int,habitFinish:Boolean) {
+        firestore.collection("habits").document(habitId).update("finish",habitFinish).await()
+        val userId = firebaseAuth.currentUser
+        val userCollection = firestore.collection("users")
+        val query = userCollection.whereEqualTo("userId", userId?.uid).get().await()
+        if (!query.isEmpty) {
+            val userDocument = query.documents[0]
+            userCollection.document(userDocument.id)
+                .update("habitComplete", habitCount)
+                .await()
+        }
     }
 }

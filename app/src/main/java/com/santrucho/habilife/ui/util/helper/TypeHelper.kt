@@ -41,3 +41,33 @@ fun typeHelper(habitType: String):Color{
         }
     }
 }
+
+@Composable
+fun placeholderType(type:Color):String{
+    return when(type){
+        Red -> {
+            "Dormir 8 horas"
+        }
+        Green -> {
+            "Llamar a la abuela"
+        }
+        Purple -> {
+            "Beber 2 litros de agua"
+        }
+        MustardYellow -> {
+            "Evitar gastos basura"
+        }
+        Pink -> {
+            "Llamar a la abuela"
+        }
+        Orange -> {
+            "Comer frutas"
+        }
+        Blue -> {
+            "Ir al gimnasio"
+        }
+        else -> {
+            "Otros"
+        }
+    }
+}

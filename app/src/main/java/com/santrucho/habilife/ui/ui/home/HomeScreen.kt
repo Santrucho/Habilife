@@ -1,6 +1,5 @@
 package com.santrucho.habilife.ui.ui.home
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -27,6 +26,7 @@ import com.santrucho.habilife.ui.presentation.LoginViewModel
 import com.santrucho.habilife.ui.presentation.SignUpViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.goals.components.GoalsUI
+import com.santrucho.habilife.ui.ui.habits.FinishHabit
 import com.santrucho.habilife.ui.ui.habits.components.HabitUI
 import com.santrucho.habilife.ui.ui.home.components.EmptyMessage
 import com.santrucho.habilife.ui.ui.home.components.HandleFilterState
@@ -38,7 +38,20 @@ import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.*
 
-
+/**
+ * Composable who show and structure the Home Screen.
+ * Here is where the user can interact with te app, navigate to other actions,
+ * also some data will be displayed here like goals and habits
+ * This screen have a bottom bar navigation to navigate an another screens
+ * and have a top bar to welcome the user and a settings button action
+ *
+ * @param navController Used to navigate between screens
+ * @param userViewModel Use SignUpViewModel to get the user information and dispalyed in the top app bar
+ * @param loginViewModel Use LoginViewModel for in Settings, make the option to log out
+ * @param goalViewModel Use GoalViewModel to display the next goal to be achieved
+ * @param habitViewModel Use HabitViewModel to show the habits that the user needs to do on the current day
+ *
+ */
 @Composable
 fun HomeScreen(
     navController: NavController,
@@ -48,22 +61,53 @@ fun HomeScreen(
     habitViewModel: HabitViewModel
 ) {
 
+    /**
+     * context variable is used to have access to the local context used for Firebase Analytics
+     * firebaseAnalytics create a instance to Firebase Analytics for information about user engagement
+     */
     val context = LocalContext.current
     val firebaseAnalytics : FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
+
+    /**
+     * Call the object logBundleAnalytics which is create for have access in the whole app and no create an instance and repeat
+     * code everytime when is needed
+     * This line is common in the whole app to have this data for engagement
+     */
+
     LogBundle.logBundleAnalytics(firebaseAnalytics,"Home Screen View","home_screen_view")
 
 
-    goalViewModel.getAllGoals()
-    habitViewModel.getAllHabits()
+    /**
+     * This function create a coroutine in this context to update data after a change is produced
+     * and call three methods
+     *
+     * @method resetValues() reset the values of fields in signup and login and
+     * the resource state to null
+     * @method getAllGoals() get all goals when a new goal is created or deleted
+     * @method getAllHabits() get all habits when a new habits is created or deleted
+     *
+     */
 
     LaunchedEffect(Unit) {
         userViewModel.resetValues()
+        goalViewModel.getAllGoals()
+        habitViewModel.getAllHabits()
     }
 
+    //This variable is used in HandleState to get a response in the callback to have all goals for the user
     val goal = goalViewModel.goalState.collectAsState()
+
+    //This variable is used in HandleState to get a response in the callback to have all habits for the user
     val habit = habitViewModel.habitState.collectAsState()
 
+    //Formatted a date to be compatible with the date used in the habits and goals model
     val formatter = DateTimeFormatter.ofPattern("dd MM yyyy")
+
+    /**
+     * Get all the goals of the user, and filter that's goals who their release_date is the next to be committed
+     * In case that are two or more with the same release date, only take the first
+     * Use formatter to compare the dates with the same patterns
+     */
     val filteredGoalList = goal.value.let { resource ->
         when (resource) {
             is Resource.Success -> resource.data.filter {
@@ -75,6 +119,12 @@ fun HomeScreen(
         }
     }
 
+    /**
+     * Get all the habits of the user, and filter that's habits where in their frequently have a day which coincide
+     * with the current date.
+     * Can have more than one habits at time
+     * In case there is not habits today, return an empty list
+     */
     val filteredHabitList = habit.value.let { resource ->
         when (resource) {
             is Resource.Success -> {
@@ -95,21 +145,25 @@ fun HomeScreen(
         }
     }
 
+    //If the user click onBack button of their cellphones, close the app
     val onBack = {}
     BackPressHandler(onBackPressed = onBack)
 
+    //Set the ui to put and display the data
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.secondaryVariant),
     ) {
 
-        //Welcomes the user to the main screen
+        //Welcome the user to the main screen calling a UserWelcome function
         loginViewModel.currentUser?.let {
             UserWelcome(name = it.displayName.toString(), navController, loginViewModel::logout)
         }
+
         Spacer(modifier = Modifier.padding(8.dp))
-        //Show a list of habits to make in the current day
+
+        //Call TextInScreen function to show a title and text to navigate to show all habits
         TextInScreen(
             title = "Habitos del dia",
             route = BottomNavScreen.Habit.screen_route,
@@ -124,7 +178,7 @@ fun HomeScreen(
                 .fillMaxWidth()
                 .wrapContentHeight()
         ) {
-            //Set the box to show the Goals to make that day
+            //Set the box to show the habits to make that day, in case this is empty, show a EmptyMessage function
             if (filteredHabitList.isEmpty()) {
                 EmptyMessage("Al parecer no tienes ningun habito para realizar hoy","Crea mas habitos!")
             } else {
@@ -134,6 +188,11 @@ fun HomeScreen(
                         .fillMaxHeight(0.37f),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+
+                    /**
+                     * Call HandleFilterState where makes the logic to have the habits from database and filter this
+                     * using filteredHabitList
+                     */
                     HandleFilterState(
                         flow = habit,
                         filteredList = filteredHabitList,
@@ -146,12 +205,15 @@ fun HomeScreen(
                 }
             }
         }
-        //Show the next goal to complete
+
+
+        //Call TextInScreen function to show a title and text to navigate to show all goals
         TextInScreen(
             title = "Proximo objetivo",
             route = BottomNavScreen.Goals.screen_route,
             navController = navController
         )
+        //Set the box to show the habits to make that day, in case this is empty, show a EmptyMessage function
         if (filteredGoalList.isEmpty()) {
             Card(
                 shape = MaterialTheme.shapes.medium,
@@ -170,6 +232,10 @@ fun HomeScreen(
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                /**
+                 * Call HandleFilterState where makes the logic to have the goals from database and filter this
+                 * using filteredGoalList
+                 */
                 HandleFilterState(
                     flow = goal,
                     filteredList = filteredGoalList,
@@ -184,7 +250,15 @@ fun HomeScreen(
 }
 
 
-/*Welcome to user, changing the background image depending of what time of day it is */
+/**
+ * Set a top bar with an image logo, greet the user and set a an settings icon to sign out
+ *
+ * @param name Username for user welcome
+ * @param navController Used for navigation between screens, in this case navigate to login screen
+ * when user sign out
+ * @param onLogout Function for call the viewmodel and make the logic for sign out of the app
+ *
+*/
 @Composable
 fun UserWelcome(name: String, navController: NavController, onLogout: () -> Unit) {
     val context = LocalContext.current

@@ -40,9 +40,6 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun GoalDetail(goal: GoalsResponse, goalViewModel: GoalViewModel, navController: NavController) {
 
-    // Recordar si se ha mostrado el diálogo de completado
-    val isCompletedDialogOpen = remember { mutableStateOf(false) }
-
     val context = LocalContext.current
     val firebaseAnalytics : FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
     LogBundle.logBundleAnalytics(firebaseAnalytics,"Goal Detail View","goal_detail_view")

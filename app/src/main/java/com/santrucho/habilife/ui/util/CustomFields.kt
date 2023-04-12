@@ -19,15 +19,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun NewFields(
+fun TextFields(
     modifier : Modifier = Modifier,
-    text: String,
+    text: String = "",
     value: String,
     isError: Boolean = false,
     error: String = "",
-    isEnabled : Boolean = false,
-    showErrorText :Boolean = false,
-    valueChange: (String) -> Unit, onValidate: () -> Unit
+    isEnabled: Boolean = false,
+    placeholder: String = "",
+    showErrorText: Boolean = false,
+    valueChange: (String) -> Unit,
+    onValidate: () -> Unit
 ) {
 
 //Set the fields to show and fill for create a new habit}
@@ -39,6 +41,7 @@ fun NewFields(
         },
         label = { Text(text = text) },
         isError = isError,
+        placeholder = {Text( text = placeholder)},
         singleLine = true,
         modifier = modifier.fillMaxWidth(1f),
         enabled = !isEnabled,
