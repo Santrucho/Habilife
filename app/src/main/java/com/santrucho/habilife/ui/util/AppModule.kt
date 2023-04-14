@@ -32,8 +32,8 @@ import dagger.hilt.components.SingletonComponent
 object AppModule {
 
     @Provides
-    fun provideGoalViewModel(implementation: GoalsRepository,finance:FinanceGoalRepository,academic:AcademicGoalRepository,work:WorkGoalRepository,training:TrainingGoalRepository,learning:LearningRepository) : GoalViewModel{
-        return GoalViewModel(implementation,academic,finance,work,training,learning)
+    fun provideGoalViewModel(implementation: GoalsRepository,finance:FinanceGoalRepository,academic:AcademicGoalRepository,training:TrainingGoalRepository,learning:LearningRepository) : GoalViewModel{
+        return GoalViewModel(implementation,academic,finance,training,learning)
     }
 
     @Provides

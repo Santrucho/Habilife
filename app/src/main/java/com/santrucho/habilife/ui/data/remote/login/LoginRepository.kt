@@ -6,6 +6,10 @@ import com.santrucho.habilife.ui.util.Resource
 interface LoginRepository {
 
     val currentUser : FirebaseUser?
+
     suspend fun loginUser(email:String,password:String) : Resource<FirebaseUser>
+
     fun logout()
+
+    suspend fun updateTokenFCM(newToken:String)
 }
