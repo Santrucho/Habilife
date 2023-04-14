@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.messaging.FirebaseMessaging
 import com.santrucho.habilife.ui.data.model.User
 import com.santrucho.habilife.ui.util.Resource
 import kotlinx.coroutines.tasks.await
@@ -25,12 +26,14 @@ class DefaultSignUpRepository @Inject constructor(private val firebaseAuth : Fir
             result?.user?.updateProfile(UserProfileChangeRequest.Builder().setDisplayName(username).build())
 
             val firestoreCollection = firebaseFirestore.collection("users").document()
+            val firestoreMessaging : FirebaseMessaging = FirebaseMessaging.getInstance()
             //Added user to firestore database
             currentUser.let{ userLogged ->
                 val userToSave = User(
                     userId = userLogged?.uid!!,
                     username = username,
-                    email = email
+                    email = email,
+                    token = firestoreMessaging.token.await()
                 )
                 firestoreCollection.set(userToSave).await()
             }
@@ -44,4 +47,5 @@ class DefaultSignUpRepository @Inject constructor(private val firebaseAuth : Fir
     override fun logout() {
         firebaseAuth.signOut()
     }
+
 }

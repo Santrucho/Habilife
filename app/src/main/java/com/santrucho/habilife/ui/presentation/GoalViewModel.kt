@@ -23,7 +23,6 @@ import javax.inject.Inject
 class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
                                         private val academicRepo : AcademicGoalRepository,
                                         private val financeRepo: FinanceGoalRepository,
-                                        private val workRepo:WorkGoalRepository,
                                         private val trainingRepo:TrainingGoalRepository,
                                         private val learningRepo:LearningRepository) : ViewModel() {
 
