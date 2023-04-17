@@ -36,6 +36,8 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
     val firebaseAnalytics : FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
 
     val habitValue = habitViewModel.habitFlow.collectAsState()
+    val isEnabledConfirmButton by habitViewModel.isEnabledConfirmButton.collectAsState()
+
 
     //Create the options to choose a type for any Habits
     val optionsState = habitViewModel.options.collectAsState()
@@ -112,8 +114,8 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                         Text("Personalice su habito", fontSize = 20.sp, color = Color.Black)
 
                         TextFields(
-                            value = habitViewModel.titleValue.value.toString() ?: "",
-                            valueChange = {habitViewModel.titleValue.value = it },
+                            value = habitViewModel.titleValue.collectAsState().value,
+                            valueChange = {habitViewModel.setTitleValue(it) },
                             placeholder = placeholderType(type = typeHelper(habitType = selectedOption!!)),
                             onValidate = {habitViewModel.validateTitle()})
                     }
@@ -143,7 +145,7 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
                             LogBundle.logBundleAnalytics(firebaseAnalytics,"Add Habit","add_habit_pressed")
                         }
                     },
-                    enabled = areDaysSelected && habitViewModel.isEnabledConfirmButton.value,
+                    enabled = areDaysSelected && isEnabledConfirmButton,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
