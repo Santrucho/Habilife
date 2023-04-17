@@ -58,16 +58,18 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
             firestore.collection("habits").document(habit.id).delete().await()
         }
         catch(e:Exception){
-            Resource.Failure(e)
+            Log.e("HabitsRepository", "Error deleting habit", e)
+            throw RuntimeException("Error deleting habit", e)
         }
     }
 
-    override suspend fun updateHabit(habitId:String,isChecked:Boolean,daysCompleted:MutableList<String>){
-        try {
-            firestore.collection("habits").document(habitId).update("completed", isChecked).await()
-            firestore.collection("habits").document(habitId).update("daysCompleted",daysCompleted).await()
+    override suspend fun updateHabit(habitId:String,isChecked:Boolean,daysCompleted:MutableList<String>) : Resource<Habit>{
+        return try {
+            val updatedHabit = Habit(habitId, daysCompleted = daysCompleted, completed = isChecked)
+            val habitReference = firestore.collection("habits").document(habitId).set(updatedHabit).await()
+            Resource.Success(updatedHabit)
         }catch(e:Exception){
-            Log.e(TAG, "Error updating habit: $e")
+            Resource.Failure(e)
         }
     }
 

@@ -18,7 +18,7 @@ interface HabitsRepository {
 
     suspend fun deleteHabit(habit:Habit)
 
-    suspend fun updateHabit(habitId:String,isChecked:Boolean,daysCompleted:MutableList<String>)
+    suspend fun updateHabit(habitId:String,isChecked:Boolean,daysCompleted:MutableList<String>) : Resource<Habit>
 
     suspend fun getOptions() : Resource<List<String>>
 
