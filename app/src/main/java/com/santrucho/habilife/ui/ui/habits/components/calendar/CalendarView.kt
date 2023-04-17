@@ -1,7 +1,6 @@
 package com.santrucho.habilife.ui.ui.habits.components
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -59,7 +58,7 @@ fun CalendarView(habitViewModel: HabitViewModel) {
 
 
     LaunchedEffect(Unit) {
-        habitViewModel.getHabitsDateCompleted()
+        habitViewModel.getHabitsCompletedDates()
     }
 
 

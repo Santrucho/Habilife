@@ -32,11 +32,6 @@ import dagger.hilt.components.SingletonComponent
 object AppModule {
 
     @Provides
-    fun provideGoalViewModel(implementation: GoalsRepository,finance:FinanceGoalRepository,academic:AcademicGoalRepository,training:TrainingGoalRepository,learning:LearningRepository) : GoalViewModel{
-        return GoalViewModel(implementation,academic,finance,training,learning)
-    }
-
-    @Provides
     fun provideFirebaseAuth():FirebaseAuth = FirebaseAuth.getInstance()
 
     @Provides

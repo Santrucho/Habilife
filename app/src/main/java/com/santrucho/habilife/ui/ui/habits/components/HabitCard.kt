@@ -44,17 +44,17 @@ fun HabitCard(
 ) {
 
     // Recordar si se ha mostrado el diálogo de completado
-    val isCompletedDialogOpen = viewModel.openDialog
+    val isCompletedDialogOpen = viewModel.openDialog.collectAsState()
 
     LaunchedEffect(habit) {
         viewModel.finishHabit(habit)
     }
 
-    if (isCompletedDialogOpen.value && habit in viewModel.finishedHabits) {
+    if (isCompletedDialogOpen.value) {
         // El hábito ya ha sido completado, mostrar el diálogo de finalización
         FinishHabit(habit.title, viewModel,habit,viewModel::deleteHabit,viewModel::extendedHabit) {
             // Aquí puedes realizar cualquier acción necesaria después de cerrar el di  álogo
-            isCompletedDialogOpen.value = false
+            viewModel.setOpenDialog(false)
         }
     }
 

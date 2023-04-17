@@ -1,37 +1,57 @@
 package com.santrucho.habilife.ui.presentation
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.santrucho.habilife.ui.data.model.Habit
-import com.santrucho.habilife.ui.data.remote.habits.HabitsRepository
+import com.santrucho.habilife.ui.domain.habit.*
 import com.santrucho.habilife.ui.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
-class HabitViewModel @Inject constructor(private val repository: HabitsRepository) : ViewModel() {
+class HabitViewModel @Inject constructor(
+    private val addHabitUseCase: AddHabitUseCase,
+    private val getHabitUseCase: GetHabitsUseCase,
+    private val deleteHabitUseCase: DeleteHabitUseCase,
+    private val updateHabitUseCase: UpdateHabitUseCase,
+    private val getCompletedDatesUseCase: GetCompletedDatesUseCase,
+    private val finishHabitUseCase: FinishHabitUseCase,
+    private val getHabitOptionUseCase: GetHabitOptionUseCase,
+    private val getDaysOfWeekUseCase: GetDaysOfWeekUseCase,
+    private val getHabitCompleteUseCase: GetHabitCompleteUseCase
+) : ViewModel() {
 
-    var titleValue: MutableState<String> = mutableStateOf("")
+    private val _titleValue: MutableStateFlow<String> = MutableStateFlow("")
+    val titleValue = _titleValue.asStateFlow()
 
-    var isEnabledConfirmButton: MutableState<Boolean> = mutableStateOf(false)
+    private val _isEnabledConfirmButton: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isEnabledConfirmButton = _isEnabledConfirmButton.asStateFlow()
 
-    var habitComplete: MutableState<Int?> = mutableStateOf(null)
-    var daysCompleted: MutableState<List<String>> = mutableStateOf(emptyList())
-    var habitType: MutableState<String> = mutableStateOf("")
-    var finishHabit: MutableState<Boolean> = mutableStateOf(true)
-    val finishedHabits = mutableStateListOf<Habit>()
+    private val _habitComplete: MutableStateFlow<Int?> = MutableStateFlow(null)
+    val habitComplete = _habitComplete.asStateFlow()
 
-    val openDialog : MutableState<Boolean> = mutableStateOf(false)
+    private val _daysCompleted: MutableStateFlow<List<String>> = MutableStateFlow(emptyList())
+    val daysCompleted = _daysCompleted.asStateFlow()
 
-    private var limitsDays: MutableState<Int> = mutableStateOf(16)
+    private val _habitType: MutableStateFlow<String> = MutableStateFlow("")
+    val habitType = _habitType.asStateFlow()
+
+    private val _finishHabit: MutableStateFlow<Boolean> = MutableStateFlow(true)
+    val finishHabit = _finishHabit.asStateFlow()
+
+    private val _openDialog: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val openDialog = _openDialog.asStateFlow()
+
+    private val _limitsDays: MutableStateFlow<Int> = MutableStateFlow(16)
+    private val limitsDays = _limitsDays.asStateFlow()
 
     private val _habitState = MutableStateFlow<Resource<List<Habit>>?>(null)
     val habitState: StateFlow<Resource<List<Habit>>?> = _habitState
@@ -49,12 +69,20 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
         getOptions()
         getDays()
         getHabitComplete()
-        getHabitsDateCompleted()
+        getHabitsCompletedDates()
+    }
+
+    fun setTitleValue(value: String) {
+        _titleValue.value = value
+    }
+
+    fun setOpenDialog(value: Boolean) {
+        _openDialog.value = value
     }
 
     //Check if the confirm button can be activated, when the validations are correct
     private fun shouldEnabledConfirmButton() {
-        isEnabledConfirmButton.value = titleValue.value.isNotEmpty()
+        _isEnabledConfirmButton.value = titleValue.value.isNotEmpty()
     }
 
     fun validateTitle() {
@@ -62,32 +90,47 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
         if (textRegex.matches(titleValue.value)) {
             shouldEnabledConfirmButton()
         }
-
     }
 
     //Reset the result of each fields
     fun resetResult() {
         _habitFlow.value = null
-        titleValue.value = ""
-    }
-
-    //Call the options to select a type in NewHabitScreen
-    private fun getOptions() {
-        viewModelScope.launch {
-            _options.value = repository.getOptions()
-        }
-    }
-
-    private fun getDays() {
-        viewModelScope.launch {
-            _daysOfWeek.value = repository.getDaysOfWeek()
-        }
+        _titleValue.value = ""
     }
 
     //Call the repository and display all habits
     fun getAllHabits() {
         viewModelScope.launch {
-            _habitState.value = repository.getHabits()
+            _habitState.value = getHabitUseCase()
+        }
+    }
+
+    //Call the options to select a type in NewHabitScreen
+    private fun getOptions() {
+        viewModelScope.launch {
+            _options.value = getHabitOptionUseCase()
+        }
+    }
+
+    private fun getDays() {
+        viewModelScope.launch {
+            _daysOfWeek.value = getDaysOfWeekUseCase()
+        }
+    }
+
+    fun getHabitComplete() {
+        viewModelScope.launch {
+            _habitComplete.value = getHabitCompleteUseCase()
+        }
+    }
+
+    fun getHabitsCompletedDates() {
+        viewModelScope.launch {
+            try {
+                _daysCompleted.value = getCompletedDatesUseCase()
+            } catch (e: NullPointerException) {
+                _daysCompleted.value = emptyList()
+            }
         }
     }
 
@@ -102,8 +145,7 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
 
         viewModelScope.launch {
             _habitFlow.value = Resource.Loading()
-            _habitFlow.value =
-                repository.addHabit(title, type, frequently, timePicker, isCompleted)
+            _habitFlow.value = addHabitUseCase(title, type, frequently, timePicker, isCompleted)
             getAllHabits()
         }
     }
@@ -111,7 +153,7 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
     //Delete an specific habit from the database
     fun deleteHabit(habit: Habit) {
         viewModelScope.launch {
-            repository.deleteHabit(habit)
+            deleteHabitUseCase(habit)
             val currentHabits = when (val currentResource = _habitState.value) {
                 is Resource.Success -> currentResource.data
                 else -> emptyList()
@@ -125,57 +167,36 @@ class HabitViewModel @Inject constructor(private val repository: HabitsRepositor
         viewModelScope.launch {
             if (isChecked) {
                 habit.daysCompleted.add(LocalDate.now().toString())
-                habitType.value = habit.type
             } else {
                 habit.daysCompleted.remove(LocalDate.now().toString())
-                habitType.value = ""
             }
-            repository.updateHabit(habit.id, isChecked, habit.daysCompleted)
-            getHabitsDateCompleted()
-            getAllHabits()
-        }
-    }
-
-    fun getHabitComplete() {
-        viewModelScope.launch {
-            habitComplete.value = repository.getHabitComplete()
-        }
-    }
-
-    fun getHabitsDateCompleted() {
-        viewModelScope.launch {
-            try {
-                daysCompleted.value = repository.getHabitsDateCompleted()
-            } catch (e: NullPointerException) {
-                daysCompleted.value = emptyList()
-            }
+            updateHabitUseCase(habit.id, isChecked, habit.daysCompleted)
         }
     }
 
     fun finishHabit(habit: Habit) {
         var habitCount = 0
-        if (habit.daysCompleted.size == limitsDays.value && habit !in finishedHabits) {
+        if (habit.daysCompleted.size == limitsDays.value) {
             viewModelScope.launch {
-                openDialog.value = true
-                finishHabit.value = true
-                habitCount = if(finishHabit.value){
+                _openDialog.value = true
+                _finishHabit.value = true
+                habitCount = if (finishHabit.value) {
                     habitComplete.value?.plus(1) ?: 0
-                }else{
+                } else {
                     habitComplete.value ?: 0
                 }
-                finishedHabits.add(habit)
-                repository.finishHabit(habit.id, habitCount, finishHabit.value)
-                habitComplete.value = habitCount
+                habitComplete.value?.let { finishHabitUseCase(habit.id, it, finishHabit.value) }
+                _habitComplete.value = habitCount
             }
         }
     }
 
     fun extendedHabit(habit: Habit) {
         viewModelScope.launch {
-            habitComplete.value = habitComplete.value?.minus(1)
-            finishHabit.value = false
-            limitsDays.value = 32
-            repository.finishHabit(habit.id, habitComplete.value!!, finishHabit.value)
+            _habitComplete.value = habitComplete.value?.minus(1)
+            _finishHabit.value = false
+            _limitsDays.value = 32
+            habitComplete.value?.let { finishHabitUseCase(habit.id, it, finishHabit.value) }
             finishHabit(habit)
         }
     }
