@@ -1,16 +1,15 @@
 package com.santrucho.habilife.ui.data.model.goals
 
 data class FinanceGoal(
-    var id : String="",
-    var userId : String="",
-    var title : String="",
-    var description : String="",
-    var isCompleted : Boolean=false,
-    var release_date : String= "",
-    var image : String = "",
-    var type : String = "Finance",
-    //New parameters
-    var amount : Int? = null,
-    var amountGoal : Int? = null
-) {
+    override var id: String = "",
+    override var userId: String = "",
+    override var title: String = "",
+    override var description: String = "",
+    override var completed: Boolean = false,
+    override var release_date: String = "",
+    override var image: String = "",
+    override var type : String = "Finance",
+    override var amount : Int? = 0,
+    override var amountGoal : Int? = 0,
+) : GoalsResponse(){
 }

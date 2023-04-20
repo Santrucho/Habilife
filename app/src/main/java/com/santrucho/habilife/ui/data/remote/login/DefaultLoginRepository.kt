@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessaging
+import com.santrucho.habilife.ui.data.model.User
 import com.santrucho.habilife.ui.util.Resource
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -13,22 +14,43 @@ class DefaultLoginRepository @Inject constructor(private val firebaseAuth : Fire
 
     val firebaseMessaging : FirebaseMessaging = FirebaseMessaging.getInstance()
 
-    override val currentUser : FirebaseUser?
-        get() = firebaseAuth.currentUser
-
-    override suspend fun loginUser(email: String, password: String): Resource<FirebaseUser> {
-        return try{
-            val token = firebaseMessaging.token.await()
-            val result = firebaseAuth.signInWithEmailAndPassword(email,password).await()
-            updateTokenFCM(token)
-            Resource.Success(result.user!!)
-        } catch(e:Exception){
-            return Resource.Failure(e)
+    override suspend fun currentUser(): Resource<User> {
+        return try {
+            val firebaseUser = firebaseAuth.currentUser
+            if (firebaseUser != null) {
+                val user = User(
+                    userId = firebaseUser.uid,
+                    email = firebaseUser.email ?: "",
+                    username = firebaseUser.displayName ?: ""
+                )
+                Resource.Success(user)
+            } else {
+                Resource.Failure(RuntimeException("FirebaseUser is null"))
+            }
+        } catch (e: Exception) {
+            Resource.Failure(e)
         }
     }
 
-    override fun logout(){
-        firebaseAuth.signOut()
+    override suspend fun loginUser(email: String, password: String): Resource<User> {
+        return try{
+            val token = firebaseMessaging.token.await()
+            val result = firebaseAuth.signInWithEmailAndPassword(email,password).await()
+            val user = User(email = result.user?.email!!)
+            updateTokenFCM(token)
+            Resource.Success(user)
+        } catch(e:Exception){
+            Resource.Failure(e)
+        }
+    }
+
+    override fun logout() : Resource<Unit>{
+        return try{
+            firebaseAuth.signOut()
+            Resource.Success(Unit)
+        } catch (e:Exception){
+            Resource.Failure(e)
+        }
     }
 
     override suspend fun updateTokenFCM(newToken:String) {

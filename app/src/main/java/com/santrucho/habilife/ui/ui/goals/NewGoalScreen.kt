@@ -27,8 +27,10 @@ import com.santrucho.habilife.ui.util.Resource
 @Composable
 fun NewGoalScreen(goalViewModel: GoalViewModel,navController:NavController){
 
-    //Makes the logic to collect and show the list of habits created by the user,
-    //in case is correct show the list and in case is incorrect show an error
+    /**
+     *Makes the logic to collect and show the list of habits created by the user,
+     * in case is correct show the list and in case is incorrect show an error
+     */
     goalViewModel.getOptionsGoals()
     goalViewModel.resetResult()
 

@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.santrucho.habilife.ui.data.model.goals.FinanceGoal
+import com.santrucho.habilife.ui.data.model.goals.GoalsResponse
 import com.santrucho.habilife.ui.util.Resource
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -14,7 +15,7 @@ class DefaultFinanceGoalRepository @Inject constructor(private val firestore: Fi
                                                        private val fireStorage:FirebaseStorage
 ) : FinanceGoalRepository {
 
-    override suspend fun addFinanceGoal(
+    override suspend fun addGoal(
         title: String,
         description: String,
         isCompleted: Boolean,
@@ -32,9 +33,10 @@ class DefaultFinanceGoalRepository @Inject constructor(private val firestore: Fi
                     userId = userLogged?.uid.toString(),
                     title = title,
                     description = description,
-                    isCompleted = isCompleted,
+                    completed = isCompleted,
                     release_date = release_date,
                     image = downloadUrl.toString(),
+                    type = "Finance",
                     amount = amount,
                     amountGoal = amountGoal
                 )
@@ -46,7 +48,13 @@ class DefaultFinanceGoalRepository @Inject constructor(private val firestore: Fi
         }
     }
 
-    override suspend fun updateGoal(goalId:String,amount: Int?){
-        firestore.collection("goals").document(goalId).update("amount",amount).await()
+    override suspend fun updateGoal(goalId:String,amount: Int?) : Resource<Unit>{
+        return try {
+            firestore.collection("goals").document(goalId).update("amount",amount).await()
+            Resource.Success(Unit)
+        } catch(e:Exception){
+            Resource.Failure(e)
+        }
+
     }
 }

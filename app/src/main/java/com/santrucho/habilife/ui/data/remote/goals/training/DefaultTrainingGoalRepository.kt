@@ -3,6 +3,7 @@ package com.santrucho.habilife.ui.data.remote.goals.training
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.santrucho.habilife.ui.data.model.goals.GoalsResponse
 import com.santrucho.habilife.ui.data.model.goals.TrainingGoal
 import com.santrucho.habilife.ui.util.Resource
 import kotlinx.coroutines.tasks.await
@@ -13,7 +14,7 @@ class DefaultTrainingGoalRepository @Inject constructor(private val firestore: F
                                                         private val fireStorage: FirebaseStorage
 ) : TrainingGoalRepository {
 
-    override suspend fun addRunningGoal(
+    override suspend fun addGoal(
         title: String,
         description: String,
         isCompleted: Boolean,
@@ -31,9 +32,10 @@ class DefaultTrainingGoalRepository @Inject constructor(private val firestore: F
                     userId = userLogged?.uid.toString(),
                     title = title,
                     description = description,
-                    isCompleted = isCompleted,
+                    completed = isCompleted,
                     release_date = release_date,
                     image = downloadUrl.toString(),
+                    type = "Training",
                     kilometers = kilometers,
                     kilometersGoal = kilometersGoal
                 )
@@ -45,7 +47,12 @@ class DefaultTrainingGoalRepository @Inject constructor(private val firestore: F
         }
     }
 
-    override suspend fun updateGoal(goalId:String,kilometers: Int?){
-        firestore.collection("goals").document(goalId).update("kilometers",kilometers).await()
+    override suspend fun updateGoal(goalId:String,kilometers: Int?) : Resource<Unit> {
+        return try{
+            firestore.collection("goals").document(goalId).update("kilometers",kilometers).await()
+            Resource.Success(Unit)
+        } catch (e:Exception){
+            Resource.Failure(e)
+        }
     }
 }

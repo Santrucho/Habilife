@@ -4,10 +4,11 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
-import com.google.firebase.auth.FirebaseUser
+import com.santrucho.habilife.ui.data.model.User
 import com.santrucho.habilife.ui.data.remote.login.LoginRepository
-import com.santrucho.habilife.ui.navigation.Screen
+import com.santrucho.habilife.ui.domain.login.GetCurrentUserUseCase
+import com.santrucho.habilife.ui.domain.login.LogOutUseCase
+import com.santrucho.habilife.ui.domain.login.LoginUseCase
 import com.santrucho.habilife.ui.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,25 +17,29 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val repository: LoginRepository) : ViewModel() {
+class LoginViewModel @Inject constructor(
+    private val loginUseCase: LoginUseCase,
+    private val getCurrentUserUseCase: GetCurrentUserUseCase,
+    private val logOutUseCase: LogOutUseCase
+) : ViewModel() {
 
-    var emailValue : MutableState<String> = mutableStateOf("")
+    var emailValue: MutableState<String> = mutableStateOf("")
     var isEmailValid: MutableState<Boolean> = mutableStateOf(false)
     var emailErrMsg: MutableState<String> = mutableStateOf("")
 
     var passwordValue: MutableState<String> = mutableStateOf("")
-    var isPasswordValid : MutableState<Boolean> = mutableStateOf(false)
-    var passwordErrMsg : MutableState<String> = mutableStateOf("")
+    var isPasswordValid: MutableState<Boolean> = mutableStateOf(false)
+    var passwordErrMsg: MutableState<String> = mutableStateOf("")
     var passwordVisibility: MutableState<Boolean> = mutableStateOf(false)
 
 
     private var isEnabledConfirmButton: MutableState<Boolean> = mutableStateOf(false)
 
-    private val _loginFlow = MutableStateFlow<Resource<FirebaseUser>?>(null)
-    val loginFlow : StateFlow<Resource<FirebaseUser>?> = _loginFlow
+    private var _currentUser = MutableStateFlow<Resource<User>?>(null)
+    val currentUser: StateFlow<Resource<User>?> = _currentUser
 
-    val currentUser: FirebaseUser?
-        get() = repository.currentUser
+    private val _loginFlow = MutableStateFlow<Resource<User>?>(null)
+    val loginFlow: StateFlow<Resource<User>?> = _loginFlow
 
     private fun shouldEnabledConfirmButton() {
         isEnabledConfirmButton.value =
@@ -42,32 +47,45 @@ class LoginViewModel @Inject constructor(private val repository: LoginRepository
                     && emailValue.value.isNotBlank()
                     && passwordValue.value.isNotBlank()
     }
+
     //Reset the fields values
-    private fun resetValues(){
+    private fun resetValues() {
         emailValue.value = ""
         passwordValue.value = ""
     }
+
     //If the user is register and its already login, initialize the app and go to the home screen directly
-    init{
-        repository.currentUser?.let { user ->
-            _loginFlow.value = Resource.Success(user)
-        } ?: run {
-            _loginFlow.value = null
+    init {
+        viewModelScope.launch {
+            getCurrentUserUseCase().let { resource ->
+                _currentUser.value = resource
+                _loginFlow.value = resource
+            }
+        }
+    }
+
+    fun currentUser() {
+        viewModelScope.launch {
+            _currentUser.value = Resource.Loading()
+            _currentUser.value = getCurrentUserUseCase()
         }
     }
 
     //Call the repository and sign in
-    fun login(email:String,password:String) = viewModelScope.launch {
+    fun login(email: String, password: String) = viewModelScope.launch {
         _loginFlow.value = Resource.Loading()
-        val resultData = repository.loginUser(email, password)
-        _loginFlow.value = resultData
-
+        val result = loginUseCase(email, password)
+        _loginFlow.value = result
+        _currentUser.value = getCurrentUserUseCase()
         resetValues()
     }
+
     //Sign out the user
-    fun logout(){
-        _loginFlow.value = Resource.Loading()
-        repository.logout()
-        _loginFlow.value = null
+    fun logout() {
+        viewModelScope.launch {
+            _loginFlow.value = Resource.Loading()
+            logOutUseCase()
+            _loginFlow.value = null
+        }
     }
 }

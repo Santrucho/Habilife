@@ -22,7 +22,7 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
 
         return try {
             firebaseAuth.currentUser.let { userLogged ->
-                var documentReference = firestore.collection("habits").document()
+                val documentReference = firestore.collection("habits").document()
 
                 val habitToSave = Habit(
                     id = documentReference.id,
@@ -63,11 +63,10 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
         }
     }
 
-    override suspend fun updateHabit(habitId:String,isChecked:Boolean,daysCompleted:MutableList<String>) : Resource<Habit>{
+    override suspend fun updateHabit(habitId:String,isChecked:Boolean,daysCompleted:MutableList<String>) : Resource<Unit>{
         return try {
-            val updatedHabit = Habit(habitId, daysCompleted = daysCompleted, completed = isChecked)
-            val habitReference = firestore.collection("habits").document(habitId).set(updatedHabit).await()
-            Resource.Success(updatedHabit)
+            firestore.collection("habits").document(habitId).update("completed",isChecked)
+            Resource.Success(Unit)
         }catch(e:Exception){
             Resource.Failure(e)
         }

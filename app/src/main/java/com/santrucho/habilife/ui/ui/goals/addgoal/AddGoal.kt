@@ -36,10 +36,10 @@ fun AddGoal(goalViewModel: GoalViewModel, navController: NavController, type: St
     val firebaseAnalytics : FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
 
 
-    val financeValue = goalViewModel.financeFlow.collectAsState()
-    val academicValue = goalViewModel.academicFlow.collectAsState()
-    val trainingValue = goalViewModel.trainingFlow.collectAsState()
-    val learningValue = goalViewModel.learningFlow.collectAsState()
+    val financeState = goalViewModel.financeFlow.collectAsState()
+    val academicState = goalViewModel.academicFlow.collectAsState()
+    val learningState = goalViewModel.learningFlow.collectAsState()
+    val trainingState = goalViewModel.trainingFlow.collectAsState()
 
     //Pick date
     var pickedDate by remember { mutableStateOf(LocalDate.now()) }
@@ -89,7 +89,7 @@ fun AddGoal(goalViewModel: GoalViewModel, navController: NavController, type: St
                         ) {
                             Text("Personalice su objetivo", fontSize = 20.sp)
                             TextFields(text = "Nombre del objetivo",
-                                value = goalViewModel.titleValue.value ?: "",
+                                value = goalViewModel.titleValue.value,
                                 isError = goalViewModel.isTitleValid.value,
                                 error = goalViewModel.titleErrMsg.value,
                                 valueChange = { goalViewModel.titleValue.value = it },
@@ -148,18 +148,20 @@ fun AddGoal(goalViewModel: GoalViewModel, navController: NavController, type: St
                 //Set the button to add the goal into database
                 Button(
                     onClick = {
-                        goalViewModel.addGoal(
-                            goalViewModel.titleValue.value,
-                            goalViewModel.descriptionValue.value,
-                            isCompleted = false,
-                            release_date = formattedDate,
-                            type = type,
-                            amountGoal = goalViewModel.amountValue.value,
-                            subject = goalViewModel.subjectValue.value,
-                            subjectList = goalViewModel.subjectList.value,
-                            kilometersGoal = goalViewModel.trainingValue.value,
-                            timesAWeek = 4
-                        )
+                        goalViewModel.subjectValue.value?.let { it1 ->
+                            goalViewModel.addGoal(
+                                goalViewModel.titleValue.value,
+                                goalViewModel.descriptionValue.value,
+                                isCompleted = false,
+                                release_date = formattedDate,
+                                type = type,
+                                amountGoal = goalViewModel.amountValue.value,
+                                subject = it1,
+                                subjectList = goalViewModel.subjectList.value,
+                                kilometersGoal = goalViewModel.trainingValue.value,
+                                timesAWeek = 4
+                            )
+                        }
                         LogBundle.logBundleAnalytics(firebaseAnalytics,"Add Goal","add_goal_pressed")
                     },
                     enabled = goalViewModel.isEnabledConfirmButton.value,
@@ -174,7 +176,7 @@ fun AddGoal(goalViewModel: GoalViewModel, navController: NavController, type: St
                 }
             }
             HandleState(
-                flow = financeValue,
+                flow = financeState,
                 navController = navController,
                 route = BottomNavScreen.Goals.screen_route,
                 text = "Objetivo creado",
@@ -182,16 +184,15 @@ fun AddGoal(goalViewModel: GoalViewModel, navController: NavController, type: St
                 eventName = "add_finance_goal"
             )
             HandleState(
-                flow = academicValue,
+                flow = academicState,
                 navController = navController,
                 route = BottomNavScreen.Goals.screen_route,
                 text = "Objetivo creado",
                 message = "Academic Goal",
                 eventName = "add_academic_goal"
             )
-            //HandleState(flow = workValue , navController = navController,route = BottomNavScreen.Goals.screen_route,text ="Objetivo creado")
             HandleState(
-                flow = trainingValue,
+                flow = trainingState,
                 navController = navController,
                 route = BottomNavScreen.Goals.screen_route,
                 text = "Objetivo creado",
@@ -199,7 +200,7 @@ fun AddGoal(goalViewModel: GoalViewModel, navController: NavController, type: St
                 eventName = "add_training_goal"
             )
             HandleState(
-                flow = learningValue,
+                flow = learningState,
                 navController = navController,
                 route = BottomNavScreen.Goals.screen_route,
                 text = "Objetivo creado",

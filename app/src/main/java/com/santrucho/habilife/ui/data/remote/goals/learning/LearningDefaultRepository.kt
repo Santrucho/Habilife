@@ -3,6 +3,7 @@ package com.santrucho.habilife.ui.data.remote.goals.learning
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.santrucho.habilife.ui.data.model.goals.GoalsResponse
 import com.santrucho.habilife.ui.data.model.goals.LearningGoal
 import com.santrucho.habilife.ui.util.Resource
 import kotlinx.coroutines.tasks.await
@@ -12,7 +13,7 @@ class LearningDefaultRepository @Inject constructor(private val firestore: Fireb
                                                     private val firebaseAuth: FirebaseAuth,
                                                     private val fireStorage: FirebaseStorage
 ):LearningRepository{
-    override suspend fun addLearningGoal(
+    override suspend fun addGoal(
         title: String,
         description: String,
         isCompleted: Boolean,
@@ -29,9 +30,10 @@ class LearningDefaultRepository @Inject constructor(private val firestore: Fireb
                     userId = userLogged?.uid.toString(),
                     title = title,
                     description = description,
-                    isCompleted = isCompleted,
+                    completed = isCompleted,
                     release_date = release_date,
                     image = downloadUrl.toString(),
+                    type = "Learning",
                     timesAWeek = timesAWeek
                 )
                 docRef.set(goalToSave).await()

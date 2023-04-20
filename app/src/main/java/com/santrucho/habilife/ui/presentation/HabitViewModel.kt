@@ -38,7 +38,7 @@ class HabitViewModel @Inject constructor(
     private val _habitComplete: MutableStateFlow<Int?> = MutableStateFlow(null)
     val habitComplete = _habitComplete.asStateFlow()
 
-    private val _daysCompleted: MutableStateFlow<List<String>> = MutableStateFlow(emptyList())
+    private val _daysCompleted: MutableStateFlow<List<String>?> = MutableStateFlow(emptyList())
     val daysCompleted = _daysCompleted.asStateFlow()
 
     private val _habitType: MutableStateFlow<String> = MutableStateFlow("")
@@ -170,12 +170,14 @@ class HabitViewModel @Inject constructor(
             } else {
                 habit.daysCompleted.remove(LocalDate.now().toString())
             }
+            _daysCompleted.value = habit.daysCompleted
             updateHabitUseCase(habit.id, isChecked, habit.daysCompleted)
+            getAllHabits()
         }
     }
 
     fun finishHabit(habit: Habit) {
-        var habitCount = 0
+        var habitCount: Int
         if (habit.daysCompleted.size == limitsDays.value) {
             viewModelScope.launch {
                 _openDialog.value = true

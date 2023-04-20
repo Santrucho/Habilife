@@ -76,7 +76,7 @@ fun <T> PasswordFields(
 
 //Set the fields to show and fill for create a new habit}
     OutlinedTextField(
-        value = value.value.toString() ?: "",
+        value = value.value.toString(),
         onValueChange = {
             value.value = valueChange(it)
             onValidate()
