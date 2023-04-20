@@ -1,15 +1,15 @@
 package com.santrucho.habilife.ui.data.model.goals
 
 data class TrainingGoal(
-    override var id: String = "",
-    override var userId: String = "",
-    override var title: String = "",
-    override var description: String = "",
-    override var completed: Boolean = false,
-    override var release_date: String = "",
-    override var image: String = "",
-    override var type: String = "Training",
-    override var kilometers: Int? = 0,
-    override var kilometersGoal: Int? = 0
-) : GoalsResponse() {
+    var id: String = "",
+    var userId: String = "",
+    var title: String = "",
+    var description: String = "",
+    var completed: Boolean = false,
+    var release_date: String = "",
+    var image: String = "",
+    var type: String = "Training",
+    var kilometers: Int? = 0,
+    var kilometersGoal: Int? = 0
+) {
 }

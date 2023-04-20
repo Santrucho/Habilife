@@ -119,7 +119,6 @@ fun FieldsHelper(type: String, goalViewModel: GoalViewModel) {
                                         }
                                     }
                                 }
-
                             }
                         }
                     }
