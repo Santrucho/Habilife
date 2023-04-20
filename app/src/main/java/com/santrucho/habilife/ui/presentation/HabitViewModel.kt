@@ -170,8 +170,8 @@ class HabitViewModel @Inject constructor(
             } else {
                 habit.daysCompleted.remove(LocalDate.now().toString())
             }
-            _daysCompleted.value = habit.daysCompleted
             updateHabitUseCase(habit.id, isChecked, habit.daysCompleted)
+            getHabitsCompletedDates()
             getAllHabits()
         }
     }
