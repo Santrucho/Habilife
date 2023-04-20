@@ -1,5 +1,6 @@
 package com.santrucho.habilife.ui.presentation
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -170,7 +171,9 @@ class HabitViewModel @Inject constructor(
             } else {
                 habit.daysCompleted.remove(LocalDate.now().toString())
             }
+
             updateHabitUseCase(habit.id, isChecked, habit.daysCompleted)
+
             getHabitsCompletedDates()
             getAllHabits()
         }

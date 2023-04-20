@@ -160,7 +160,6 @@ fun HomeScreen(
 
         //Welcome the user to the main screen calling a UserWelcome function
         val username by loginViewModel.currentUser.collectAsState()
-        Log.d("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",username.toString())
         username.let{ result ->
             when(result){
                 is Resource.Success -> {

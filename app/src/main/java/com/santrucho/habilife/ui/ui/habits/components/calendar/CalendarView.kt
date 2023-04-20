@@ -76,7 +76,11 @@ fun CalendarView(habitViewModel: HabitViewModel) {
             .clickable {
                 isMonthCalendar = !isMonthCalendar
                 isWeekCalendar = !isWeekCalendar
-                LogBundle.logBundleAnalytics(firebaseAnalytics,"Calendar Expanded","calendar_expanded_pressed")
+                LogBundle.logBundleAnalytics(
+                    firebaseAnalytics,
+                    "Calendar Expanded",
+                    "calendar_expanded_pressed"
+                )
             }
     ) {
         Column(
@@ -161,7 +165,7 @@ private fun Day(
     habitViewModel: HabitViewModel,
     onClick: (LocalDate) -> Unit
 ) {
-    val daysCompleted = habitViewModel.daysCompleted.value ?: emptyList()
+    val daysCompleted = habitViewModel.daysCompleted.collectAsState().value ?: emptyList()
     val dateFormatter = DateTimeFormatter.ofPattern("dd")
 
     val isDateComplete =
@@ -230,7 +234,6 @@ fun DayCalendar(
     onClick: (CalendarDay) -> Unit
 ) {
     val daysCompleted = habitViewModel.daysCompleted.value ?: emptyList()
-    Log.d("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",daysCompleted.toString())
     val isCompleted = (daysCompleted.any { it == day.date.toString() } && LocalDate.parse((day.date.toString())) <= LocalDate.now())
     val habits = habitViewModel.habitState.collectAsState().value.let { resource ->
         when (resource) {
