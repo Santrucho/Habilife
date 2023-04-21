@@ -23,7 +23,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         val firebaseMessaging : FirebaseMessaging = FirebaseMessaging.getInstance()
         val token = firebaseMessaging.token.result
-        Log.d("Token1:",token)
         super.onMessageReceived(remoteMessage)
         val title = remoteMessage.notification!!.title
         val text = remoteMessage.notification!!
@@ -54,7 +53,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        Log.d("token", token)
     }
 
 }

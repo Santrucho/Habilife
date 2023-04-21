@@ -1,6 +1,5 @@
 package com.santrucho.habilife.ui.presentation
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -11,7 +10,13 @@ import com.santrucho.habilife.ui.data.remote.goals.academic.AcademicGoalReposito
 import com.santrucho.habilife.ui.data.remote.goals.finance.FinanceGoalRepository
 import com.santrucho.habilife.ui.data.remote.goals.learning.LearningRepository
 import com.santrucho.habilife.ui.data.remote.goals.training.TrainingGoalRepository
-import com.santrucho.habilife.ui.data.remote.goals.work.WorkGoalRepository
+import com.santrucho.habilife.ui.domain.goal.academic.AddAcademicGoalUseCase
+import com.santrucho.habilife.ui.domain.goal.academic.UpdateAcademicGoalUseCase
+import com.santrucho.habilife.ui.domain.goal.finance.AddFinanceGoalUseCase
+import com.santrucho.habilife.ui.domain.goal.finance.UpdateFinanceGoalUseCase
+import com.santrucho.habilife.ui.domain.goal.learning.AddLearningGoalUseCase
+import com.santrucho.habilife.ui.domain.goal.training.AddTrainingGoalUseCase
+import com.santrucho.habilife.ui.domain.goal.training.UpdateTrainingGoalUseCase
 import com.santrucho.habilife.ui.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,10 +26,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
-                                        private val academicRepo : AcademicGoalRepository,
-                                        private val financeRepo: FinanceGoalRepository,
-                                        private val trainingRepo:TrainingGoalRepository,
-                                        private val learningRepo:LearningRepository) : ViewModel() {
+                                        private val updateAcademicGoalUseCase: UpdateAcademicGoalUseCase,
+                                        private val updateFinanceGoalUseCase: UpdateFinanceGoalUseCase,
+                                        private val updateTrainingGoalUseCase: UpdateTrainingGoalUseCase,
+                                        private val addAcademicGoalUseCase: AddAcademicGoalUseCase,
+                                        private val addLearningGoalUseCase: AddLearningGoalUseCase,
+                                        private val addTrainingGoalUseCase: AddTrainingGoalUseCase,
+                                        private val addFinanceGoalUseCase: AddFinanceGoalUseCase) : ViewModel() {
 
     var titleValue : MutableState<String> = mutableStateOf("")
     var isTitleValid : MutableState<Boolean> = mutableStateOf(false)
@@ -52,17 +60,17 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
     private val _academicFlow = MutableStateFlow<Resource<AcademicGoal>?>(null)
     val academicFlow : StateFlow<Resource<AcademicGoal>?> = _academicFlow
 
-    private val _subjectList = MutableStateFlow<List<String>>(emptyList())
-    val subjectList : StateFlow<List<String>> = _subjectList
-
-    private val _subjectApproved = MutableStateFlow<List<String>>(emptyList())
-    val subjectApproved : StateFlow<List<String>> = _subjectApproved
-
     private val _learningFlow = MutableStateFlow<Resource<LearningGoal>?>(null)
     val learningFlow : StateFlow<Resource<LearningGoal>?> = _learningFlow
 
     private val _trainingFlow = MutableStateFlow<Resource<TrainingGoal>?>(null)
     val trainingFlow : StateFlow<Resource<TrainingGoal>?> = _trainingFlow
+
+    private val _subjectList = MutableStateFlow<List<String>>(emptyList())
+    val subjectList : StateFlow<List<String>> = _subjectList
+
+    private val _subjectApproved = MutableStateFlow<List<String>>(emptyList())
+    val subjectApproved : StateFlow<List<String>> = _subjectApproved
 
     private val _goalState = MutableStateFlow<Resource<List<GoalsResponse>>?>(null)
     val goalState : StateFlow<Resource<List<GoalsResponse>>?> = _goalState
@@ -113,13 +121,13 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
         description: String,
         isCompleted: Boolean,
         release_date: String,
-        subject: String?,
-        subjectList : List<String>?,
-        subjectApproved:List<String>?
+        subject: String,
+        subjectList : List<String>,
+        subjectApproved:List<String>
     ){
         viewModelScope.launch {
             _academicFlow.value = Resource.Loading()
-            _academicFlow.value = academicRepo.addAcademicGoal(title,description,isCompleted,release_date,subject,subjectList,subjectApproved)
+            _academicFlow.value = addAcademicGoalUseCase(title, description, isCompleted, release_date, subject, subjectList, subjectApproved)
         }
     }
     //Call learning Repository and add goal into the database
@@ -132,9 +140,10 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
     ){
         viewModelScope.launch {
             _learningFlow.value = Resource.Loading()
-            _learningFlow.value = learningRepo.addLearningGoal(title,description,isCompleted,release_date,timesAWeek)
+            _learningFlow.value = addLearningGoalUseCase(title, description, isCompleted, release_date, timesAWeek)
         }
     }
+
     private fun addFinanceGoal(
         title: String,
         description: String,
@@ -145,11 +154,11 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
     ){
         viewModelScope.launch {
             _financeFlow.value = Resource.Loading()
-            _financeFlow.value = financeRepo.addFinanceGoal(title,description,isCompleted,release_date,amount,amountGoal)
+            _financeFlow.value = addFinanceGoalUseCase(title, description, isCompleted, release_date, amount, amountGoal)
         }
     }
 
-    private fun addRunningGoal(title: String,
+    private fun addTrainingGoal(title: String,
                             description: String,
                             isCompleted: Boolean,
                             release_date: String,
@@ -157,7 +166,7 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
                             kilometersGoal:Int?){
         viewModelScope.launch {
             _trainingFlow.value = Resource.Loading()
-            _trainingFlow.value = trainingRepo.addRunningGoal(title,description,isCompleted,release_date,kilometers,kilometersGoal)
+            _trainingFlow.value = addTrainingGoalUseCase(title, description, isCompleted, release_date, kilometers, kilometersGoal)
         }
     }
 
@@ -170,15 +179,14 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
         type:String,
         amount: Int? = null,
         amountGoal: Int? = null,
-        subject: String? = "",
-        subjectList : List<String>? = emptyList(),
+        subject: String = "",
+        subjectList : List<String> = emptyList(),
         subjectApproved: List<String> = emptyList(),
         timesAWeek : Int = 0,
         kilometers : Int? = null,
         kilometersGoal : Int? = null
     ) {
         viewModelScope.launch {
-            _financeFlow.value = Resource.Loading()
             when (type) {
                 "Finance" -> {
                     addFinanceGoal(title, description, isCompleted, release_date, amount, amountGoal)
@@ -190,7 +198,7 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
                     addLearningGoal(title,description,isCompleted,release_date, timesAWeek)
                 }
                 "Training" -> {
-                    addRunningGoal(title,description,isCompleted,release_date, kilometers, kilometersGoal)
+                    addTrainingGoal(title,description,isCompleted,release_date, kilometers, kilometersGoal)
                 }
                 else -> {
                     Unit
@@ -202,7 +210,7 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
     fun resetResult(){
         _financeFlow.value = null
         _academicFlow.value = null
-        //_workFlow.value = null
+        _learningFlow.value = null
         _trainingFlow.value = null
         titleValue.value = ""
         descriptionValue.value = ""
@@ -222,7 +230,7 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
 
     //Complete goal
     fun completeGoal(goal:GoalsResponse,isGoalComplete:Boolean){
-        var goalCount = 0
+        var goalCount: Int
         viewModelScope.launch {
             goalCount = if(isGoalComplete){
                 goalComplete.value?.plus(1) ?: 0
@@ -237,9 +245,9 @@ class GoalViewModel @Inject constructor(private val repository:GoalsRepository,
 
     fun updateGoal(goal:GoalsResponse,amount:Int?,newAmount:Int?,kilometers: Int?,addKilometers: Int?,subjectApproved:List<String>){
         viewModelScope.launch {
-            financeRepo.updateGoal(goal.id, (amount ?: 0) + (newAmount ?: 0))
-            trainingRepo.updateGoal(goal.id,(kilometers ?: 0) + (addKilometers ?: 0))
-            academicRepo.updateGoal(goal.id,subjectApproved)
+            updateAcademicGoalUseCase(goal.id,subjectApproved)
+            updateFinanceGoalUseCase(goal.id,(amount ?: 0) + (newAmount ?: 0))
+            updateTrainingGoalUseCase(goal.id,(kilometers ?: 0) + (addKilometers ?: 0))
             getAllGoals()
             amountValue.value = null
             trainingValue.value = 0

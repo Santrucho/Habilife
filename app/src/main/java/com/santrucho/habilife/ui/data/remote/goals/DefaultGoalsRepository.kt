@@ -12,32 +12,6 @@ class DefaultGoalsRepository @Inject constructor(private val firestore:FirebaseF
                                                  private val firebaseAuth:FirebaseAuth,
 ) : GoalsRepository {
 
-    override suspend fun addGoal(
-        title: String,
-        description: String,
-        isCompleted: Boolean,
-        release_date: String
-    ): Resource<GoalsResponse> {
-        return try {
-
-            firebaseAuth.currentUser.let { userLogged ->
-                val docRef = firestore.collection("goals").document()
-                val goalToSave = GoalsResponse(
-                    id = docRef.id,
-                    userId = userLogged?.uid.toString(),
-                    title = title,
-                    description = description,
-                    completed = isCompleted,
-                    release_date = release_date,
-                )
-                docRef.set(goalToSave).await()
-                Resource.Success(goalToSave)
-            }
-        }
-        catch(e:Exception) {
-            return Resource.Failure(e)
-        }
-}
     override suspend fun getGoals(): Resource<List<GoalsResponse>> {
         return try {
             val resultData = firestore.collection("goals")

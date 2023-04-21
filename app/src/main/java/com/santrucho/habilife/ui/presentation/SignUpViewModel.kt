@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
 import com.santrucho.habilife.ui.data.remote.signup.SignUpRepository
+import com.santrucho.habilife.ui.domain.signup.AddUserUseCase
 import com.santrucho.habilife.ui.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +15,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SignUpViewModel @Inject constructor(private val repository: SignUpRepository) : ViewModel() {
+class SignUpViewModel @Inject constructor(private val addUserUseCase: AddUserUseCase) : ViewModel() {
 
     var usernameValue: MutableState<String> = mutableStateOf("")
     var isUsernameValid: MutableState<Boolean> = mutableStateOf(false)
@@ -116,7 +117,6 @@ class SignUpViewModel @Inject constructor(private val repository: SignUpReposito
     //Call the repository and create an new user
     fun signUp(username: String, email: String, password: String) = viewModelScope.launch {
         _signUpFlow.value = Resource.Loading()
-        val resultData = repository.createUser(username, email, password)
-        _signUpFlow.value = resultData
+        addUserUseCase(username,email,password)
     }
 }

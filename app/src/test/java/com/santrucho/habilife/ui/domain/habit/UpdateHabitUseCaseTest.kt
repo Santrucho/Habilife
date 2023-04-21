@@ -31,14 +31,14 @@ internal class UpdateHabitUseCaseTest{
         val daysCompleted = mutableListOf("Monday","Saturday")
         val habit = Habit(habitId, "asd2dfajkjd", "Title","Salud" , daysCompleted, "12:00", isChecked,mutableListOf("18 04 2023"),false)
         //Given
-        coEvery { habitsRepository.updateHabit(any(),any(),any()) } returns Resource.Success(habit)
+        coEvery { habitsRepository.updateHabit(any(),any(),any()) } returns Resource.Success(Unit)
 
         //When
         val result = updateHabitUseCase(habitId,isChecked,daysCompleted)
 
         //Then
         coVerify(exactly = 1) { habitsRepository.updateHabit(habitId,isChecked,daysCompleted) }
-        assertEquals(Resource.Success(habit),result)
+        assertEquals(Resource.Success(Unit),result)
     }
 
     @Test

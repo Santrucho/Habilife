@@ -13,15 +13,12 @@ import com.santrucho.habilife.ui.data.remote.goals.learning.LearningDefaultRepos
 import com.santrucho.habilife.ui.data.remote.goals.learning.LearningRepository
 import com.santrucho.habilife.ui.data.remote.goals.training.DefaultTrainingGoalRepository
 import com.santrucho.habilife.ui.data.remote.goals.training.TrainingGoalRepository
-import com.santrucho.habilife.ui.data.remote.goals.work.DefaultWorkGoalRepository
-import com.santrucho.habilife.ui.data.remote.goals.work.WorkGoalRepository
 import com.santrucho.habilife.ui.data.remote.habits.DefaultHabitsRepository
 import com.santrucho.habilife.ui.data.remote.habits.HabitsRepository
 import com.santrucho.habilife.ui.data.remote.signup.DefaultSignUpRepository
 import com.santrucho.habilife.ui.data.remote.signup.SignUpRepository
 import com.santrucho.habilife.ui.data.remote.login.DefaultLoginRepository
 import com.santrucho.habilife.ui.data.remote.login.LoginRepository
-import com.santrucho.habilife.ui.presentation.GoalViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -57,9 +54,6 @@ object AppModule {
 
     @Provides
     fun provideAcademicGoalRepository(implementation:DefaultAcademicGoalRepository) : AcademicGoalRepository = implementation
-
-    @Provides
-    fun provideWorkGoalRepository(implementation:DefaultWorkGoalRepository) : WorkGoalRepository = implementation
 
     @Provides
     fun provideTrainingGoalRepository(implementation:DefaultTrainingGoalRepository) : TrainingGoalRepository = implementation

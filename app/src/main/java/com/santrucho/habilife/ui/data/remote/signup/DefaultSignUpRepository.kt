@@ -20,7 +20,7 @@ class DefaultSignUpRepository @Inject constructor(private val firebaseAuth : Fir
         username: String,
         email: String,
         password: String,
-    ) : Resource<FirebaseUser> {
+    ) : Resource<User> {
         return try{
             val result = firebaseAuth.createUserWithEmailAndPassword(email,password).await()
             result?.user?.updateProfile(UserProfileChangeRequest.Builder().setDisplayName(username).build())
@@ -36,16 +36,10 @@ class DefaultSignUpRepository @Inject constructor(private val firebaseAuth : Fir
                     token = firestoreMessaging.token.await()
                 )
                 firestoreCollection.set(userToSave).await()
+                Resource.Success(userToSave)
             }
-
-            Resource.Success(result.user!!)
         } catch(e:Exception){
             return Resource.Failure(e)
         }
     }
-
-    override fun logout() {
-        firebaseAuth.signOut()
-    }
-
 }

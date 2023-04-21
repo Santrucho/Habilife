@@ -12,7 +12,7 @@ class UpdateHabitUseCase @Inject constructor(private val repository: HabitsRepos
 
     suspend operator fun invoke(habitId:String,
                                 isChecked:Boolean,
-                                daysCompleted:MutableList<String>) : Resource<Habit> {
+                                daysCompleted:MutableList<String>) : Resource<Unit> {
         return try{
             repository.updateHabit(habitId,
                 isChecked,

@@ -37,7 +37,7 @@ fun ProgressBarHelper(goal: GoalsResponse) {
         }
         "Academic" -> {
             CustomLinearProgress(
-                maxProgress = goal.subjectList?.size?.toFloat(),
+                maxProgress = goal.subjectList.size.toFloat(),
                 currentProgress = goal.subjectApproved.size.toFloat(),
                 valueType = "%",
                 showValues = false,
@@ -79,7 +79,7 @@ fun CustomLinearProgress(
             horizontalArrangement = Arrangement.End
         ) {
             Text(
-                text = "${(((currentProgress?.toInt() ?: 0) * 100) / (maxProgress ?: 1).toInt()) ?: 0} $valueType",
+                text = "${(((currentProgress?.toInt() ?: 0) * 100) / (maxProgress ?: 1).toInt())} $valueType",
                 color = MaterialTheme.colors.secondary,
                 fontSize = 16.sp
             )
@@ -112,9 +112,6 @@ fun CustomLinearProgress(
     if (currentProgress != null) {
         if(currentProgress >= maxProgress!!){
             !goalComplete
-        }
-        else{
-            goalComplete
         }
     }
 }

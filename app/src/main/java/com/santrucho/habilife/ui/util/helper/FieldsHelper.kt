@@ -109,10 +109,6 @@ fun FieldsHelper(type: String, goalViewModel: GoalViewModel) {
                                         IconButton(onClick = {
                                             goalViewModel.deleteSubject(subject)
                                             subjectList.toMutableList().remove(subject)
-                                            Log.d(
-                                                "@@@@@@@@@@@@@@@@@@@@@@@@@@@",
-                                                goalViewModel.subjectList.value.toString()
-                                            )
                                         }) {
                                             Icon(
                                                 imageVector = Icons.Outlined.Delete,
@@ -123,7 +119,6 @@ fun FieldsHelper(type: String, goalViewModel: GoalViewModel) {
                                         }
                                     }
                                 }
-
                             }
                         }
                     }

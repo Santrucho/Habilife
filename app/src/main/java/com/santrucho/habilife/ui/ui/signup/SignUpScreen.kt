@@ -109,7 +109,7 @@ fun SignUpScreen(viewModel: SignUpViewModel,navController: NavController) {
                      */
 
                     TextFields(text = "Email",
-                        value = viewModel.emailValue.value.toString() ?: "",
+                        value = viewModel.emailValue.value,
                         isError = viewModel.isEmailValid.value,
                         error = viewModel.emailErrMsg.value,
                         valueChange = { viewModel.emailValue.value = it }, onValidate = { viewModel.validateEmail() })

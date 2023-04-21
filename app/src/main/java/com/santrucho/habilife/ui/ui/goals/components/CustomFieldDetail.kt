@@ -107,7 +107,7 @@ fun TypeFieldDetail(goal: GoalsResponse, goalViewModel: GoalViewModel) {
 
             GoalField(
                 text = "Kilometros a correr",
-                goalText = goal.kilometersGoal.toString() ?: ""
+                goalText = goal.kilometersGoal.toString()
             )
             Divider(modifier = Modifier.padding(4.dp))
             GoalField(
@@ -153,7 +153,7 @@ fun TypeFieldDetail(goal: GoalsResponse, goalViewModel: GoalViewModel) {
             Column(modifier = Modifier.padding(4.dp)) {
                 Text("Progreso", fontSize = 20.sp, color = MaterialTheme.colors.secondary)
                 CustomLinearProgress(
-                    maxProgress = goal.subjectList?.size?.toFloat(),
+                    maxProgress = goal.subjectList.size.toFloat(),
                     currentProgress = subjectApprovedCount,
                     valueType = "%"
                 )
@@ -164,7 +164,7 @@ fun TypeFieldDetail(goal: GoalsResponse, goalViewModel: GoalViewModel) {
 
             GoalField(
                 text = "Materias a aprobar: ",
-                goalText = goal.subjectList?.size.toString() ?: ""
+                goalText = goal.subjectList.size.toString()
             )
             Divider(modifier = Modifier.padding(4.dp))
 
@@ -218,7 +218,7 @@ fun TypeFieldDetail(goal: GoalsResponse, goalViewModel: GoalViewModel) {
             LaunchedEffect(goalViewModel.subjectApproved.value) {
                 if(!goal.completed) {
                     subjectApprovedCount = goal.subjectApproved.size.toFloat()
-                    if (subjectApprovedCount >= (goal.subjectList?.size?.toFloat() ?: 0f)) {
+                    if (subjectApprovedCount >= (goal.subjectList.size.toFloat())) {
                         goalViewModel.completeGoal(goal,true)
                         isCompletedDialogOpen.value = true
                     }
@@ -235,7 +235,7 @@ fun TypeFieldDetail(goal: GoalsResponse, goalViewModel: GoalViewModel) {
         "Learning" -> {
             GoalField(
                 text = "Veces a hacer en la semana: ",
-                goalText = goal.timesAWeek.toString() ?: ""
+                goalText = goal.timesAWeek.toString()
             )
             TextFields(
                 text = "Veces que cumplio en esta semana: ",

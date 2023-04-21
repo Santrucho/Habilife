@@ -1,5 +1,6 @@
 package com.santrucho.habilife.ui.ui.home
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -103,6 +104,7 @@ fun HomeScreen(
     //Formatted a date to be compatible with the date used in the habits and goals model
     val formatter = DateTimeFormatter.ofPattern("dd MM yyyy")
 
+
     /**
      * Get all the goals of the user, and filter that's goals who their release_date is the next to be committed
      * In case that are two or more with the same release date, only take the first
@@ -157,9 +159,21 @@ fun HomeScreen(
     ) {
 
         //Welcome the user to the main screen calling a UserWelcome function
-        loginViewModel.currentUser?.let {
-            UserWelcome(name = it.displayName.toString(), navController, loginViewModel::logout)
+        val username by loginViewModel.currentUser.collectAsState()
+        username.let{ result ->
+            when(result){
+                is Resource.Success -> {
+                    UserWelcome(name = result.data.username , navController, loginViewModel::logout)
+                }
+                is Resource.Failure -> {
+                    Log.d("Error obteniendo nombre de usuario",result.exception.message.toString())
+                }
+                else -> {
+                    Unit
+                }
+            }
         }
+
 
         Spacer(modifier = Modifier.padding(8.dp))
 
@@ -253,10 +267,10 @@ fun HomeScreen(
 /**
  * Set a top bar with an image logo, greet the user and set a an settings icon to sign out
  *
- * @param name Username for user welcome
+ * @param name Username for user message welcome
  * @param navController Used for navigation between screens, in this case navigate to login screen
  * when user sign out
- * @param onLogout Function for call the viewmodel and make the logic for sign out of the app
+ * @param onLogout This function call the viewmodel and make the logic for sign out of the app
  *
 */
 @Composable
@@ -265,7 +279,9 @@ fun UserWelcome(name: String, navController: NavController, onLogout: () -> Unit
     val firebaseAnalytics : FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
 
     var showOptions by remember { mutableStateOf(false) }
-    Box(modifier = Modifier.fillMaxWidth().background(MaterialTheme.colors.background)) {
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .background(MaterialTheme.colors.background)) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()

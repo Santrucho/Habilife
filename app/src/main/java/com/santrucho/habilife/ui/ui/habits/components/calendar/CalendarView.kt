@@ -1,6 +1,7 @@
-package com.santrucho.habilife.ui.ui.habits.components
+package com.santrucho.habilife.ui.ui.habits.components.calendar
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -35,8 +36,6 @@ import com.kizitonwose.calendar.compose.weekcalendar.WeekCalendarState
 import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
 import com.kizitonwose.calendar.core.*
 import com.santrucho.habilife.ui.presentation.HabitViewModel
-import com.santrucho.habilife.ui.ui.habits.components.calendar.rememberFirstVisibleMonthAfterScroll
-import com.santrucho.habilife.ui.ui.habits.components.calendar.rememberFirstVisibleWeekAfterScroll
 import com.santrucho.habilife.ui.util.LogBundle
 import com.santrucho.habilife.ui.util.Resource
 import com.santrucho.habilife.ui.util.typeHelper
@@ -55,7 +54,6 @@ fun CalendarView(habitViewModel: HabitViewModel) {
 
     val context = LocalContext.current
     val firebaseAnalytics : FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
-
 
     LaunchedEffect(Unit) {
         habitViewModel.getHabitsCompletedDates()
@@ -78,7 +76,11 @@ fun CalendarView(habitViewModel: HabitViewModel) {
             .clickable {
                 isMonthCalendar = !isMonthCalendar
                 isWeekCalendar = !isWeekCalendar
-                LogBundle.logBundleAnalytics(firebaseAnalytics,"Calendar Expanded","calendar_expanded_pressed")
+                LogBundle.logBundleAnalytics(
+                    firebaseAnalytics,
+                    "Calendar Expanded",
+                    "calendar_expanded_pressed"
+                )
             }
     ) {
         Column(
@@ -163,7 +165,7 @@ private fun Day(
     habitViewModel: HabitViewModel,
     onClick: (LocalDate) -> Unit
 ) {
-    val daysCompleted = habitViewModel.daysCompleted.value ?: emptyList()
+    val daysCompleted = habitViewModel.daysCompleted.collectAsState().value ?: emptyList()
     val dateFormatter = DateTimeFormatter.ofPattern("dd")
 
     val isDateComplete =
@@ -232,8 +234,7 @@ fun DayCalendar(
     onClick: (CalendarDay) -> Unit
 ) {
     val daysCompleted = habitViewModel.daysCompleted.value ?: emptyList()
-    val isCompleted =
-        (daysCompleted.any { it == day.date.toString() } && LocalDate.parse((day.date.toString())) <= LocalDate.now())
+    val isCompleted = (daysCompleted.any { it == day.date.toString() } && LocalDate.parse((day.date.toString())) <= LocalDate.now())
     val habits = habitViewModel.habitState.collectAsState().value.let { resource ->
         when (resource) {
             is Resource.Success -> resource.data
