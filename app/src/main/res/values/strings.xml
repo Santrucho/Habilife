@@ -1,3 +1,45 @@
 <resources>
     <string name="app_name">Habilife</string>
+    <string name="username">Nombre de usuario</string>
+    <string name="email">Correo electronico</string>
+    <string name="password">Contraseña</string>
+    <string name="confirm_password">Confirmar contraseña</string>
+    <string name="create_account">Crear cuenta</string>
+    <string name="have_account">Ya tienes una cuenta?</string>
+    <string name="sign_in">Inicia sesion!</string>
+
+    <string name="log_in">Iniciar sesion</string>
+    <string name="email_field">Ingresar correo electronico</string>
+    <string name="password_field">Ingresar contraseña</string>
+    <string name="dont_have_account">No tienes una cuenta? </string>
+    <string name="sign_up">Registrate aqui!</string>
+
+    <string name="welcome">bienvenido,</string>
+    <string name="habits_day">Habitos del dia</string>
+    <string name="all">ver todos</string>
+    <string name="next_goal">Proximo objetivo</string>
+    <string name="dont_have_habits">Al parecer no tienes ningun habito para realizar hoy!</string>
+    <string name="create_habits">Crea y desarrolla nuevos habitos!</string>
+    <string name="dont_have_goals">Al parecer no tienes ningun objetivo para realizar proximamente</string>
+    <string name="create_goals">Crea y cumple nuevos objetivos!</string>
+
+    <string name="my_habits">Mis habitos</string>
+    <string name="empty_habits">Al parecer no tienes ningun habito creado</string>
+
+    <string name="goals">OBJETIVOS</string>
+    <string name="chips_all">Todos</string>
+    <string name="chips_year">Año</string>
+    <string name="chips_month">Mes</string>
+    <string name="empty_goals">Parece que aun no has creado ningun objetivo</string>
+    <string name="create_new_goals">Crea el primero!</string>
+    <string name="empty_year_goals">No tienes objetivos para realizar este año!</string>
+    <string name="empty_month_goals">No tienes objetivos para realizar este mes!</string>
+
+    <string name="profile">Mi perfil</string>
+    <string name="username_text">Nombre de usuario:</string>
+    <string name="email_text">Correo electronico:</string>
+    <string name="current_habits">Habitos \nactuales</string>
+    <string name="current_goals">Objetivos actuales</string>
+    <string name="completed_habits">Habitos completados</string>
+    <string name="completed_goals">Objetivos completados</string>
 </resources>

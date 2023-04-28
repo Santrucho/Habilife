@@ -1,6 +1,8 @@
 package com.santrucho.habilife.ui.util
 
 import android.annotation.SuppressLint
+import android.content.ContentValues.TAG
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,18 +29,13 @@ fun HandleState(flow: State<Resource<Any>?>, navController: NavController,route:
             is Resource.Success -> {
                 LaunchedEffect(Unit) {
                     navController.navigate(route)
-                    Toast.makeText(
-                        context,
-                        "$text correctamente!",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Log.d(TAG,"$text correctamente")
                     LogBundle.logBundleAnalytics(firebaseAnalytics,"$message Succeeded","${eventName}_success")
                 }
             }
             is Resource.Failure -> {
                 LaunchedEffect(flow.value) {
-                    Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG)
-                        .show()
+                    Log.d(TAG,it.exception.message.toString())
                     LogBundle.logBundleAnalytics(firebaseAnalytics,"$message Failure","${eventName}_failure")
                 }
             }

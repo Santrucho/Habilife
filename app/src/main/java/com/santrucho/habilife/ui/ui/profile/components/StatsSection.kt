@@ -12,10 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.santrucho.habilife.R
 
 @Composable
 fun StatsSection(actualHabits: String, habitCount: String, actualGoals: String, goalCount: String) {
@@ -26,8 +28,8 @@ fun StatsSection(actualHabits: String, habitCount: String, actualGoals: String, 
             .padding(4.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        InfoBox(title = "Habitos\n actuales", value = actualHabits, 0.5f)
-        InfoBox(title = "Habitos completados", value = habitCount, 1f)
+        InfoBox(title = stringResource(id = R.string.current_habits), value = actualHabits, 0.5f)
+        InfoBox(title = stringResource(id = R.string.completed_habits), value = habitCount, 1f)
     }
     Spacer(modifier = Modifier.padding(8.dp))
     Row(
@@ -36,8 +38,8 @@ fun StatsSection(actualHabits: String, habitCount: String, actualGoals: String, 
             .padding(4.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        InfoBox(title = "Objetivos actuales", value = actualGoals, 0.5f)
-        InfoBox(title = "Objetivos completados", value = goalCount, 1f)
+        InfoBox(title = stringResource(id = R.string.current_goals), value = actualGoals, 0.5f)
+        InfoBox(title = stringResource(id = R.string.completed_goals), value = goalCount, 1f)
     }
 }
 

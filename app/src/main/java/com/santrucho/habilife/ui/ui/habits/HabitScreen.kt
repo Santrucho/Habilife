@@ -10,12 +10,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.presentation.HabitViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.habits.components.calendar.CalendarView
@@ -66,7 +68,7 @@ fun MyHabitsSection(habitViewModel: HabitViewModel) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = "Mis habitos",
+            text = stringResource(id = R.string.my_habits),
             fontWeight = FontWeight.Medium,
             color = Color.Black,
             modifier = Modifier.wrapContentWidth(Alignment.Start),

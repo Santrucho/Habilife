@@ -13,6 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.fontResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -20,11 +23,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.GoalViewModel
 import com.santrucho.habilife.ui.presentation.HabitViewModel
 import com.santrucho.habilife.ui.presentation.LoginViewModel
 import com.santrucho.habilife.ui.presentation.SignUpViewModel
+import com.santrucho.habilife.ui.theme.YsabeuItalic
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.goals.components.GoalsUI
 import com.santrucho.habilife.ui.ui.habits.FinishHabit
@@ -179,7 +184,7 @@ fun HomeScreen(
 
         //Call TextInScreen function to show a title and text to navigate to show all habits
         TextInScreen(
-            title = "Habitos del dia",
+            title = stringResource(id = R.string.habits_day),
             route = BottomNavScreen.Habit.screen_route,
             navController = navController
         )
@@ -194,7 +199,7 @@ fun HomeScreen(
         ) {
             //Set the box to show the habits to make that day, in case this is empty, show a EmptyMessage function
             if (filteredHabitList.isEmpty()) {
-                EmptyMessage("Al parecer no tienes ningun habito para realizar hoy","Crea mas habitos!")
+                EmptyMessage(stringResource(id = R.string.dont_have_habits),stringResource(id = R.string.create_habits))
             } else {
                 Column(
                     modifier = Modifier
@@ -223,7 +228,7 @@ fun HomeScreen(
 
         //Call TextInScreen function to show a title and text to navigate to show all goals
         TextInScreen(
-            title = "Proximo objetivo",
+            title = stringResource(id = R.string.next_goal),
             route = BottomNavScreen.Goals.screen_route,
             navController = navController
         )
@@ -238,7 +243,7 @@ fun HomeScreen(
                     .fillMaxWidth()
                     .wrapContentHeight()
             ) {
-                EmptyMessage("Al parecer no tienes ningun objetivo para realizar proximamente","Crea nuevos objetivos y cumple tus metas!")
+                EmptyMessage(stringResource(id = R.string.dont_have_goals),stringResource(id = R.string.create_goals))
             }
         } else {
             Column(
@@ -290,32 +295,30 @@ fun UserWelcome(name: String, navController: NavController, onLogout: () -> Unit
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             AsyncImage(
-                model = "https://firebasestorage.googleapis.com/v0/b/habilife-2bba3.appspot.com/o/Habi(1).png?alt=media&token=8cbe8c2c-ee97-4f80-b8ba-e130fcce7379",
+                model = R.drawable.logo,
                 contentDescription = "profile image",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .width(68.dp)
-                    .height(68.dp)
+                    .width(70.dp)
+                    .height(70.dp)
                     .padding(4.dp)
-                    .clip(CircleShape)
             )
 
             Column(
                 modifier = Modifier
-                    .wrapContentSize()
-                    .padding(horizontal = 8.dp),
+                    .wrapContentSize(),
                 horizontalAlignment = Alignment.Start
             ) {
 
                 Text(
-                    text = "bienvenido",
+                    text = stringResource(id = R.string.welcome),
                     fontWeight = FontWeight.Bold,
                     fontSize = 12.sp
                 )
                 Text(
-                    text = "$name",
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 30.sp
+                    text = name,
+                    fontFamily = YsabeuItalic,
+                    fontSize = 52.sp
                 )
             }
             IconButton(onClick = {
@@ -406,7 +409,7 @@ fun TextInScreen(title: String, route: String, navController: NavController) {
             LogBundle.logBundleAnalytics(firebaseAnalytics,"See All","see_all_pressed")
         }) {
             Text(
-                text = "ver todos",
+                text = stringResource(id = R.string.all),
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colors.primary,
                 textAlign = TextAlign.End,

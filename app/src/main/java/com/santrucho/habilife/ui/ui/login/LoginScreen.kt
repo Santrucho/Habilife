@@ -1,5 +1,6 @@
 package com.santrucho.habilife.ui.ui.login
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -14,11 +15,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.LoginViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
@@ -94,8 +99,12 @@ fun LoginScreen(viewModel: LoginViewModel, navController: NavController) {
                 ) {
 
                     Spacer(modifier = Modifier.padding(8.dp))
+                    //Call logo function
+                    LogoScreen()
+
+                    Spacer(modifier = Modifier.padding(8.dp))
                     Text(
-                        text = "Email",
+                        text = stringResource(id = R.string.email),
                         fontSize = 18.sp,
                         color = Color.Black,
                         modifier = Modifier.padding(4.dp)
@@ -109,14 +118,14 @@ fun LoginScreen(viewModel: LoginViewModel, navController: NavController) {
                        * This is the field to Email data
                      */
 
-                    TextFields(text = "Email",
+                    TextFields(text = stringResource(id = R.string.email_field),
                         value = viewModel.emailValue.value,
                         isError = viewModel.isEmailValid.value,
                         error = viewModel.emailErrMsg.value,
                         valueChange = { viewModel.emailValue.value = it }, onValidate = { })
 
                     Text(
-                        text = "Contraseña",
+                        text = stringResource(id = R.string.password),
                         fontSize = 18.sp,
                         color = Color.Black,
                         modifier = Modifier.padding(4.dp)
@@ -131,7 +140,7 @@ fun LoginScreen(viewModel: LoginViewModel, navController: NavController) {
                      */
 
                     PasswordFields(
-                        text = "Password",
+                        text = stringResource(id = R.string.password_field),
                         value = viewModel.passwordValue,
                         isError = viewModel.isPasswordValid,
                         error = viewModel.passwordErrMsg,
@@ -168,7 +177,7 @@ fun LoginScreen(viewModel: LoginViewModel, navController: NavController) {
                         shape = CircleShape
                     ) {
                         Text(
-                            text = "Login"
+                            text = stringResource(id = R.string.log_in)
                         )
                     }
                     Spacer(modifier = Modifier.padding(8.dp))
@@ -191,16 +200,16 @@ fun LoginScreen(viewModel: LoginViewModel, navController: NavController) {
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            text = "You don't have account? ",
+                            text = "${stringResource(id = R.string.dont_have_account)} ",
                             modifier = Modifier,
                             color = Color.Black,
                             fontSize = 14.sp,
                             textAlign = TextAlign.Center
                         )
                         Text(
-                            text = "SignUp here!",
+                            text = stringResource(id = R.string.sign_up),
                             modifier = Modifier,
-                            color = Color.Blue,
+                            color = MaterialTheme.colors.primary,
                             fontSize = 14.sp,
                             textAlign = TextAlign.Center
                         )
@@ -222,5 +231,17 @@ fun LoginScreen(viewModel: LoginViewModel, navController: NavController) {
                 eventName = "log_in"
             )
         }
+    }
+}
+
+@Composable
+fun LogoScreen(){
+    Box(modifier = Modifier
+        .fillMaxWidth(),
+        contentAlignment = Alignment.Center){
+        Image(painterResource(id = R.drawable.logomain2),
+            alignment = Alignment.Center,
+            contentDescription = "Splash logo app",
+            modifier = Modifier.fillMaxWidth())
     }
 }

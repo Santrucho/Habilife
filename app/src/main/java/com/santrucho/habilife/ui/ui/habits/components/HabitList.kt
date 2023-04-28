@@ -11,7 +11,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.data.model.Habit
 import com.santrucho.habilife.ui.presentation.HabitViewModel
 import com.santrucho.habilife.ui.ui.home.components.EmptyMessage
@@ -46,8 +48,8 @@ fun HabitList(habitViewModel: HabitViewModel) {
                     ) {
                         if (result.data.isEmpty()) {
                             EmptyMessage(
-                                text = "Al parecer no tienes ningun habito creado ahora mismo",
-                                "Crea uno nuevo!"
+                                text = stringResource(id = R.string.empty_habits),
+                                stringResource(id = R.string.create_habits)
                             )
                         } else {
                             HabitUI(
