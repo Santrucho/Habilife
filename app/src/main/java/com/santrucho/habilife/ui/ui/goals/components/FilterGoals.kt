@@ -9,8 +9,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.data.model.goals.GoalsResponse
 import com.santrucho.habilife.ui.presentation.GoalViewModel
 import com.santrucho.habilife.ui.ui.home.components.EmptyMessage
@@ -55,8 +57,8 @@ fun FilterGoals(title: String, goalViewModel: GoalViewModel, navController: NavC
                             ) {
                                 if (filterByMonth.isEmpty()) {
                                     EmptyMessage(
-                                        text = "No tienes objetivos para realizar este mes",
-                                        textClick = "Crea nuevos objetivos!"
+                                        text = stringResource(id = R.string.empty_month_goals),
+                                        textClick = stringResource(id = R.string.create_goals)
                                     )
                                 } else {
                                     GoalsUI(goals = filterByMonth, navController = navController)
@@ -76,8 +78,8 @@ fun FilterGoals(title: String, goalViewModel: GoalViewModel, navController: NavC
                             ) {
                                 if (filterByYear.isEmpty()) {
                                     EmptyMessage(
-                                        text = "No tienes objetivos para realizar este año",
-                                        textClick = "Crea nuevos objetivos!"
+                                        text = stringResource(id = R.string.empty_year_goals),
+                                        textClick = stringResource(id = R.string.create_goals)
                                     )
                                 } else {
                                     GoalsUI(goals = filterByYear, navController = navController)
@@ -92,8 +94,8 @@ fun FilterGoals(title: String, goalViewModel: GoalViewModel, navController: NavC
                             ) {
                                 if (result.data.isEmpty()) {
                                     EmptyMessage(
-                                        text = "No tienes objetivos para realizar este año",
-                                        textClick = "Crea nuevos objetivos!"
+                                        text = stringResource(id = R.string.empty_goals),
+                                        textClick = stringResource(id = R.string.create_new_goals)
                                     )
                                 } else {
                                     GoalsUI(goals = result.data, navController = navController)

@@ -85,9 +85,9 @@ dependencies {
     
     //TimePicker
     implementation "io.github.vanpra.compose-material-dialogs:datetime:0.8.1-rc"
+
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.6'
     //Calendar
-    //implementation 'com.himanshoe:kalendar:1.1.0'
     implementation 'com.kizitonwose.calendar:compose:2.0.0'
 
     //Coil 2.0
@@ -106,6 +106,7 @@ dependencies {
     //Testing
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0'
     //Mockk
     testImplementation "io.mockk:mockk:1.12.4"

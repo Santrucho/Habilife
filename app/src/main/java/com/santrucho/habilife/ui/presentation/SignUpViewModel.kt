@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
+import com.santrucho.habilife.ui.data.model.User
 import com.santrucho.habilife.ui.data.remote.signup.SignUpRepository
 import com.santrucho.habilife.ui.domain.signup.AddUserUseCase
 import com.santrucho.habilife.ui.util.Resource
@@ -37,8 +38,8 @@ class SignUpViewModel @Inject constructor(private val addUserUseCase: AddUserUse
 
     var isEnabledConfirmButton: MutableState<Boolean> = mutableStateOf(false)
 
-    private val _signUpFlow = MutableStateFlow<Resource<FirebaseUser>?>(null)
-    val signUpFlow: StateFlow<Resource<FirebaseUser>?> = _signUpFlow
+    private val _signUpFlow = MutableStateFlow<Resource<User>?>(null)
+    val signUpFlow: StateFlow<Resource<User>?> = _signUpFlow
 
 
     private fun shouldEnabledConfirmButton() {
@@ -117,6 +118,6 @@ class SignUpViewModel @Inject constructor(private val addUserUseCase: AddUserUse
     //Call the repository and create an new user
     fun signUp(username: String, email: String, password: String) = viewModelScope.launch {
         _signUpFlow.value = Resource.Loading()
-        addUserUseCase(username,email,password)
+        _signUpFlow.value = addUserUseCase(username,email,password)
     }
 }

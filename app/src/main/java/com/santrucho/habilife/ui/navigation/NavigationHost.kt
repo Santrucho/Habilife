@@ -23,6 +23,7 @@ import com.santrucho.habilife.ui.ui.goals.addgoal.AddGoal
 import com.santrucho.habilife.ui.ui.goals.addgoal.NewGoalScreen
 import com.santrucho.habilife.ui.ui.home.HomeScreen
 import com.santrucho.habilife.ui.ui.profile.ProfileScreen
+import com.santrucho.habilife.ui.ui.splash.SplashScreen
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
@@ -35,8 +36,12 @@ fun NavigationHost(navController:NavController) {
     val habitViewModel = viewModel<HabitViewModel>()
     val loginViewModel = viewModel<LoginViewModel>()
 
-    NavHost(navController = navController as NavHostController, startDestination = Screen.LoginScreen.route,builder ={
+    NavHost(navController = navController as NavHostController, startDestination = Screen.SplashScreen.route,builder ={
 
+        composable(
+            route = Screen.SplashScreen.route){
+            SplashScreen(navController)
+        }
         composable(
             route = Screen.LoginScreen.route){
             LoginScreen(

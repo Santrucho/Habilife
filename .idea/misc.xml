@@ -3,16 +3,26 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/santi/Escritorio/Habilife/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1" />
+        <entry key="..\:/Users/santi/Escritorio/Habilife/app/src/main/res/drawable/ic_app_logo.xml" value="0.1" />
         <entry key="..\:/Users/santi/Escritorio/Habilife/app/src/main/res/drawable/ic_check.xml" value="0.1" />
         <entry key="..\:/Users/santi/Escritorio/Habilife/app/src/main/res/drawable/ic_check_circle.xml" value="0.1" />
         <entry key="..\:/Users/santi/Escritorio/Habilife/app/src/main/res/drawable/ic_checkbox.xml" value="0.1" />
         <entry key="..\:/Users/santi/Escritorio/Habilife/app/src/main/res/drawable/ic_egg_fried.xml" value="0.1" />
         <entry key="..\:/Users/santi/Escritorio/Habilife/app/src/main/res/drawable/ic_health.xml" value="0.1" />
+        <entry key="..\:/Users/santi/Escritorio/Habilife/app/src/main/res/drawable/ic_iconapp.xml" value="0.1385" />
+        <entry key="..\:/Users/santi/Escritorio/Habilife/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1385" />
+        <entry key="..\:/Users/santi/Escritorio/Habilife/app/src/main/res/drawable/ic_logo.xml" value="0.1385" />
         <entry key="..\:/Users/santi/Escritorio/Habilife/app/src/main/res/drawable/ic_nodata.xml" value="0.1055" />
         <entry key="..\:/Users/santi/Escritorio/Habilife/app/src/main/res/drawable/ic_pencil_outline.xml" value="0.1055" />
+        <entry key="..\:/Users/santi/Escritorio/Habilife/app/src/main/res/drawable/ic_profile.xml" value="0.1" />
         <entry key="..\:/Users/santi/Escritorio/Habilife/app/src/main/res/drawable/ic_unchecked_circle.xml" value="0.1" />
+        <entry key="..\:/Users/santi/Escritorio/Habilife/app/src/main/res/drawable/ic_undraw_empty_re_opql.xml" value="0.1" />
         <entry key="..\:/Users/santi/Escritorio/Habilife/app/src/main/res/drawable/ic_undraw_no_data_re_kwbl_1_.xml" value="0.1055" />
+        <entry key="..\:/Users/santi/Escritorio/Habilife/app/src/main/res/drawable/ic_untitled.xml" value="0.1385" />
         <entry key="..\:/Users/santi/Escritorio/Habilife/app/src/main/res/drawable/ic_water.xml" value="0.1" />
+        <entry key="..\:/Users/santi/Escritorio/Habilife/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.3505" />
+        <entry key="..\:/Users/santi/Escritorio/Habilife/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1" />
       </map>
     </option>
   </component>

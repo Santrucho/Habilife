@@ -143,11 +143,11 @@ fun CalendarView(habitViewModel: HabitViewModel) {
                 HorizontalCalendar(
                     state = stateCalendar,
                     dayContent = { day ->
-                        DayCalendar(day, habitViewModel) { day ->
-                            if (day.date != LocalDate.now()) {
-                                selections.remove(day)
+                        DayCalendar(day, habitViewModel) { currentDay ->
+                            if (currentDay.date != LocalDate.now()) {
+                                selections.remove(currentDay)
                             } else {
-                                selections.add(day)
+                                selections.add(currentDay)
                             }
                         }
                     },

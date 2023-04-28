@@ -13,9 +13,6 @@ import javax.inject.Inject
 class DefaultSignUpRepository @Inject constructor(private val firebaseAuth : FirebaseAuth,private val firebaseFirestore:FirebaseFirestore) :
     SignUpRepository {
 
-    override val currentUser : FirebaseUser?
-        get() = firebaseAuth.currentUser
-
     override suspend fun createUser(
         username: String,
         email: String,
@@ -25,6 +22,7 @@ class DefaultSignUpRepository @Inject constructor(private val firebaseAuth : Fir
             val result = firebaseAuth.createUserWithEmailAndPassword(email,password).await()
             result?.user?.updateProfile(UserProfileChangeRequest.Builder().setDisplayName(username).build())
 
+            val currentUser = firebaseAuth.currentUser
             val firestoreCollection = firebaseFirestore.collection("users").document()
             val firestoreMessaging : FirebaseMessaging = FirebaseMessaging.getInstance()
             //Added user to firestore database

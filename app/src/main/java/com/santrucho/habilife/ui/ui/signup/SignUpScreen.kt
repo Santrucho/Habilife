@@ -1,5 +1,6 @@
 package com.santrucho.habilife.ui.ui.signup
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -14,16 +15,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.SignUpViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.ui.goals.components.TextFields
 import com.santrucho.habilife.ui.ui.goals.components.PasswordFields
+import com.santrucho.habilife.ui.ui.login.LogoScreen
 import com.santrucho.habilife.ui.util.BackPressHandler
 import com.santrucho.habilife.ui.util.HandleState
 import com.santrucho.habilife.ui.util.LogBundle
@@ -65,6 +69,7 @@ fun SignUpScreen(viewModel: SignUpViewModel,navController: NavController) {
      */
     val signUpFlow = viewModel.signUpFlow.collectAsState()
 
+
     //Set the fields and button in Sign Up to fill by the user
     Column(
         modifier = Modifier
@@ -88,7 +93,9 @@ fun SignUpScreen(viewModel: SignUpViewModel,navController: NavController) {
                         .fillMaxWidth()
                         .padding(8.dp)
                 ) {
-                    Spacer(modifier = Modifier.padding(12.dp))
+                    Spacer(modifier = Modifier.padding(8.dp))
+
+                    LogoScreen()
 
                     /*
                        * This functions create a fields who interact with view model
@@ -97,8 +104,8 @@ fun SignUpScreen(viewModel: SignUpViewModel,navController: NavController) {
                        *
                        * This is the field to Username data
                      */
-
-                    TextFields(text = "Username",
+                    Spacer(modifier = Modifier.padding(8.dp))
+                    TextFields(text = stringResource(id = R.string.username),
                         value = viewModel.usernameValue.value,
                         isError = viewModel.isUsernameValid.value,
                         error = viewModel.usernameErrMsg.value,
@@ -108,7 +115,7 @@ fun SignUpScreen(viewModel: SignUpViewModel,navController: NavController) {
                      * This is the field for email data
                      */
 
-                    TextFields(text = "Email",
+                    TextFields(text = stringResource(id = R.string.email),
                         value = viewModel.emailValue.value,
                         isError = viewModel.isEmailValid.value,
                         error = viewModel.emailErrMsg.value,
@@ -123,7 +130,7 @@ fun SignUpScreen(viewModel: SignUpViewModel,navController: NavController) {
                      */
 
                     PasswordFields(
-                        text = "Password",
+                        text = stringResource(id = R.string.password),
                         value = viewModel.passwordValue,
                         isError = viewModel.isPasswordValid,
                         error = viewModel.passwordErrMsg,
@@ -138,7 +145,7 @@ fun SignUpScreen(viewModel: SignUpViewModel,navController: NavController) {
                      */
 
                     PasswordFields(
-                        text = "Confirm password",
+                        text = stringResource(id = R.string.confirm_password),
                         value = viewModel.confirmPasswordValue,
                         isError = viewModel.isConfirmPasswordValid,
                         error = viewModel.confirmPasswordErrMsg,
@@ -161,7 +168,6 @@ fun SignUpScreen(viewModel: SignUpViewModel,navController: NavController) {
                                 viewModel.emailValue.value,
                                 viewModel.passwordValue.value
                             )
-
                             LogBundle.logBundleAnalytics(firebaseAnalytics,"Register Pressed","register_pressed")
                         },
                         shape = CircleShape,
@@ -172,7 +178,7 @@ fun SignUpScreen(viewModel: SignUpViewModel,navController: NavController) {
                             .align(Alignment.CenterHorizontally),
                     ) {
                         Text(
-                            text = "Create account"
+                            text = stringResource(id = R.string.create_account)
                         )
                     }
 
@@ -192,16 +198,16 @@ fun SignUpScreen(viewModel: SignUpViewModel,navController: NavController) {
                         horizontalArrangement = Arrangement.Center){
 
                         Text(
-                            text = "You already have an account? ",
+                            text = "${stringResource(id = R.string.have_account)} ",
                             modifier = Modifier,
                             color = Color.Black,
                             fontSize = 14.sp,
                             textAlign = TextAlign.Center
                         )
                         Text(
-                            text = "Sign in",
+                            text = stringResource(id = R.string.sign_in),
                             modifier = Modifier,
-                            color = Color.Blue,
+                            color = MaterialTheme.colors.primary,
                             fontSize = 14.sp,
                             textAlign = TextAlign.Center
                         )

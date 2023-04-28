@@ -14,11 +14,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.GoalViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
@@ -72,7 +74,7 @@ fun GoalsScreen(goalViewModel: GoalViewModel, navController: NavController) {
                     .wrapContentSize()
             ) {
                 Text(
-                    text = "OBJETIVOS",
+                    text = stringResource(id = R.string.goals),
                     color = Color.White,
                     modifier = Modifier.shadow(
                         elevation = 24.dp,
@@ -103,8 +105,8 @@ fun GoalsScreen(goalViewModel: GoalViewModel, navController: NavController) {
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             MyChip(
-                title = "Todos",
-                selected = selectedChip == "Todos",
+                title = stringResource(id = R.string.chips_all),
+                selected = selectedChip == stringResource(id = R.string.chips_all),
                 onSelected = { selected ->
                     selectedChip = if (selected) {
                         "Todos"
@@ -115,8 +117,8 @@ fun GoalsScreen(goalViewModel: GoalViewModel, navController: NavController) {
                 colorBackground = MaterialTheme.colors.background
             )
             MyChip(
-                title = "Año",
-                selected = selectedChip == "Año",
+                title = stringResource(id = R.string.chips_year),
+                selected = selectedChip == stringResource(id = R.string.chips_year),
                 onSelected = { selected ->
                     selectedChip = if (selected) {
                         "Año"
@@ -127,8 +129,8 @@ fun GoalsScreen(goalViewModel: GoalViewModel, navController: NavController) {
                 colorBackground = MaterialTheme.colors.background
             )
             MyChip(
-                title = "Mes",
-                selected = selectedChip == "Mes",
+                title = stringResource(id = R.string.chips_month),
+                selected = selectedChip == stringResource(id = R.string.chips_month),
                 onSelected = { selected ->
                     selectedChip = if (selected) {
                         "Mes"
