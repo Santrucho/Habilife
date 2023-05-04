@@ -299,15 +299,16 @@ fun UserWelcome(name: String, navController: NavController, onLogout: () -> Unit
                 contentDescription = "profile image",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .width(70.dp)
-                    .height(70.dp)
+                    .width(72.dp)
+                    .height(72.dp)
                     .padding(4.dp)
             )
 
             Column(
                 modifier = Modifier
                     .wrapContentSize(),
-                horizontalAlignment = Alignment.Start
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.SpaceAround
             ) {
 
                 Text(
@@ -318,7 +319,7 @@ fun UserWelcome(name: String, navController: NavController, onLogout: () -> Unit
                 Text(
                     text = name,
                     fontFamily = YsabeuItalic,
-                    fontSize = 52.sp
+                    fontSize = 42.sp
                 )
             }
             IconButton(onClick = {

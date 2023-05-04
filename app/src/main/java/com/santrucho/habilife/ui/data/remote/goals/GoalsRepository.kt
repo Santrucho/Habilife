@@ -13,7 +13,9 @@ interface GoalsRepository {
 
     suspend fun getGoalsOptions() : Resource<List<GoalsOption>>
 
-    suspend fun completeGoal(goalId:String,goalCount:Int,goalComplete:Boolean)
-
     suspend fun getGoalsCompleted() : Int?
+
+    suspend fun finishGoal(goalId: String)
+
+    suspend fun extendedGoal(goalId:String,newDate:String)
 }

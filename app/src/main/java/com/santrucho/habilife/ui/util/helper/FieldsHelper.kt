@@ -1,7 +1,7 @@
 package com.santrucho.habilife.ui.util
 
 import android.annotation.SuppressLint
-import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -9,22 +9,22 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.santrucho.habilife.ui.presentation.GoalViewModel
-import com.santrucho.habilife.ui.ui.goals.components.TextFields
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun FieldsHelper(type: String, goalViewModel: GoalViewModel) {
 
+    val context = LocalContext.current
     Box(modifier = Modifier.padding(4.dp)) {
         Card(
             modifier = Modifier
@@ -36,12 +36,21 @@ fun FieldsHelper(type: String, goalViewModel: GoalViewModel) {
             ) {
                 when (type) {
                     "Finance" -> {
-                        TextFields(
-                            text = "Monto objetivo",
-                            value = goalViewModel.amountValue.value?.toString() ?: "",
-                            valueChange = { goalViewModel.amountValue.value = it.toIntOrNull() },
-                            onValidate = {},
-                            showErrorText = false
+                        val maxLength = 8
+                        Text("Monto objetivo:")
+                        InputField(
+                            modifier = Modifier.fillMaxWidth().padding(4.dp),
+                            leadingIcon = {Text(text="$",fontSize = 24.sp)},
+                            trailingIcon = { Text(text =",00", fontSize = 24.sp) },
+                            value = goalViewModel.amountValue.value?.toString()?.let { formatMoneyInput(it) } ?: "",
+                            onValueChange = { newValue ->
+                                val intValue = newValue.toIntOrNull()
+                                if (intValue != null && intValue.toString().length > maxLength) {
+                                    Toast.makeText(context, "El valor máximo es de $maxLength digitos", Toast.LENGTH_SHORT).show()
+                                    return@InputField
+                                }
+                                goalViewModel.amountValue.value = intValue
+                            }
                         )
                     }
                     "Academic" -> {
@@ -50,11 +59,12 @@ fun FieldsHelper(type: String, goalViewModel: GoalViewModel) {
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            TextFields(text = "Agregar materia",
+                            CustomTextFields(text = "Agregar materia",
                                 value = goalViewModel.subjectValue.value ?: "",
                                 modifier = Modifier
                                     .fillMaxWidth(0.8f),
                                 showErrorText = false,
+                                singleLine = true,
                                 valueChange = { goalViewModel.subjectValue.value = it },
                                 onValidate = {})
 
@@ -89,7 +99,7 @@ fun FieldsHelper(type: String, goalViewModel: GoalViewModel) {
                             )
 
                             val subjectList by goalViewModel.subjectList.collectAsState()
-                            LazyColumn(modifier = Modifier.fillMaxHeight(0.7f)) {
+                            LazyColumn(modifier = Modifier.wrapContentHeight()) {
                                 itemsIndexed(subjectList) { _, subject ->
                                     Divider(modifier = Modifier.padding(4.dp))
                                     Row(
@@ -123,26 +133,23 @@ fun FieldsHelper(type: String, goalViewModel: GoalViewModel) {
                         }
                     }
                     "Learning" -> {
-
-                        TextFields(
-                            text = "Veces a hacer en la semana",
+                        Text("Veces a hacer en la semana:")
+                        InputField(
+                            modifier = Modifier.fillMaxWidth().padding(4.dp),
                             value = goalViewModel.learningValue.value?.toString() ?: "",
-                            valueChange = { goalViewModel.learningValue.value = it.toIntOrNull() },
-                            onValidate = {},
-                            showErrorText = false
-                        )
-
+                            onValueChange = { newValue ->
+                                val intValue = newValue.toIntOrNull()
+                                goalViewModel.learningValue.value = intValue })
                     }
                     "Training" -> {
-
-                        TextFields(
-                            text = "Kilometros a recorrer: ",
+                        Text("Kilometros a recorrer:")
+                        InputField(
+                            modifier = Modifier.fillMaxWidth().padding(4.dp),
+                            trailingIcon = { Text(text ="Km", fontSize = 24.sp) },
                             value = goalViewModel.trainingValue.value?.toString() ?: "",
-                            valueChange = { goalViewModel.trainingValue.value = it.toIntOrNull() },
-                            onValidate = {},
-                            showErrorText = false
-                        )
-
+                            onValueChange = { newValue ->
+                                val intValue = newValue.toIntOrNull()
+                                goalViewModel.trainingValue.value = intValue })
                     }
                 }
             }

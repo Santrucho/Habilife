@@ -1,6 +1,5 @@
 package com.santrucho.habilife.ui.ui.signup
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -25,8 +24,8 @@ import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.SignUpViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
-import com.santrucho.habilife.ui.ui.goals.components.TextFields
-import com.santrucho.habilife.ui.ui.goals.components.PasswordFields
+import com.santrucho.habilife.ui.util.CustomTextFields
+import com.santrucho.habilife.ui.util.CustomPasswordFields
 import com.santrucho.habilife.ui.ui.login.LogoScreen
 import com.santrucho.habilife.ui.util.BackPressHandler
 import com.santrucho.habilife.ui.util.HandleState
@@ -105,7 +104,7 @@ fun SignUpScreen(viewModel: SignUpViewModel,navController: NavController) {
                        * This is the field to Username data
                      */
                     Spacer(modifier = Modifier.padding(8.dp))
-                    TextFields(text = stringResource(id = R.string.username),
+                    CustomTextFields(text = stringResource(id = R.string.username),
                         value = viewModel.usernameValue.value,
                         isError = viewModel.isUsernameValid.value,
                         error = viewModel.usernameErrMsg.value,
@@ -115,7 +114,7 @@ fun SignUpScreen(viewModel: SignUpViewModel,navController: NavController) {
                      * This is the field for email data
                      */
 
-                    TextFields(text = stringResource(id = R.string.email),
+                    CustomTextFields(text = stringResource(id = R.string.email),
                         value = viewModel.emailValue.value,
                         isError = viewModel.isEmailValid.value,
                         error = viewModel.emailErrMsg.value,
@@ -129,7 +128,7 @@ fun SignUpScreen(viewModel: SignUpViewModel,navController: NavController) {
                        * This is the field for password data
                      */
 
-                    PasswordFields(
+                    CustomPasswordFields(
                         text = stringResource(id = R.string.password),
                         value = viewModel.passwordValue,
                         isError = viewModel.isPasswordValid,
@@ -144,7 +143,7 @@ fun SignUpScreen(viewModel: SignUpViewModel,navController: NavController) {
                      * forms for confirm the password
                      */
 
-                    PasswordFields(
+                    CustomPasswordFields(
                         text = stringResource(id = R.string.confirm_password),
                         value = viewModel.confirmPasswordValue,
                         isError = viewModel.isConfirmPasswordValid,

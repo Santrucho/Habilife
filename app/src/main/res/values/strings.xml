@@ -42,4 +42,15 @@
     <string name="current_goals">Objetivos actuales</string>
     <string name="completed_habits">Habitos completados</string>
     <string name="completed_goals">Objetivos completados</string>
+
+
+    <string name="goal_placeholder_finance">Comprar un celular</string>
+    <string name="goal_placeholder_academic">Aprobar el semestre</string>
+    <string name="goal_placeholder_learning">Aprender un instrumento</string>
+    <string name="goal_placeholder_training">Salir a caminar</string>
+
+    <string name="description_finance">"Ahorrar en mercado pago, Ahorrar en cuenta bancaria, etc"</string>
+    <string name="description_academic">"Unirme a grupos de estudio para facilitar el aprendizaje... etc"</string>
+    <string name="description_training">"Unirme a un grupo de running, Salir por mi cuenta, etc"</string>
+    <string name="description_learning">"Lo hare de manera autodidacta, Ire a un curso cada semana, etc"</string>
 </resources>

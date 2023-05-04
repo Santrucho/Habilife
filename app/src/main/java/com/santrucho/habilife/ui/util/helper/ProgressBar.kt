@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.santrucho.habilife.ui.data.model.goals.GoalsResponse
+import com.santrucho.habilife.ui.util.formatMoneyInput
 
 @Composable
 fun ProgressBarHelper(goal: GoalsResponse) {
@@ -64,11 +65,11 @@ fun CustomLinearProgress(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "${currentProgress?.toInt() ?: 0} $valueType",
+                text = "${formatMoneyInput(currentProgress?.toInt().toString())} $valueType",
                 color = Color.Black,
                 fontSize = 16.sp
             )
-            Text(text = "${maxProgress?.toInt()} $valueType", color = Color.Black, fontSize = 16.sp)
+            Text(text = "${formatMoneyInput(maxProgress?.toInt().toString())} $valueType", color = Color.Black, fontSize = 16.sp)
         }
     } else {
         Row(
