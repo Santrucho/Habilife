@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -24,7 +25,7 @@ fun FinishHabit(
 
 ) {
     val context = LocalContext.current
-    val openDialog = habitViewModel.finishHabit.value
+    val openDialog = habitViewModel.finishHabit.collectAsState().value
     AlertDialog(
         onDismissRequest = { !openDialog },
         backgroundColor = MaterialTheme.colors.secondaryVariant,

@@ -1,6 +1,7 @@
 package com.santrucho.habilife.ui.util
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -16,47 +17,59 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.santrucho.habilife.ui.data.model.goals.GoalsResponse
 import com.santrucho.habilife.ui.presentation.GoalViewModel
 import com.santrucho.habilife.ui.ui.goals.GoalField
-import com.santrucho.habilife.ui.ui.goals.GoalsComplete
-import com.santrucho.habilife.ui.ui.goals.components.TextFields
+import com.santrucho.habilife.ui.ui.goals.FinishGoal
 import com.santrucho.habilife.ui.util.helper.CustomLinearProgress
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun TypeFieldDetail(goal: GoalsResponse, goalViewModel: GoalViewModel) {
+fun TypeFieldDetail(goal: GoalsResponse, goalViewModel: GoalViewModel,navController:NavController) {
 
+    val isEditedConfirmed = goalViewModel.isEditedConfirmed.value
     // Recordar si se ha mostrado el diálogo de completado
     val isCompletedDialogOpen = remember { mutableStateOf(false) }
-
+    val localDate = LocalDate.now()
+    val formattedDate by remember {
+        derivedStateOf {
+            DateTimeFormatter.ofPattern("dd MM yyyy").format(localDate)
+        }
+    }
     when (goal.type) {
         "Finance" -> {
-
             var moneyCount by remember { mutableStateOf(goal.amount?.toFloat() ?: 0f) }
 
             // Actualizar el valor de kilometersCount cada vez que el valor de trainingValue cambia
             LaunchedEffect(goalViewModel.amountValue.value) {
-                if (!goal.completed) { // Agregar esta comprobación adicional
-                    moneyCount = (goalViewModel.amountValue.value ?: 0) + (goal.amount ?: 0).toFloat()
+                if (!goal.completed) {
+                    moneyCount =
+                        (goalViewModel.amountValue.value ?: 0) + (goal.amount ?: 0).toFloat()
                     if (moneyCount >= (goal.amountGoal?.toFloat() ?: 0f)) {
-                        goalViewModel.completeGoal(goal,true)
                         isCompletedDialogOpen.value = true
                     }
                 }
             }
-
             // Verificar si el objetivo ha sido completado y el diálogo aún no se ha mostrado
-            if (isCompletedDialogOpen.value) {
-                GoalsComplete(goal.title, goalViewModel) {
+            if (isEditedConfirmed && (isCompletedDialogOpen.value || goal.release_date <= formattedDate)) {
+                FinishGoal(goal.title, goalViewModel,goal,navController,goalViewModel::finishGoal,goalViewModel::extendedGoal) {
                     // Aquí puedes realizar cualquier acción necesaria después de cerrar el diálogo
                     isCompletedDialogOpen.value = false
                 }
             }
-            GoalField(text = "Monto objetivo", goalText = "${goal.amountGoal.toString()} $")
+            GoalField(
+                text = "Monto objetivo",
+                goalText = "${formatMoneyInput(goal.amountGoal.toString())} $"
+            )
 
             Divider(modifier = Modifier.padding(4.dp))
-            GoalField(text = "Monto actual", goalText = "${goal.amount ?: 0} $")
+            GoalField(
+                text = "Monto actual",
+                goalText = "${formatMoneyInput(goal.amount.toString())} $"
+            )
 
             Divider(modifier = Modifier.padding(4.dp))
 
@@ -64,22 +77,29 @@ fun TypeFieldDetail(goal: GoalsResponse, goalViewModel: GoalViewModel) {
                 Text("Progreso", fontSize = 20.sp, color = MaterialTheme.colors.secondary)
 
                 CustomLinearProgress(
-                    goal.amountGoal?.toFloat(),
-                    currentProgress = if(moneyCount <= (goal.amountGoal?.toFloat() ?: Float.MAX_VALUE)) moneyCount else goal.amountGoal?.toFloat(),
+                    maxProgress = goal.amountGoal?.toFloat(),
+                    currentProgress = if (moneyCount <= (goal.amountGoal?.toFloat()
+                            ?: Float.MAX_VALUE)
+                    ) moneyCount else goal.amountGoal?.toFloat(),
                     valueType = "$",
                     showValues = true
                 )
             }
-
             Divider(modifier = Modifier.padding(4.dp))
-            Spacer(modifier = Modifier.padding(4.dp))
-            TextFields(
-                text = "Agregar monto:",
-                value = goalViewModel.amountValue.value?.toString() ?: "",
-                valueChange = { goalViewModel.amountValue.value = it.toIntOrNull() },
-                onValidate = {},
-                isEnabled = (goal.amount ?: 0) >= (goal.amountGoal ?: 0)
-            )
+            Column(modifier = Modifier.padding(1.dp)) {
+                Text("Agregar monto", fontSize = 20.sp, color = MaterialTheme.colors.secondary)
+                Spacer(modifier = Modifier.padding(4.dp))
+                InputField(
+                    leadingIcon = {Text(text="$",fontSize = 24.sp)},
+                    trailingIcon = { Text(text =",00", fontSize = 24.sp) },
+                    value = goalViewModel.amountValue.value?.toString()
+                        ?.let { formatMoneyInput(it) }
+                        ?: "",
+                    onValueChange = { newValue ->
+                        val intValue = newValue.toIntOrNull()
+                        goalViewModel.amountValue.value = intValue
+                    })
+            }
         }
         "Training" -> {
             var kilometersCount by remember { mutableStateOf(goal.kilometers?.toFloat() ?: 0f) }
@@ -90,7 +110,6 @@ fun TypeFieldDetail(goal: GoalsResponse, goalViewModel: GoalViewModel) {
                     kilometersCount =
                         (goalViewModel.trainingValue.value ?: 0) + (goal.kilometers ?: 0).toFloat()
                     if (kilometersCount >= (goal.kilometersGoal?.toFloat() ?: 0f)) {
-                        goalViewModel.completeGoal(goal,true)
                         isCompletedDialogOpen.value = true
                         // Limitar el valor máximo de kilometersCount a goal.kilometersGoal
                         kilometersCount = goal.kilometersGoal?.toFloat() ?: 0f
@@ -98,8 +117,8 @@ fun TypeFieldDetail(goal: GoalsResponse, goalViewModel: GoalViewModel) {
                 }
             }
             // Verificar si el objetivo ha sido completado y el diálogo aún no se ha mostrado
-            if (isCompletedDialogOpen.value) {
-                GoalsComplete(goal.title, goalViewModel) {
+            if (isEditedConfirmed && (isCompletedDialogOpen.value || goal.release_date <= formattedDate)) {
+                FinishGoal(goal.title, goalViewModel,goal,navController,goalViewModel::finishGoal,goalViewModel::extendedGoal) {
                     // Aquí puedes realizar cualquier acción necesaria después de cerrar el diálogo
                     isCompletedDialogOpen.value = false
                 }
@@ -128,7 +147,7 @@ fun TypeFieldDetail(goal: GoalsResponse, goalViewModel: GoalViewModel) {
             }
             Divider(modifier = Modifier.padding(4.dp))
             Spacer(modifier = Modifier.padding(4.dp))
-            TextFields(
+            CustomTextFields(
                 text = "Agregar kilometros: ",
                 value = goalViewModel.trainingValue.value?.toString() ?: "",
                 valueChange = {
@@ -219,25 +238,32 @@ fun TypeFieldDetail(goal: GoalsResponse, goalViewModel: GoalViewModel) {
                 if(!goal.completed) {
                     subjectApprovedCount = goal.subjectApproved.size.toFloat()
                     if (subjectApprovedCount >= (goal.subjectList.size.toFloat())) {
-                        goalViewModel.completeGoal(goal,true)
                         isCompletedDialogOpen.value = true
                     }
                 }
             }
             // Verificar si el objetivo ha sido completado y el diálogo aún no se ha mostrado
-            if (isCompletedDialogOpen.value) {
-                GoalsComplete(goal.title, goalViewModel) {
+            if (isEditedConfirmed && (isCompletedDialogOpen.value || goal.release_date <= formattedDate)) {
+                FinishGoal(goal.title, goalViewModel,goal,navController,goalViewModel::finishGoal,goalViewModel::extendedGoal) {
                     // Aquí puedes realizar cualquier acción necesaria después de cerrar el diálogo
                     isCompletedDialogOpen.value = false
                 }
             }
         }
         "Learning" -> {
+            // Actualizar el valor de subjectApprovedCount cada vez que el valor de subjectApproved cambia
+            // Verificar si el objetivo ha sido completado y el diálogo aún no se ha mostrado
+            if (isEditedConfirmed && (isCompletedDialogOpen.value || goal.release_date <= formattedDate)) {
+                FinishGoal(goal.title, goalViewModel,goal,navController,goalViewModel::finishGoal,goalViewModel::extendedGoal) {
+                    // Aquí puedes realizar cualquier acción necesaria después de cerrar el diálogo
+                    isCompletedDialogOpen.value = false
+                }
+            }
             GoalField(
                 text = "Veces a hacer en la semana: ",
                 goalText = goal.timesAWeek.toString()
             )
-            TextFields(
+            CustomTextFields(
                 text = "Veces que cumplio en esta semana: ",
                 value = goalViewModel.learningValue.value?.toString() ?: "",
                 valueChange = { goalViewModel.learningValue.value = it.toIntOrNull() },
@@ -246,4 +272,3 @@ fun TypeFieldDetail(goal: GoalsResponse, goalViewModel: GoalViewModel) {
         }
     }
 }
-

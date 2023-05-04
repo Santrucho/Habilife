@@ -19,7 +19,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.presentation.HabitViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
-import com.santrucho.habilife.ui.ui.goals.components.TextFields
+import com.santrucho.habilife.ui.util.CustomTextFields
 import com.santrucho.habilife.ui.ui.habits.components.Categories
 import com.santrucho.habilife.ui.ui.habits.components.FrequencyPicker
 import com.santrucho.habilife.ui.ui.habits.components.TimePicker
@@ -113,7 +113,7 @@ fun NewHabitScreen(habitViewModel: HabitViewModel, navController: NavController)
 
                         Text("Personalice su habito", fontSize = 20.sp, color = Color.Black)
 
-                        TextFields(
+                        CustomTextFields(
                             value = habitViewModel.titleValue.collectAsState().value,
                             valueChange = {habitViewModel.setTitleValue(it) },
                             placeholder = placeholderType(type = typeHelper(habitType = selectedOption!!)),

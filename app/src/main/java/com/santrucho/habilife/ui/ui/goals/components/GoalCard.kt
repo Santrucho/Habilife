@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.santrucho.habilife.ui.data.model.goals.GoalsResponse
-import com.santrucho.habilife.ui.ui.goals.GoalsComplete
 import com.santrucho.habilife.ui.ui.goals.addgoal.GoalImage
 import com.santrucho.habilife.ui.util.LogBundle
 import com.santrucho.habilife.ui.util.helper.ProgressBarHelper

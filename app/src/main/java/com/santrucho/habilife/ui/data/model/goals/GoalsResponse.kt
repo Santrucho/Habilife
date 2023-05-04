@@ -15,7 +15,7 @@ data class GoalsResponse(
     var release_date: String = "",
     var image: String = "",
     var type: String = "",
-    var amount: Int? = 0,
+    var amount: Int = 0,
     var amountGoal: Int? = 0,
     var subject: String = "",
     var subjectList: List<String> = emptyList(),

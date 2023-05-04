@@ -129,7 +129,7 @@ fun GoalDetail(goal: GoalsResponse, goalViewModel: GoalViewModel, navController:
                                 .fillMaxWidth()
                                 .padding(8.dp)
                         ) {
-                            TypeFieldDetail(goal, goalViewModel = goalViewModel)
+                            TypeFieldDetail(goal, goalViewModel = goalViewModel,navController)
                         }
                     }
                 }
@@ -153,6 +153,7 @@ fun GoalDetail(goal: GoalsResponse, goalViewModel: GoalViewModel, navController:
                 }
                 Button(
                     onClick = {
+                        goalViewModel.isEditedConfirmed.value = true
                         goalViewModel.confirmSubject.value = true
                         goalViewModel.updateGoal(
                             goal,
@@ -162,7 +163,6 @@ fun GoalDetail(goal: GoalsResponse, goalViewModel: GoalViewModel, navController:
                             goalViewModel.trainingValue.value,
                             goal.subjectApproved
                         )
-                        navController.navigate(BottomNavScreen.Goals.screen_route)
                         LogBundle.logBundleAnalytics(firebaseAnalytics,"Confirm Goal Update","confirm_goal_update_pressed")
                     },
                     Modifier

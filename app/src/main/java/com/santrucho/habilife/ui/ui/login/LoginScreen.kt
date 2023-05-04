@@ -18,7 +18,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -27,8 +26,8 @@ import com.santrucho.habilife.R
 import com.santrucho.habilife.ui.navigation.Screen
 import com.santrucho.habilife.ui.presentation.LoginViewModel
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
-import com.santrucho.habilife.ui.ui.goals.components.TextFields
-import com.santrucho.habilife.ui.ui.goals.components.PasswordFields
+import com.santrucho.habilife.ui.util.CustomTextFields
+import com.santrucho.habilife.ui.util.CustomPasswordFields
 import com.santrucho.habilife.ui.util.BackPressHandler
 import com.santrucho.habilife.ui.util.HandleState
 import com.santrucho.habilife.ui.util.LogBundle
@@ -118,7 +117,7 @@ fun LoginScreen(viewModel: LoginViewModel, navController: NavController) {
                        * This is the field to Email data
                      */
 
-                    TextFields(text = stringResource(id = R.string.email_field),
+                    CustomTextFields(text = stringResource(id = R.string.email_field),
                         value = viewModel.emailValue.value,
                         isError = viewModel.isEmailValid.value,
                         error = viewModel.emailErrMsg.value,
@@ -139,7 +138,7 @@ fun LoginScreen(viewModel: LoginViewModel, navController: NavController) {
                        * This is the field for password data
                      */
 
-                    PasswordFields(
+                    CustomPasswordFields(
                         text = stringResource(id = R.string.password_field),
                         value = viewModel.passwordValue,
                         isError = viewModel.isPasswordValid,
