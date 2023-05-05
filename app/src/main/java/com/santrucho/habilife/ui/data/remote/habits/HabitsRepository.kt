@@ -30,4 +30,6 @@ interface HabitsRepository {
 
     suspend fun finishHabit(habitId:String,habitCount:Int,habitFinish:Boolean)
 
+    suspend fun resetField()
+
 }

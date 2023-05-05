@@ -29,6 +29,7 @@ import com.santrucho.habilife.ui.theme.HabilifeTheme
 import com.santrucho.habilife.ui.ui.bottombar.BottomBar
 import com.santrucho.habilife.ui.ui.bottombar.BottomNavScreen
 import com.santrucho.habilife.ui.util.LogBundle
+import com.santrucho.habilife.ui.util.manager.HabitScheduler
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -38,10 +39,11 @@ class MainActivity : ComponentActivity() {
 
     val firebaseAnalytics : FirebaseAnalytics = FirebaseAnalytics.getInstance(this)
     val firebaseMessaging : FirebaseMessaging = FirebaseMessaging.getInstance()
+    private val schedule = HabitScheduler(this)
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        firebaseMessaging.subscribeToTopic("all_devices")
+        schedule.startUpdateFieldWorker()
         setContent {
             HabilifeTheme {
                 val navItems = listOf(

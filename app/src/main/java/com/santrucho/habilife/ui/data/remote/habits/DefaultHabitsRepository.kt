@@ -1,7 +1,5 @@
 package com.santrucho.habilife.ui.data.remote.habits
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.santrucho.habilife.ui.data.model.Habit
@@ -9,14 +7,15 @@ import com.santrucho.habilife.ui.util.Resource
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class DefaultHabitsRepository @Inject constructor(private val firestore: FirebaseFirestore
-        ,private val firebaseAuth: FirebaseAuth) : HabitsRepository {
+class DefaultHabitsRepository @Inject constructor(
+    private val firestore: FirebaseFirestore, private val firebaseAuth: FirebaseAuth
+) : HabitsRepository {
 
     override suspend fun addHabit(
         title: String,
-        type:String,
-        frequently : List<String>,
-        timePicker : String,
+        type: String,
+        frequently: List<String>,
+        timePicker: String,
         completed: Boolean
     ): Resource<Habit> {
 
@@ -36,7 +35,7 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
                 documentReference.set(habitToSave).await()
                 Resource.Success(habitToSave)
             }
-        } catch(e:Exception){
+        } catch (e: Exception) {
             return Resource.Failure(e)
         }
     }
@@ -44,7 +43,7 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
     override suspend fun getHabits(): Resource<List<Habit>> {
         return try {
             val resultData = firestore.collection("habits")
-                .whereEqualTo("userId",firebaseAuth.currentUser?.uid)
+                .whereEqualTo("userId", firebaseAuth.currentUser?.uid)
                 .get().await().toObjects(Habit::class.java)
 
             Resource.Success(resultData)
@@ -56,18 +55,22 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
     override suspend fun deleteHabit(habit: Habit) {
         try {
             firestore.collection("habits").document(habit.id).delete().await()
-        }
-        catch(e:Exception){
+        } catch (e: Exception) {
             Resource.Failure(e)
         }
     }
 
-    override suspend fun updateHabit(habitId:String,isChecked:Boolean,daysCompleted:MutableList<String>) : Resource<Unit>{
+    override suspend fun updateHabit(
+        habitId: String,
+        isChecked: Boolean,
+        daysCompleted: MutableList<String>
+    ): Resource<Unit> {
         return try {
             firestore.collection("habits").document(habitId).update("completed", isChecked).await()
-            firestore.collection("habits").document(habitId).update("daysCompleted",daysCompleted).await()
+            firestore.collection("habits").document(habitId).update("daysCompleted", daysCompleted)
+                .await()
             Resource.Success(Unit)
-        }catch(e:Exception){
+        } catch (e: Exception) {
             Resource.Failure(e)
         }
     }
@@ -75,19 +78,23 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
     override suspend fun getOptions(): Resource<List<String>> {
         return try {
             val result = firestore.collection("typeOptions").get().await()
-                .documents.flatMap { it.data?.values?.mapNotNull { value -> value as String? } ?: emptyList() }
+                .documents.flatMap {
+                    it.data?.values?.mapNotNull { value -> value as String? } ?: emptyList()
+                }
             Resource.Success(result)
-        } catch (e:Exception){
+        } catch (e: Exception) {
             Resource.Failure(e)
         }
     }
 
-    override suspend fun getDaysOfWeek(): Resource<List<String>>{
+    override suspend fun getDaysOfWeek(): Resource<List<String>> {
         return try {
             val result = firestore.collection("days").get().await()
-                .documents.flatMap { it.data?.values?.mapNotNull { value -> value as String? } ?: emptyList() }
+                .documents.flatMap {
+                    it.data?.values?.mapNotNull { value -> value as String? } ?: emptyList()
+                }
             Resource.Success(result)
-        } catch (e:Exception){
+        } catch (e: Exception) {
             Resource.Failure(e)
         }
     }
@@ -119,8 +126,8 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
         return daysCompletedList
     }
 
-    override suspend fun finishHabit(habitId:String,habitCount:Int,habitFinish:Boolean) {
-        firestore.collection("habits").document(habitId).update("finish",habitFinish).await()
+    override suspend fun finishHabit(habitId: String, habitCount: Int, habitFinish: Boolean) {
+        firestore.collection("habits").document(habitId).update("finish", habitFinish).await()
         val userId = firebaseAuth.currentUser
         val userCollection = firestore.collection("users")
         val query = userCollection.whereEqualTo("userId", userId?.uid).get().await()
@@ -129,6 +136,20 @@ class DefaultHabitsRepository @Inject constructor(private val firestore: Firebas
             userCollection.document(userDocument.id)
                 .update("habitComplete", habitCount)
                 .await()
+        }
+    }
+
+    override suspend fun resetField() {
+        try {
+            val userId = firebaseAuth.currentUser
+            val userCollection = firestore.collection("users")
+            val query = userCollection.whereEqualTo("userId", userId?.uid).get().await()
+            if (!query.isEmpty) {
+                firestore.collection("habits").document().update("completed", false)
+            }
+            Resource.Success("Reset field success")
+        } catch (e:Exception){
+            Resource.Failure(e)
         }
     }
 }
