@@ -8,12 +8,4 @@ import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
 @HiltAndroidApp
-class HabilifeApplication : Application(), Configuration.Provider {
-
-    @Inject lateinit var workerFactory: HiltWorkerFactory
-
-    override fun getWorkManagerConfiguration() =
-        Configuration.Builder()
-            .setWorkerFactory(workerFactory)
-            .build()
-}
+class HabilifeApplication : Application()

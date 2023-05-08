@@ -140,21 +140,4 @@ class DefaultHabitsRepository @Inject constructor(
                 .await()
         }
     }
-
-    override suspend fun resetField() {
-        try {
-            val userId = firebaseAuth.currentUser
-            val habitCollection = firestore.collection("habits")
-            val query = habitCollection.whereEqualTo("userId", userId?.uid).whereEqualTo("completed",true).get().await()
-            Log.d("USER UID LOG",userId?.uid.toString())
-            for (doc in query.documents){
-                habitCollection.document(doc.id).update("completed",false).await()
-                Log.d("LOG IN REPOSITORYY CICLE FOR",habitCollection.document(doc.id).toString())
-            }
-
-            Resource.Success("Reset field success")
-        } catch (e:Exception){
-            Resource.Failure(e)
-        }
-    }
 }
